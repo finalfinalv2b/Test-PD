@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
 
@@ -17,10 +18,13 @@ export function Navigation() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  const pathname = usePathname();
+  const isDarkTheme = pathname === "/" && !scrolled;
+
   const links = [
     { name: "Capabilities", href: "/#capabilities" },
     { name: "Process", href: "/#process" },
-    { name: "About", href: "/#about" },
+    { name: "About", href: "/about" },
     { name: "Contact", href: "/contact" },
   ];
 
@@ -33,12 +37,12 @@ export function Navigation() {
       <div className="w-full px-6 h-20 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-3">
           <img 
-            src={scrolled ? "/PD Logo Black line.svg" : "/PD logo white line.svg"} 
+            src={isDarkTheme ? "/PD logo white line.svg" : "/PD Logo Black line.svg"} 
             alt="PD Logo" 
             className="h-6 w-auto" 
           />
           <img 
-            src={scrolled ? "/PD wordmark.svg" : "/PD white wordmark.svg"} 
+            src={isDarkTheme ? "/PD white wordmark.svg" : "/PD wordmark.svg"} 
             alt="Product Dept." 
             className="h-4 w-auto" 
           />
@@ -51,7 +55,7 @@ export function Navigation() {
               key={link.name}
               href={link.href}
               className={`text-sm font-medium transition-colors ${
-                scrolled ? "text-foreground/80 hover:text-foreground" : "text-white/80 hover:text-white"
+                isDarkTheme ? "text-white/80 hover:text-white" : "text-foreground/80 hover:text-foreground"
               }`}
             >
               {link.name}
@@ -61,7 +65,7 @@ export function Navigation() {
 
         {/* Mobile Toggle */}
         <button
-          className="md:hidden text-foreground"
+          className={isDarkTheme ? "text-white md:hidden" : "text-foreground md:hidden"}
           onClick={() => setIsOpen(!isOpen)}
           aria-label="Toggle Menu"
         >

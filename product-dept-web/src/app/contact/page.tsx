@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
+import { Footer } from "@/components/Footer";
 
 export default function Contact() {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -70,6 +71,29 @@ export default function Contact() {
                 <textarea id="description" name="description" rows={4} className="border-b border-charcoal/20 bg-transparent py-2 outline-none focus:border-charcoal transition-colors resize-none" placeholder="Tell us about what you're building..." required></textarea>
               </div>
 
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div className="flex flex-col gap-2">
+                  <label htmlFor="timeline" className="text-sm font-semibold tracking-wide text-charcoal uppercase">Target Timeline</label>
+                  <select id="timeline" name="timeline" className="border-b border-charcoal/20 bg-transparent py-2 outline-none focus:border-charcoal transition-colors appearance-none cursor-pointer" required>
+                    <option value="" disabled selected>Select a timeframe...</option>
+                    <option value="ASAP">ASAP (Q1)</option>
+                    <option value="3-6 Months">3-6 Months</option>
+                    <option value="6-12 Months">6-12 Months</option>
+                    <option value="1+ Year">1+ Year (Exploratory)</option>
+                  </select>
+                </div>
+                <div className="flex flex-col gap-2">
+                  <label htmlFor="budget" className="text-sm font-semibold tracking-wide text-charcoal uppercase">Budget Range <span className="text-mid-gray/50 normal-case tracking-normal ml-1">(Optional)</span></label>
+                  <select id="budget" name="budget" className="border-b border-charcoal/20 bg-transparent py-2 outline-none focus:border-charcoal transition-colors appearance-none cursor-pointer">
+                    <option value="" disabled selected>Select a range...</option>
+                    <option value="<$50k">&lt; $50k</option>
+                    <option value="$50k - $250k">$50k - $250k</option>
+                    <option value="$250k - $1M">$250k - $1M</option>
+                    <option value="$1M+">$1M+</option>
+                  </select>
+                </div>
+              </div>
+
               <div className="pt-8">
                 <button
                   type="submit"
@@ -99,6 +123,11 @@ export default function Contact() {
           </div>
         )}
       </section>
+      
+      {/* Push Footer to bottom of screen naturally */}
+      <div className="mt-auto">
+        <Footer />
+      </div>
     </div>
   );
 }

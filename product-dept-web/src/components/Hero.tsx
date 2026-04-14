@@ -8,13 +8,12 @@ interface Particle {
   x: number;
   y: number;
   vx: number;
-  vy: number;
-  baseX: number;
-  baseY: number;
-  scrollX: number;
-  scrollY: number;
-  hoverOffsetX: number;
-  hoverOffsetY: number;
+  f1X: number;
+  f1Y: number;
+  f2X: number;
+  f2Y: number;
+  f3X: number;
+  f3Y: number;
   hoverMagnet: number;
 }
 
@@ -112,17 +111,21 @@ export function Hero() {
     };
 
     const initParticles = async () => {
-      // Get logo pixels
-      const logoPixels = await getPixelsFromImg("/PD logo white line.svg", width < 768 ? 1.0 : 1.5);
+      const scale = width < 768 ? 1.5 : 3.0; // Scaled specifically for the new cube SVGs
+      const px1 = await getPixelsFromImg("/animation of cube logo-01.svg", scale);
+      const px2 = await getPixelsFromImg("/animation of cube logo-02.svg", scale);
+      const px3 = await getPixelsFromImg("/animation of cube logo-03.svg", scale);
       
       const particles: Particle[] = [];
       const side = Math.ceil(Math.sqrt(PARTICLE_COUNT));
       
-      // Make grid a constrained square
-      const squareSize = Math.min(width, height) * 0.7; // Framed in middle
+      const squareSize = Math.min(width, height) * 0.7;
       const startX = (width - squareSize) / 2;
       const startY = (height - squareSize) / 2;
       const cellSize = squareSize / side;
+
+      // Vertical offset to make space for text
+      const screenCY = height / 2 - (height * 0.1); 
 
       for (let i = 0; i < PARTICLE_COUNT; i++) {
         const c = i % side;
@@ -130,17 +133,19 @@ export function Hero() {
         const baseX = startX + c * cellSize;
         const baseY = startY + r * cellSize;
         
-        let lp = logoPixels.length > 0
-           ? logoPixels[Math.floor(Math.random() * logoPixels.length)]
-           : { x: width/2, y: height/2 };
+        let p1 = px1.length > 0 ? px1[Math.floor(Math.random() * px1.length)] : { x: width/2, y: height/2 };
+        let p2 = px2.length > 0 ? px2[Math.floor(Math.random() * px2.length)] : { x: width/2, y: height/2 };
+        let p3 = px3.length > 0 ? px3[Math.floor(Math.random() * px3.length)] : { x: width/2, y: height/2 };
 
-        // Convert hover target to relative offset from center so it maps around cursor
-        const hoverOffsetX = lp.x - (width / 2);
-        const hoverOffsetY = lp.y - (height / 2);
+        // Absolute physical mapping destinations
+        const f1X = (width / 2) + (p1.x - width / 2);
+        const f1Y = screenCY + (p1.y - height / 2);
 
-        // Scroll mapping coordinates are the raw centered SVG pixels
-        const scrollX = lp.x;
-        const scrollY = lp.y - (height * 0.1); // slight shift up to leave room for text below
+        const f2X = (width / 2) + (p2.x - width / 2);
+        const f2Y = screenCY + (p2.y - height / 2);
+
+        const f3X = (width / 2) + (p3.x - width / 2);
+        const f3Y = screenCY + (p3.y - height / 2);
 
         particles.push({
           x: baseX,
@@ -149,10 +154,12 @@ export function Hero() {
           vy: 0,
           baseX,
           baseY,
-          scrollX,
-          scrollY,
-          hoverOffsetX,
-          hoverOffsetY,
+          f1X,
+          f1Y,
+          f2X,
+          f2Y,
+          f3X,
+          f3Y,
           hoverMagnet: 0,
         });
       }
@@ -168,8 +175,10 @@ export function Hero() {
       const scrollProg = scrollProgRef.current;
       const mouse = mouseRef.current;
       const particles = particlesRef.current;
-      const radiusSq = (width * 0.2) * (width * 0.2); // wider grab area
       
+      // Decrease the total physical mapped attraction area explicitly by 50% 
+      const radiusSq = ((width * 0.11) * (width * 0.11)) * 0.5;
+
       ctx.fillStyle = "white";
       ctx.beginPath();
 
@@ -186,25 +195,29 @@ export function Hero() {
           p.hoverMagnet = Math.max(0, p.hoverMagnet - 0.05);
         }
 
-        // Determine destination: 
-        // 1. Mouse hover has absolute priority.
-        // 2. Otherwise scroll progression.
-        // 3. Otherwise base grid.
-        
         let targetX = p.baseX;
         let targetY = p.baseY;
 
         if (p.hoverMagnet > 0) {
-            // Morph into cursor-centered PD logo
-            // Blended based on hoverMagnet
-            const hoverTx = mouse.x + p.hoverOffsetX;
-            const hoverTy = mouse.y + p.hoverOffsetY;
-            targetX = p.baseX + (hoverTx - p.baseX) * p.hoverMagnet;
-            targetY = p.baseY + (hoverTy - p.baseY) * p.hoverMagnet;
+            // Hover safely repels dots outwards from the cursor natively
+            const pullPower = p.hoverMagnet * 1.5;
+            targetX = p.baseX + (p.baseX - mouse.x) * pullPower;
+            targetY = p.baseY + (p.baseY - mouse.y) * pullPower;
         } else if (scrollProg > 0) {
-            // Morph into screen-centered bold main text
-            targetX = p.baseX + (p.scrollX - p.baseX) * scrollProg;
-            targetY = p.baseY + (p.scrollY - p.baseY) * scrollProg;
+            // Linear morphological interpolation binding dots directly to the explicit SVGs
+            if (scrollProg < 0.33) {
+                let localProg = scrollProg / 0.33;
+                targetX = p.baseX + (p.f1X - p.baseX) * localProg;
+                targetY = p.baseY + (p.f1Y - p.baseY) * localProg;
+            } else if (scrollProg < 0.66) {
+                let localProg = (scrollProg - 0.33) / 0.33;
+                targetX = p.f1X + (p.f2X - p.f1X) * localProg;
+                targetY = p.f1Y + (p.f2Y - p.f1Y) * localProg;
+            } else {
+                let localProg = (scrollProg - 0.66) / 0.34;
+                targetX = p.f2X + (p.f3X - p.f2X) * localProg;
+                targetY = p.f2Y + (p.f3Y - p.f2Y) * localProg;
+            }
         }
 
         const pullX = targetX - p.x;
@@ -258,7 +271,7 @@ export function Hero() {
         
         <canvas 
           ref={canvasRef} 
-          className="absolute inset-0 w-full h-full z-0 block cursor-crosshair"
+          className="absolute inset-0 w-full h-full z-0 block"
         />
 
         {/* Fading in text block below the centered logo */}

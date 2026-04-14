@@ -7,32 +7,38 @@ import { useState } from "react";
 const offerings = [
   {
     title: "Innovation Strategy",
-    description: "Invent what's next—then plan how to make it real. Ideation, roadmapping, and MVP definition.",
+    description: "Discover lucrative market whitespace and outpace the competition. We transform ambiguous ideas into actionable, highly de-risked product blueprints.",
+    features: ["Market & Technical Feasibility", "IP Roadmapping", "MVP Definition"],
     icon: Lightbulb,
   },
   {
-    title: "Design",
-    description: "Bring ideas to life through intentional, insight-driven industrial, graphic, and packaging design.",
+    title: "Industrial Design",
+    description: "Create profound brand equity through physical touchpoints. We draft beautiful, ergonomic forms engineered to captivate consumers and scale elegantly.",
+    features: ["Concept Generation", "CMF Strategy", "Ergonomics & Physical UX"],
     icon: PenTool,
   },
   {
-    title: "Engineering",
-    description: "Bridge the gap between design and real-world functionality with mechanical, electrical, and firmware logic.",
+    title: "Systems Engineering",
+    description: "Bridge the gap between pure aesthetics and functional reality. Our engineering guarantees real-world performance without sacrificing the original vision.",
+    features: ["Mechanical Architecture", "Electrical & Firmware Logic", "DFM / DFA Analysis"],
     icon: Cpu,
   },
   {
-    title: "Manufacturing",
-    description: "Make it real—at scale, with quality, speed, and confidence across our global network.",
+    title: "Mass Manufacturing",
+    description: "Turn prototypes into profit. We directly transition complex engineering onto the factory floor with airtight quality control and rapid scalability.",
+    features: ["Production Tooling Formulation", "Quality Assurance (QA/QC)", "Assembly Automation"],
     icon: Factory,
   },
   {
-    title: "Supply Chain",
-    description: "Design and activate chains from raw materials to finished goods with resilience and optimization.",
+    title: "Supply Chain Strategy",
+    description: "Build a resilient, cost-effective global network. We source premium materials, audit elite vendors, and negotiate aggressive margins to protect your bottom line.",
+    features: ["Elite Vendor Sourcing", "BOM Cost Optimization", "Contract Negotiation"],
     icon: Box,
   },
   {
-    title: "Logistics",
-    description: "Deliver with precision—globally, reliably, and at scale from customs to final fulfillment.",
+    title: "Global Logistics",
+    description: "Deliver at scale with absolute precision. We handle complex trans-continental shipping, freight forwarding, and 3PL warehousing so you never have to miss a launch date.",
+    features: ["Global Freight & Customs", "Warehousing & 3PL Integration", "Last-Mile Distribution"],
     icon: Ship,
   },
 ];
@@ -78,7 +84,7 @@ export function CoreOffering() {
               variants={itemVariants}
               onMouseEnter={() => setHoveredIndex(i)}
               onMouseLeave={() => setHoveredIndex(null)}
-              className="group relative p-12 border-r border-b border-charcoal/10 bg-white hover:bg-black transition-colors duration-500 overflow-hidden cursor-pointer h-[320px] flex flex-col justify-between"
+              className="group relative p-12 border-r border-b border-charcoal/10 bg-white hover:bg-black transition-colors duration-500 overflow-hidden cursor-pointer h-[400px] flex flex-col justify-between"
             >
               <div className="relative z-10 transition-colors duration-500 text-charcoal group-hover:text-white">
                 <item.icon className="w-8 h-8 mb-6 opacity-70 group-hover:opacity-100" strokeWidth={1.5} />
@@ -93,15 +99,22 @@ export function CoreOffering() {
                   transition={{ duration: 0.4, ease: "easeInOut" }}
                   className="overflow-hidden"
                 >
-                  <p className="text-white/80 text-sm leading-relaxed pb-4">
+                  <p className="text-white/80 text-[15px] font-light leading-relaxed pb-6">
                     {item.description}
                   </p>
+                  <ul className="text-white/60 text-sm font-medium space-y-3 pb-2">
+                    {item.features.map((feat, idx) => (
+                      <li key={idx} className="flex items-center gap-3">
+                        <div className="w-[3px] h-[3px] bg-white opacity-50 rounded-full" />
+                        {feat}
+                      </li>
+                    ))}
+                  </ul>
                 </motion.div>
               </div>
 
-              <div className="relative z-10 flex items-center gap-2 text-sm font-medium tracking-wide text-charcoal group-hover:text-white transition-colors duration-500">
-                Explore <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-2" />
-              </div>
+              {/* Empty placeholder to maintain grid alignment if necessary, else just space */}
+              <div className="relative z-10 h-6"></div>
 
               {/* Background gradient flare on hover */}
               <div className="absolute inset-0 bg-gradient-to-tr from-charcoal to-black opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />

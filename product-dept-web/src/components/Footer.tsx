@@ -1,40 +1,50 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowUpRight } from "lucide-react";
 
 export function Footer() {
   return (
-    <footer className="w-full bg-charcoal text-white pt-24 pb-12 px-6 mt-16">
-      <div className="max-w-screen-xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 border-b border-white/20 pb-12 mb-12">
-        <div className="flex flex-col gap-6">
-          <h2 className="text-3xl font-bold tracking-tighter">Product Dept.</h2>
-          <p className="text-white/60 max-w-sm font-light">
-            We are the product team ambitious companies wish they had in-house. Strategy, design, engineering, and manufacturing.
+    <footer className="w-full bg-black text-[#FAF9F6] border-t border-black">
+      <div className="grid grid-cols-1 md:grid-cols-2">
+        {/* LEFT BLOCK */}
+        <div className="p-8 md:p-12 border-b md:border-b-0 md:border-r border-[#FAF9F6]/20 flex flex-col justify-between h-full min-h-[300px]">
+          <div>
+            <h2 className="text-4xl md:text-6xl font-black tracking-tighter uppercase mb-2">
+              PRODUCT DEPT.
+            </h2>
+            <p className="font-mono text-sm tracking-widest uppercase text-[#FAF9F6]/50">
+              PHYSICAL HARDWARE // MANUFACTURED
+            </p>
+          </div>
+          <p className="text-lg font-bold uppercase tracking-tight max-w-md mt-16">
+            WE ARE THE ENGINEERING TEAM AMBITIOUS COMPANIES WISH THEY HAD IN-HOUSE.
           </p>
         </div>
         
-        <div className="flex flex-col md:flex-row justify-end gap-12 md:gap-24">
-          <div className="flex flex-col gap-4">
-            <h4 className="text-xs font-semibold tracking-widest uppercase text-white/40 mb-2">Company</h4>
-            <Link href="/about" className="hover:text-white/70 transition-colors">About</Link>
-            <Link href="/#process" className="hover:text-white/70 transition-colors">Process</Link>
-            <Link href="/#capabilities" className="hover:text-white/70 transition-colors">Capabilities</Link>
+        {/* RIGHT BLOCK */}
+        <div className="p-8 md:p-12 flex flex-col justify-between">
+          <div className="grid grid-cols-2 gap-8">
+            <div className="flex flex-col gap-4">
+              <h4 className="border-b border-[#FAF9F6]/20 pb-2 text-xs font-black tracking-widest uppercase text-[#FAF9F6]/40">INDEX</h4>
+              <Link href="/about" className="font-bold uppercase tracking-tight hover:text-[#FAF9F6]/60 transition-colors">ABOUT</Link>
+              <Link href="/#process" className="font-bold uppercase tracking-tight hover:text-[#FAF9F6]/60 transition-colors">PROCESS</Link>
+              <Link href="/#capabilities" className="font-bold uppercase tracking-tight hover:text-[#FAF9F6]/60 transition-colors">CAPABILITIES</Link>
+            </div>
+            <div className="flex flex-col gap-4">
+              <h4 className="border-b border-[#FAF9F6]/20 pb-2 text-xs font-black tracking-widest uppercase text-[#FAF9F6]/40">DISPATCH</h4>
+              <Link href="/contact" className="font-bold uppercase tracking-tight hover:text-[#FAF9F6]/60 transition-colors">
+                INITIATE PROTOCOL &rarr;
+              </Link>
+            </div>
           </div>
-          <div className="flex flex-col gap-4">
-            <h4 className="text-xs font-semibold tracking-widest uppercase text-white/40 mb-2">Engage</h4>
-            <Link href="/contact" className="hover:text-white/70 transition-colors inline-flex items-center gap-1">
-              Start a Project <ArrowUpRight size={14} />
-            </Link>
+          
+          <div className="mt-16 flex flex-col sm:flex-row justify-between items-start sm:items-end text-xs font-mono tracking-widest uppercase text-[#FAF9F6]/40 gap-4 border-t border-[#FAF9F6]/20 pt-8">
+            <p>&copy; {new Date().getFullYear()} PRODUCT DEPT. // ALL OP-SEC RESERVED.</p>
+            <div className="flex gap-6">
+              <a href="#" className="hover:text-[#FAF9F6] transition-colors">LINKEDIN</a>
+              <a href="#" className="hover:text-[#FAF9F6] transition-colors">INSTAGRAM</a>
+            </div>
           </div>
-        </div>
-      </div>
-      
-      <div className="max-w-screen-xl mx-auto flex flex-col md:flex-row justify-between items-center text-sm text-white/40 gap-4">
-        <p>&copy; {new Date().getFullYear()} Product Dept. All rights reserved.</p>
-        <div className="flex gap-6">
-          <a href="#" className="hover:text-white transition-colors">LinkedIn</a>
-          <a href="#" className="hover:text-white transition-colors">Instagram</a>
         </div>
       </div>
     </footer>

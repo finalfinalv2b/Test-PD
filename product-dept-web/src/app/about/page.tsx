@@ -4,92 +4,117 @@ import { Footer } from "@/components/Footer";
 
 export default function About() {
   return (
-    <div className="flex flex-col min-h-screen bg-background pt-20">
-      <section className="py-24 px-6 max-w-4xl mx-auto w-full">
-        <h1 className="text-5xl md:text-7xl font-bold tracking-tighter text-charcoal mb-12">About Us.</h1>
-        
-        <div className="space-y-20">
+    <div className="flex flex-col min-h-screen bg-[#FAF9F6] pt-[72px]">
+      <section className="flex-grow w-full border-b border-black">
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_2fr] h-full min-h-[calc(100vh-72px)]">
           
-          {/* Who We Are */}
-          <div className="grid grid-cols-1 md:grid-cols-[1fr_2fr] gap-8">
-            <h2 className="text-sm font-semibold tracking-wide text-mid-gray uppercase">Who We Are</h2>
-            <div className="text-charcoal space-y-6 text-xl leading-relaxed">
-              <p>
-                We are the product team ambitious companies wish they had in-house. Product Dept. operates at the intersection of industrial design, meticulous engineering, and global manufacturing.
-              </p>
-              <p>
-                As a fully integrated operational partner, we collapse the traditional silos between creative studios and contract manufacturers, ensuring that the original vision is never compromised during production.
-              </p>
-            </div>
+          {/* LEFT SIDE TITLE BLOCK */}
+          <div className="border-b lg:border-b-0 lg:border-r border-black p-8 md:p-16 flex flex-col justify-start bg-[#FAF9F6]">
+            <h1 className="text-6xl md:text-[8vw] font-black tracking-tighter text-black uppercase leading-none mb-12">
+              THE <br/> APPARATUS.
+            </h1>
+            <p className="text-lg font-bold text-black uppercase tracking-widest max-w-sm mb-8">
+              WE ARE THE PRODUCT TEAM AMBITIOUS COMPANIES WISH THEY HAD IN-HOUSE.
+            </p>
+            <div className="w-full h-[2px] bg-black mb-8" />
+            <p className="font-mono text-sm tracking-widest text-black/60 uppercase">
+              // NO SILOS <br/> // NO FRAGMENTATION
+            </p>
           </div>
 
-          {/* Mission */}
-          <div className="grid grid-cols-1 md:grid-cols-[1fr_2fr] gap-8">
-            <h2 className="text-sm font-semibold tracking-wide text-mid-gray uppercase">Mission</h2>
-            <div className="text-charcoal space-y-6 text-xl leading-relaxed">
-              <p>
-                To bring rigor to creativity, clarity to complexity, and momentum to vision. We believe that exceptional products require a holistic approach where aesthetics, usability, and scale are considered simultaneously from day one.
-              </p>
-            </div>
-          </div>
-
-          {/* Core Principles */}
-          <div className="grid grid-cols-1 md:grid-cols-[1fr_2fr] gap-8">
-            <h2 className="text-sm font-semibold tracking-wide text-mid-gray uppercase">Principles</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 text-charcoal">
-              <div>
-                <h3 className="font-semibold text-xl mb-2">Disciplined Strategy</h3>
-                <p className="text-mid-gray">We don't guess. We map constraints, establish requirements, and build with deep intentionality.</p>
-              </div>
-              <div>
-                <h3 className="font-semibold text-xl mb-2">Technical Rigor</h3>
-                <p className="text-mid-gray">Excellence is binary. Every millimeter, surface finish, and mechanical tolerance is accounted for.</p>
-              </div>
-              <div>
-                <h3 className="font-semibold text-xl mb-2">Calm execution</h3>
-                <p className="text-mid-gray">Developing hardware is hard. We absorb the chaos of the supply chain so our partners can focus on growth.</p>
+          {/* RIGHT SIDE DATA CASCADE */}
+          <div className="p-0 bg-[#FAF9F6] text-black flex flex-col justify-start">
+            
+            {/* WHO WE ARE */}
+            <div className="p-8 md:p-16 border-b border-black">
+              <h2 className="text-sm font-black tracking-widest uppercase mb-8">[ ORG_STRUCTURE ]</h2>
+              <div className="font-bold space-y-6 text-xl md:text-3xl tracking-tighter uppercase leading-tight">
+                <p>
+                  PRODUCT DEPT. OPERATES AT THE INTERSECTION OF INDUSTRIAL DESIGN, METICULOUS ENGINEERING, AND GLOBAL MANUFACTURING.
+                </p>
+                <p>
+                  AS A FULLY INTEGRATED PARTNER, WE COLLAPSE THE TRADITIONAL SILOS BETWEEN CREATIVE STUDIOS AND CONTRACT MANUFACTURERS. THE ORIGINAL VISION IS NEVER COMPROMISED.
+                </p>
               </div>
             </div>
-          </div>
 
-          {/* History Timeline */}
-          <div className="grid grid-cols-1 md:grid-cols-[1fr_2fr] gap-8">
-            <h2 className="text-sm font-semibold tracking-wide text-mid-gray uppercase">Timeline</h2>
-            <div className="space-y-8 relative before:absolute before:inset-0 before:ml-2 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-transparent before:via-charcoal/20 before:to-transparent">
+            {/* MISSION */}
+            <div className="p-8 md:p-16 border-b border-black bg-black text-[#FAF9F6]">
+              <h2 className="text-sm font-black tracking-widest uppercase mb-8 text-[#FAF9F6]/50">[ MISSION_DIRECTIVE ]</h2>
+              <div className="font-bold text-xl md:text-3xl tracking-tighter uppercase leading-tight">
+                <p>
+                  BRING RIGOR TO CREATIVITY. CLARITY TO COMPLEXITY. MOMENTUM TO VISION. EXCEPTIONAL PRODUCTS REQUIRE STRICT HOLISTIC INTEGRATION FROM DAY ONE.
+                </p>
+              </div>
+            </div>
+
+            {/* PRINCIPLES */}
+            <div className="p-8 md:p-16 border-b border-black">
+              <h2 className="text-sm font-black tracking-widest uppercase mb-8">[ CORE_PRINCIPLES ]</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+                
+                <div className="border-t border-black pt-4">
+                  <h3 className="font-black text-2xl mb-4 tracking-tighter uppercase">DISCIPLINED STRATEGY</h3>
+                  <p className="font-bold tracking-tight uppercase text-black/70">WE DON'T GUESS. WE MAP CONSTRAINTS, ESTABLISH RIGID REQUIREMENTS, AND DEPLOY WITH INTENTIONALITY.</p>
+                </div>
+
+                <div className="border-t border-black pt-4">
+                  <h3 className="font-black text-2xl mb-4 tracking-tighter uppercase">TECHNICAL RIGOR</h3>
+                  <p className="font-bold tracking-tight uppercase text-black/70">EXCELLENCE IS BINARY. EVERY MILLIMETER, SURFACE FINISH, AND MECHANICAL TOLERANCE IS ACCOUNTED FOR.</p>
+                </div>
+
+                <div className="border-t border-black pt-4 md:col-span-2">
+                  <h3 className="font-black text-2xl mb-4 tracking-tighter uppercase">CALM EXECUTION</h3>
+                  <p className="font-bold tracking-tight uppercase text-black/70 max-w-xl">HARDWARE IS HARD. WE ABSORB THE CHAOS OF THE SUPPLY CHAIN SO OUR PARTNERS CAN FOCUS EXCLUSIVELY ON GROWTH AND DEPLOYMENT.</p>
+                </div>
+
+              </div>
+            </div>
+
+            {/* TIMELINE */}
+            <div className="p-8 md:p-16">
+              <h2 className="text-sm font-black tracking-widest uppercase mb-12">[ EVENT_LOG ]</h2>
               
-              <div className="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
-                <div className="flex items-center justify-center w-5 h-5 rounded-full border border-white bg-charcoal shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2"></div>
-                <div className="w-[calc(100%-2rem)] md:w-[calc(50%-1.25rem)] p-4 rounded bg-white shadow shadow-charcoal/5">
-                  <span className="font-bold text-mid-gray mb-1 block">1996</span>
-                  <p className="text-charcoal leading-relaxed">The original foundation is laid, bridging creative concepts with structural engineering.</p>
+              <div className="space-y-0 border-l-2 border-black ml-2 pl-8 relative">
+                
+                <div className="relative mb-16 group">
+                  <div className="absolute w-4 h-4 bg-black -left-[39px] top-1"></div>
+                  <span className="font-black tracking-widest text-black mb-2 block border-b border-black pb-2 uppercase max-w-[150px]">
+                    EPOCH // 1996
+                  </span>
+                  <p className="font-bold text-lg tracking-tight uppercase text-black/80 max-w-xl mt-4">
+                    THE ORIGINAL FOUNDATION IS LAID, BRIDGING CREATIVE CONCEPTS WITH STRUCTURAL MECHANICAL ENGINEERING.
+                  </p>
                 </div>
-              </div>
 
-              <div className="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
-                <div className="flex items-center justify-center w-5 h-5 rounded-full border border-white bg-charcoal shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2"></div>
-                <div className="w-[calc(100%-2rem)] md:w-[calc(50%-1.25rem)] p-4 rounded bg-white shadow shadow-charcoal/5">
-                  <span className="font-bold text-mid-gray mb-1 block">2010</span>
-                  <p className="text-charcoal leading-relaxed">Expanded global manufacturing presence across multiple strategic regions.</p>
+                <div className="relative mb-16 group">
+                  <div className="absolute w-4 h-4 bg-black -left-[39px] top-1"></div>
+                  <span className="font-black tracking-widest text-black mb-2 block border-b border-black pb-2 uppercase max-w-[150px]">
+                    EPOCH // 2010
+                  </span>
+                  <p className="font-bold text-lg tracking-tight uppercase text-black/80 max-w-xl mt-4">
+                    GLOBAL MANUFACTURING PRESENCE VASTLY EXPANDED ACROSS MULTIPLE STRATEGIC ASIAN AND EUROPEAN REGIONS.
+                  </p>
                 </div>
-              </div>
 
-              <div className="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
-                <div className="flex items-center justify-center w-5 h-5 rounded-full border border-white bg-charcoal shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2"></div>
-                <div className="w-[calc(100%-2rem)] md:w-[calc(50%-1.25rem)] p-4 rounded bg-white shadow shadow-charcoal/5">
-                  <span className="font-bold text-mid-gray mb-1 block">Present</span>
-                  <p className="text-charcoal leading-relaxed">Integrated full-stack product development platform launching best-in-class consumer goods natively.</p>
+                <div className="relative group">
+                  <div className="absolute w-4 h-4 bg-black -left-[39px] top-1"></div>
+                  <span className="font-black tracking-widest text-black mb-2 block border-b border-black pb-2 uppercase max-w-[150px]">
+                    STATUS // ACTIVE
+                  </span>
+                  <p className="font-bold text-lg tracking-tight uppercase text-black/80 max-w-xl mt-4">
+                    INTEGRATED FULL-STACK PRODUCT PLATFORM. LAUNCHING BEST-IN-CLASS CONSUMER HARDWARE NATIVELY.
+                  </p>
                 </div>
-              </div>
 
+              </div>
             </div>
-          </div>
 
+          </div>
         </div>
       </section>
-
-      <div className="mt-auto">
-        <Footer />
-      </div>
+      
+      <Footer />
     </div>
   );
 }

@@ -5,66 +5,62 @@ import { useRef } from "react";
 
 const steps = [
   { 
-    num: "01", title: "Idea", label: "Define the Vision",
-    description: "We rigorously outline product requirements, market positioning, and structural constraints. This guarantees only ideas with genuine mechanical and scalable potential move forward into active development."
+    num: "01", title: "THE VISION", label: "PARAMETERS SET",
+    description: "WE OUTLINE PRODUCT REQUIREMENTS, POSITIONING, AND STRUCTURAL CONSTRAINTS. ONLY IDEAS WITH GENUINE SCALABLE POTENTIAL MOVE FORWARD. NO EXCEPTIONS."
   },
   { 
-    num: "02", title: "Concept", label: "Design & Strategy",
-    description: "Our industrial designers draft foundational geometry, establishing the core aesthetic and ergonomic narrative. Material viability is planned meticulously to ensure the vision survives physical realization."
+    num: "02", title: "CONCEPT", label: "FORM DEFINED",
+    description: "WE DRAFT FOUNDATIONAL GEOMETRY AND ESTABLISH THE AESTHETIC. MATERIAL VIABILITY IS PLANNED METICULOUSLY TO ENSURE THE DESIGN SURVIVES REALITY."
   },
   { 
-    num: "03", title: "Engineering", label: "Technical Architecture",
-    description: "The conceptual surface is systematically converted into detailed mechanical architecture and functional CAD. Every internal component is hyper-optimized for structural integrity and mass manufacturability."
+    num: "03", title: "ENGINEERING", label: "TECHNICAL ARCHITECTURE",
+    description: "THE SURFACE IS SYSTEMATICALLY CONVERTED INTO FUNCTIONAL CAD. EVERY INTERNAL COMPONENT IS HYPER-OPTIMIZED FOR STRUCTURAL INTEGRITY."
   },
   { 
-    num: "04", title: "Sourcing", label: "Supply Chain Setup",
-    description: "We ping our global auditing network to secure elite vendors capable of executing uncompromising tolerances. Accurate pricing limits are structured and critical raw material streams are locked down."
+    num: "04", title: "SOURCING", label: "SUPPLY CHAIN",
+    description: "WE ACTIVATE OUR GLOBAL NETWORK TO SECURE ELITE VENDORS CAPABLE OF UNCOMPROMISING TOLERANCES. CRITICAL RAW MATERIAL STREAMS ARE LOCKED DOWN."
   },
   { 
-    num: "05", title: "Production", label: "Manufacturing at Scale",
-    description: "Production tooling is verified alongside aggressive on-the-floor QA/QC protocols. Assembly pathways are rapidly activated to hit demanding output quotas without ever softening the original blueprint."
+    num: "05", title: "PRODUCTION", label: "MASS AT SCALE",
+    description: "TOOLING IS VERIFIED ALONGSIDE AGGRESSIVE ON-THE-FLOOR QA/QC PROTOCOLS. ASSEMBLY PATHWAYS HIT OUTPUT QUOTAS WITHOUT SOFTENING THE BLUEPRINT."
   },
   { 
-    num: "06", title: "Delivery", label: "Global Logistics",
-    description: "Constructed inventory seamlessly transfers immediately into unified freight channels. We expertly orchestrate all trans-continental shipping and 3PL distributions required to hit demanding launch timelines."
+    num: "06", title: "DELIVERY", label: "GLOBAL LOGISTICS",
+    description: "INVENTORY SEAMLESSLY TRANSFERS INTO UNIFIED FREIGHT CHANNELS. WE ORCHESTRATE ALL TRANS-CONTINENTAL SHIPPING TO HIT YOUR LAUNCH TIMELINES."
   },
 ];
 
 function StepNode({ step, index, totalSteps, smoothProgress }: { step: typeof steps[0], index: number, totalSteps: number, smoothProgress: MotionValue<number> }) {
-  // Generate a strictly ascending array covering all progression steps exactly across [0.0 - 1.0] bounds.
-  // This satisfies the Web Animations API (WAAPI) requirement for monotonically non-decreasing offsets.
   const inputs = Array.from({ length: totalSteps }, (_, i) => i / (totalSteps - 1));
-  
-  // Map index tracking so the target scale peaks actively only when reaching the matching input sequence.
-  const scaleMap = inputs.map((_, i) => (i === index ? 1.25 : 1.0));
-
+  const scaleMap = inputs.map((_, i) => (i === index ? 1.05 : 1.0)); // Reduced scaling slightly for rigid brutalism
   const scale = useTransform(smoothProgress, inputs, scaleMap);
-
-  // Independent inner parallax generating physical depth without losing alignment
-  const bgParallaxX = useTransform(smoothProgress, [0, 1], ["50%", "-50%"]);
+  const bgParallaxX = useTransform(smoothProgress, [0, 1], ["20%", "-20%"]);
 
   return (
     <motion.div 
       style={{ scale, opacity: 1 }} 
-      className="w-[300px] sm:w-[350px] shrink-0 relative px-4 py-8 origin-left md:origin-center bg-transparent backdrop-blur-sm"
+      className="w-[350px] shrink-0 relative px-8 py-10 origin-center bg-[#FAF9F6] border-2 border-black flex flex-col justify-between h-[450px]"
     >
-      {/* Massive tethered background watermark with dedicated parallax mapping */}
       <motion.div 
         style={{ x: bgParallaxX }} 
-        className="absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-[30%] -z-10 text-[260px] md:text-[340px] font-black text-black opacity-[0.03] select-none pointer-events-none"
+        className="absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 -z-10 text-[380px] font-black text-black opacity-[0.03] select-none pointer-events-none"
       >
         {index + 1}
       </motion.div>
-      <div className="w-16 h-16 rounded-full border border-black/30 flex items-center justify-center font-mono text-base tracking-widest text-black mb-8 bg-black/5 relative z-10 shadow-sm transition-colors group-hover:bg-black group-hover:text-white">
-        {step.num}
+
+      <div>
+        <div className="border border-black px-4 py-2 inline-flex items-center justify-center font-mono text-sm tracking-widest text-black mb-10 bg-black/5 uppercase font-black">
+          PHASE // {step.num}
+        </div>
+        <h3 className="text-4xl md:text-5xl font-black tracking-tighter text-black mb-4 uppercase">
+          {step.title}
+        </h3>
+        <p className="text-sm font-mono tracking-widest text-black/60 mb-6 uppercase border-b border-black/20 pb-4">
+          [ {step.label} ]
+        </p>
       </div>
-      <h3 className="text-4xl md:text-5xl font-bold tracking-tight text-black mb-4">
-        {step.title}
-      </h3>
-      <p className="text-lg md:text-xl text-black tracking-wide mb-4 font-semibold">
-        {step.label}
-      </p>
-      <p className="text-[15px] leading-relaxed text-black font-medium">
+
+      <p className="text-sm leading-relaxed text-black font-bold uppercase">
         {step.description}
       </p>
     </motion.div>
@@ -78,32 +74,28 @@ export function ProcessSequence() {
     offset: ["start start", "end end"],
   });
 
-  // Inject real physical mass algorithm into the timeline bounds to totally eliminate scrolling/flicking snaps
   const smoothProgress = useSpring(scrollYProgress, { stiffness: 80, damping: 20, mass: 1, restDelta: 0.001 });
-
-  // Natively align coordinates using CSS algebraic offset so the sequence perfectly aligns the first and last frames to the active viewport center.
-  // Framer Motion strictly requires identical string formats for interpolation (`0%` is deeply required here).
-  const foregroundX = useTransform(smoothProgress, [0, 1], ["calc(0% + 50vw + -160px)", "calc(-100% + 50vw + 160px)"]);
+  const foregroundX = useTransform(smoothProgress, [0, 1], ["calc(0% + 50vw + -175px)", "calc(-100% + 50vw + 175px)"]);
 
   return (
-    <section ref={targetRef} className="relative h-[300vh] bg-[#FDFDFD]">
+    <section ref={targetRef} className="relative h-[300vh] bg-[#FAF9F6] border-b border-black">
       <div className="sticky top-0 h-screen w-full overflow-hidden flex flex-col justify-center items-start">
         
         {/* Absolute Parallax Setup Title */}
-        <div className="absolute top-24 md:top-36 left-6 md:left-24 z-30 pointer-events-none">
-          <h2 className="text-4xl md:text-7xl font-bold tracking-tighter text-charcoal mb-4 drop-shadow-sm">
-            Process.
+        <div className="absolute top-24 left-6 md:left-24 z-30 pointer-events-none">
+          <h2 className="text-6xl md:text-[8vw] font-black tracking-tighter text-black uppercase leading-none mb-4">
+            THE <br/> ROADMAP.
           </h2>
-          <p className="text-xl tracking-tight text-mid-gray shrink-0 max-w-sm">
-            A frictionless, six-step journey mapped perfectly from early concept to final unit on the shelf.
+          <p className="font-mono text-sm tracking-widest uppercase border-t border-black pt-4 max-w-sm font-black">
+            SIX PROTOCOLS. FROM CONCEPT TO SHELF.
           </p>
         </div>
 
-        {/* Foreground Action Layer (1.0x Parallax) */}
-        <motion.div style={{ x: foregroundX }} className="flex gap-24 md:gap-40 relative shrink-0 z-20 items-center justify-start mt-32 w-max">
+        {/* Foreground Action Layer */}
+        <motion.div style={{ x: foregroundX }} className="flex gap-16 md:gap-32 relative shrink-0 z-20 items-center justify-start mt-32 w-max">
           
           {/* Continuous thin geometric tracking line slicing the container perfectly through the nodes */}
-          <div className="absolute top-[80px] left-0 w-[400vw] h-[1px] bg-gradient-to-r from-transparent via-charcoal/20 to-transparent z-0" />
+          <div className="absolute top-1/2 left-0 w-[400vw] h-[2px] bg-black -translate-y-1/2 -z-10" />
 
           {steps.map((step, index) => (
             <StepNode 
@@ -115,10 +107,6 @@ export function ProcessSequence() {
             />
           ))}
         </motion.div>
-
-        {/* Lighting Glare overlay for cinematic fade out on edges */}
-        <div className="absolute inset-y-0 left-0 w-[15vw] bg-gradient-to-r from-[#FDFDFD] to-transparent pointer-events-none z-30" />
-        <div className="absolute inset-y-0 right-0 w-[15vw] bg-gradient-to-l from-[#FDFDFD] to-transparent pointer-events-none z-30" />
 
       </div>
     </section>

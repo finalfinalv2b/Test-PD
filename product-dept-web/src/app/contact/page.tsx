@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
 import { Footer } from "@/components/Footer";
 
 export default function Contact() {
@@ -12,12 +11,11 @@ export default function Contact() {
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setIsSubmitting(true);
-    
+
     const formData = new FormData(event.currentTarget);
     const data = Object.fromEntries(formData.entries());
 
     try {
-      // Use FormSubmit AJAX endpoint to bypass their ad/logo pages entirely
       await fetch("https://formsubmit.co/ajax/ryrorussell1@gmail.com", {
         method: "POST",
         headers: {
@@ -26,108 +24,94 @@ export default function Contact() {
         },
         body: JSON.stringify(data),
       });
-      
+
       setIsSuccess(true);
     } catch (error) {
       console.error("Error submitting form", error);
-      // Fallback
     } finally {
       setIsSubmitting(false);
     }
   }
 
   return (
-    <div className="flex flex-col min-h-screen bg-background pt-20">
-      <section className="py-24 px-6 max-w-2xl mx-auto w-full">
-        {!isSuccess ? (
-          <>
-            <h1 className="text-5xl md:text-7xl font-bold tracking-tighter text-charcoal mb-6">Contact.</h1>
-            <p className="text-xl text-mid-gray leading-relaxed mb-16">
-              Ready to turn a compelling idea into an exceptional product? Start the conversation here.
-            </p>
+  <div className="flex flex-col min-h-screen bg-[#FAF9F6] pt-[72px]">
+    <section className="flex-grow w-full border-b border-black">
+      <div className="grid grid-cols-1 lg:grid-cols-2 h-full min-h-[calc(100vh-72px)]">
 
-            <form onSubmit={handleSubmit} className="space-y-8">
-              <input type="hidden" name="_subject" value="New Inquiry from Product Dept. Website" />
+        {/* LEFT SIDE COPY BLOCK */}
+        <div className="border-b lg:border-b-0 lg:border-r border-black p-8 md:p-16 flex flex-col justify-start bg-[#FAF9F6]">
+          <h1 className="text-6xl md:text-[8vw] font-black tracking-tighter text-black uppercase leading-none mb-12">
+            INITIATE <br /> PROTOCOL.
+          </h1>
+          <p className="text-lg font-bold text-black uppercase tracking-widest max-w-sm mb-8">
+            READY TO EXECUTE A PROJECT? WE ONLY PARTNER WITH AMBITIOUS OPERATORS.
+          </p>
+          <div className="w-full h-px bg-black mb-8" />
+          <p className="font-mono text-sm tracking-widest text-black/60 uppercase">
+              // HQ_NEW_YORK <br /> // INBOUND_DATA_LINK
+          </p>
+        </div>
+
+        {/* RIGHT SIDE FORM GRID */}
+        <div className="p-8 md:p-16 bg-black text-[#FAF9F6] flex flex-col justify-center">
+          {!isSuccess ? (
+            <form onSubmit={handleSubmit} className="space-y-8 max-w-2xl w-full mx-auto">
+              <input type="hidden" name="_subject" value="New Inquiry from Product Dept." />
               <input type="hidden" name="_captcha" value="false" />
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div className="flex flex-col gap-2">
-                  <label htmlFor="name" className="text-sm font-semibold tracking-wide text-charcoal uppercase">Name</label>
-                  <input type="text" id="name" name="name" className="border-b border-charcoal/20 bg-transparent py-2 outline-none focus:border-charcoal transition-colors" placeholder="Jane Doe" required />
+                <div className="flex flex-col gap-3">
+                  <label htmlFor="name" className="text-xs font-black tracking-widest uppercase text-[#FAF9F6]/50">[ PARAM_01: NAME ]</label>
+                  <input type="text" id="name" name="name" className="border-2 border-[#FAF9F6] bg-black py-4 px-4 outline-none focus:bg-[#FAF9F6] focus:text-black transition-colors font-mono uppercase text-sm" placeholder="JANE DOE" required />
                 </div>
-                <div className="flex flex-col gap-2">
-                  <label htmlFor="email" className="text-sm font-semibold tracking-wide text-charcoal uppercase">Email</label>
-                  <input type="email" id="email" name="email" className="border-b border-charcoal/20 bg-transparent py-2 outline-none focus:border-charcoal transition-colors" placeholder="jane@company.com" required />
+                <div className="flex flex-col gap-3">
+                  <label htmlFor="email" className="text-xs font-black tracking-widest uppercase text-[#FAF9F6]/50">[ PARAM_02: COMM_LINK ]</label>
+                  <input type="email" id="email" name="email" className="border-2 border-[#FAF9F6] bg-black py-4 px-4 outline-none focus:bg-[#FAF9F6] focus:text-black transition-colors font-mono uppercase text-sm" placeholder="JANE@COMPANY.COM" required />
                 </div>
               </div>
 
-              <div className="flex flex-col gap-2">
-                <label htmlFor="company" className="text-sm font-semibold tracking-wide text-charcoal uppercase">Company</label>
-                <input type="text" id="company" name="company" className="border-b border-charcoal/20 bg-transparent py-2 outline-none focus:border-charcoal transition-colors" placeholder="Company Name" />
+              <div className="flex flex-col gap-3">
+                <label htmlFor="company" className="text-xs font-black tracking-widest uppercase text-[#FAF9F6]/50">[ PARAM_03: ORGANIZATION ]</label>
+                <input type="text" id="company" name="company" className="border-2 border-[#FAF9F6] bg-black py-4 px-4 outline-none focus:bg-[#FAF9F6] focus:text-black transition-colors font-mono uppercase text-sm" placeholder="ORGANIZATION NAME" />
               </div>
 
-              <div className="flex flex-col gap-2">
-                <label htmlFor="description" className="text-sm font-semibold tracking-wide text-charcoal uppercase">Project Description</label>
-                <textarea id="description" name="description" rows={4} className="border-b border-charcoal/20 bg-transparent py-2 outline-none focus:border-charcoal transition-colors resize-none" placeholder="Tell us about what you're building..." required></textarea>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div className="flex flex-col gap-2">
-                  <label htmlFor="timeline" className="text-sm font-semibold tracking-wide text-charcoal uppercase">Target Timeline</label>
-                  <select id="timeline" name="timeline" className="border-b border-charcoal/20 bg-transparent py-2 outline-none focus:border-charcoal transition-colors appearance-none cursor-pointer" required>
-                    <option value="" disabled selected>Select a timeframe...</option>
-                    <option value="ASAP">ASAP (Q1)</option>
-                    <option value="3-6 Months">3-6 Months</option>
-                    <option value="6-12 Months">6-12 Months</option>
-                    <option value="1+ Year">1+ Year (Exploratory)</option>
-                  </select>
-                </div>
-                <div className="flex flex-col gap-2">
-                  <label htmlFor="budget" className="text-sm font-semibold tracking-wide text-charcoal uppercase">Budget Range <span className="text-mid-gray/50 normal-case tracking-normal ml-1">(Optional)</span></label>
-                  <select id="budget" name="budget" className="border-b border-charcoal/20 bg-transparent py-2 outline-none focus:border-charcoal transition-colors appearance-none cursor-pointer">
-                    <option value="" disabled selected>Select a range...</option>
-                    <option value="<$50k">&lt; $50k</option>
-                    <option value="$50k - $250k">$50k - $250k</option>
-                    <option value="$250k - $1M">$250k - $1M</option>
-                    <option value="$1M+">$1M+</option>
-                  </select>
-                </div>
+              <div className="flex flex-col gap-3">
+                <label htmlFor="description" className="text-xs font-black tracking-widest uppercase text-[#FAF9F6]/50">[ PARAM_04: DIRECTIVE ]</label>
+                <textarea id="description" name="description" rows={5} className="border-2 border-[#FAF9F6] bg-black py-4 px-4 outline-none focus:bg-[#FAF9F6] focus:text-black transition-colors resize-none font-mono uppercase text-sm" placeholder="STATE YOUR OBJECTIVE..." required></textarea>
               </div>
 
               <div className="pt-8">
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="inline-flex items-center justify-center bg-charcoal text-white hover:bg-black disabled:opacity-50 disabled:cursor-not-allowed transition-colors px-12 py-5 rounded-full font-medium text-base tracking-wide w-full md:w-auto"
+                  className="w-full bg-[#FAF9F6] text-black hover:bg-black hover:text-[#FAF9F6] hover:border-[#FAF9F6] border-2 border-transparent transition-colors py-6 font-black text-2xl tracking-tighter uppercase"
                 >
-                  {isSubmitting ? "Sending..." : "Submit Inquiry"}
+                  {isSubmitting ? "TRANSMITTING..." : "EXECUTE."}
                 </button>
               </div>
             </form>
-          </>
-        ) : (
-          <div className="flex flex-col items-center justify-center text-center py-20 animate-in fade-in slide-in-from-bottom-4 duration-700">
-            <div className="w-16 h-16 bg-charcoal/5 rounded-full flex items-center justify-center mb-8">
-              <span className="text-charcoal text-2xl">✓</span>
+          ) : (
+            <div className="flex flex-col items-start justify-center h-full max-w-2xl mx-auto">
+              <div className="uppercase border-2 border-[#FAF9F6] p-4 font-mono font-black mb-8 text-xs tracking-widest">
+                [ STATUS: 200 OK ]
+              </div>
+              <h2 className="text-5xl md:text-6xl font-black tracking-tighter mb-6 uppercase">DATA RECEIVED.</h2>
+              <p className="text-lg font-mono text-[#FAF9F6]/70 uppercase mb-12">
+                THE DIRECTIVE HAS BEEN LOGGED. A DISPATCH WILL BE SENT TO YOUR COMM_LINK SHORTLY.
+              </p>
+              <Link
+                href="/"
+                className="bg-[#FAF9F6] text-black hover:bg-black hover:text-[#FAF9F6] border-2 border-transparent hover:border-[#FAF9F6] transition-colors py-6 px-12 font-black text-xl tracking-tighter uppercase inline-flex"
+              >
+                RETURN TO BASE &rarr;
+              </Link>
             </div>
-            <h2 className="text-4xl md:text-5xl font-bold tracking-tighter text-charcoal mb-6">Inquiry Received.</h2>
-            <p className="text-xl text-mid-gray leading-relaxed mb-12 max-w-md">
-              Thank you for reaching out. A partner from Product Dept. will be in touch shortly to review your brief.
-            </p>
-            <Link 
-              href="/"
-              className="inline-flex items-center justify-center bg-charcoal text-white hover:bg-black transition-colors px-10 py-4 rounded-full font-medium text-base tracking-wide gap-3"
-            >
-              Back to Homepage <ArrowRight size={18} />
-            </Link>
-          </div>
-        )}
-      </section>
-      
-      {/* Push Footer to bottom of screen naturally */}
-      <div className="mt-auto">
-        <Footer />
+          )}
+        </div>
       </div>
-    </div>
-  );
+    </section>
+
+    <Footer />
+  </div>
+);
 }

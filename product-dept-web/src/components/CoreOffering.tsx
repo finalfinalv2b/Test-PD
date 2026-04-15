@@ -1,45 +1,50 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { ArrowRight, Lightbulb, PenTool, Cpu, Factory, Ship, Box } from "lucide-react";
 import { useState } from "react";
 
 const offerings = [
   {
-    title: "Innovation Strategy",
-    description: "Discover lucrative market whitespace and outpace the competition. We transform ambiguous ideas into actionable, highly de-risked product blueprints.",
-    features: ["Market & Technical Feasibility", "IP Roadmapping", "MVP Definition"],
-    icon: Lightbulb,
+    code: "01",
+    label: "STRATEGY",
+    title: "THE VISION",
+    description: "WE HUNT DOWN LUCRATIVE MARKET WHITESPACE AND OUTPACE THE COMPETITION. WE TRANSFORM AMBIGUOUS IDEAS INTO HIGHLY DE-RISKED, BULLETPROOF BLUEPRINTS.",
+    features: ["FEASIBILITY MATRIX", "IP ROADMAPPING", "MVP DEPLOYMENT"],
   },
   {
-    title: "Industrial Design",
-    description: "Create profound brand equity through physical touchpoints. We draft beautiful, ergonomic forms engineered to captivate consumers and scale elegantly.",
-    features: ["Concept Generation", "CMF Strategy", "Ergonomics & Physical UX"],
-    icon: PenTool,
+    code: "02",
+    label: "INDUSTRIAL",
+    title: "FORM & FUNCTION",
+    description: "WE DRAFT BEAUTIFUL, ERGONOMIC GEOMETRY ENGINEERED TO CAPTIVATE CONSUMERS. PURE BRAND EQUITY CONSTRUCTED THROUGH PHYSICAL TOUCHPOINTS.",
+    features: ["CONCEPT GENERATION", "CMF PROTOCOLS", "UX ERGONOMICS"],
   },
   {
-    title: "Systems Engineering",
-    description: "Bridge the gap between pure aesthetics and functional reality. Our engineering guarantees real-world performance without sacrificing the original vision.",
-    features: ["Mechanical Architecture", "Electrical & Firmware Logic", "DFM / DFA Analysis"],
-    icon: Cpu,
+    code: "03",
+    label: "ENGINEERING",
+    title: "RAW GEOMETRY",
+    description: "WE BRIDGE THE GAP BETWEEN PURE AESTHETICS AND PHYSICAL REALITY. OUR ENGINEERING GUARANTEES MAXIMUM PERFORMANCE WITHOUT SACRIFICING THE VISION.",
+    features: ["MECHANICAL ARCHITECTURE", "FIRMWARE LOGIC", "DFM / DFA"],
   },
   {
-    title: "Mass Manufacturing",
-    description: "Turn prototypes into profit. We directly transition complex engineering onto the factory floor with airtight quality control and rapid scalability.",
-    features: ["Production Tooling Formulation", "Quality Assurance (QA/QC)", "Assembly Automation"],
-    icon: Factory,
+    code: "04",
+    label: "PRODUCTION",
+    title: "MASS SCALE",
+    description: "WE TRANSITION COMPLEX ENGINEERING DIRECTLY ONTO THE FACTORY FLOOR WITH AIRTIGHT QUALITY CONTROL AND UNCOMPROMISING SCALABILITY.",
+    features: ["TOOLING FORMULATION", "QA / QC PATHWAYS", "ASSEMBLY AUTOMATION"],
   },
   {
-    title: "Supply Chain Strategy",
-    description: "Build a resilient, cost-effective global network. We source premium materials, audit elite vendors, and negotiate aggressive margins to protect your bottom line.",
-    features: ["Elite Vendor Sourcing", "BOM Cost Optimization", "Contract Negotiation"],
-    icon: Box,
+    code: "05",
+    label: "SOURCING",
+    title: "THE NETWORK",
+    description: "WE BUILD RESILIENT, COST-EFFECTIVE GLOBAL CHAINS. WE SECURE PREMIUM MATERIALS AND NEGOTIATE AGGRESSIVE MARGINS TO PROTECT YOUR BOTTOM LINE.",
+    features: ["ELITE VENDOR AUDITS", "BOM OPTIMIZATION", "CONTRACT LOCKS"],
   },
   {
-    title: "Global Logistics",
-    description: "Deliver at scale with absolute precision. We handle complex trans-continental shipping, freight forwarding, and 3PL warehousing so you never have to miss a launch date.",
-    features: ["Global Freight & Customs", "Warehousing & 3PL Integration", "Last-Mile Distribution"],
-    icon: Ship,
+    code: "06",
+    label: "LOGISTICS",
+    title: "GLOBAL FREIGHT",
+    description: "DELIVER AT SCALE WITH ABSOLUTE PRECISION. WE ORCHESTRATE ALL TRANS-CONTINENTAL SHIPPING AND WAREHOUSING. YOU NEVER MISS A LAUNCH DATE.",
+    features: ["CUSTOMS & FREIGHT", "3PL INTEGRATION", "LAST-MILE DISTRIBUTION"],
   },
 ];
 
@@ -48,35 +53,34 @@ export function CoreOffering() {
 
   const containerVariants = {
     hidden: { opacity: 0 },
-    show: {
-      opacity: 1,
-      transition: { staggerChildren: 0.1 },
-    },
+    show: { opacity: 1, transition: { staggerChildren: 0.1 } },
   };
 
   const itemVariants = {
-    hidden: { opacity: 0, y: 30 },
-    show: { opacity: 1, y: 0, transition: { duration: 0.6 } },
+    hidden: { opacity: 0, scale: 0.98 },
+    show: { opacity: 1, scale: 1, transition: { duration: 0.4 } },
   };
 
   return (
-    <section className="py-32 bg-white px-6">
-      <div className="w-full px-4 md:px-8">
-        <div className="mb-20">
-          <h2 className="text-3xl md:text-5xl font-bold tracking-tight text-charcoal mb-6">
-            Core Offering
+    <section className="bg-[#FAF9F6] border-b border-black">
+      <div className="w-full">
+        {/* HEADER BLOCK */}
+        <div className="border-b border-black p-6 md:p-12 lg:p-16 flex flex-col md:flex-row justify-between items-start md:items-end gap-8 bg-black text-[#FAF9F6]">
+          <h2 className="text-5xl md:text-7xl lg:text-[7vw] font-black tracking-tighter uppercase leading-none">
+            CORE <br/> STANDARDS.
           </h2>
-          <p className="text-xl text-mid-gray max-w-2xl">
-            A fully integrated cycle for creating exceptional products. From the first sketch to the final delivery.
+          <p className="font-mono text-sm tracking-widest uppercase max-w-sm border-t border-[#FAF9F6]/20 pt-4">
+            END-TO-END SUPREMACY. NO FRAGMENTATION. WE CONTROL THE ENTIRE BOARD.
           </p>
         </div>
 
+        {/* BENTO GRID */}
         <motion.div
           variants={containerVariants}
           initial="hidden"
           whileInView="show"
           viewport={{ once: true, margin: "-100px" }}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-0 border-t border-l border-charcoal/10"
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
         >
           {offerings.map((item, i) => (
             <motion.div
@@ -84,40 +88,33 @@ export function CoreOffering() {
               variants={itemVariants}
               onMouseEnter={() => setHoveredIndex(i)}
               onMouseLeave={() => setHoveredIndex(null)}
-              className="group relative p-12 border-r border-b border-charcoal/10 bg-white hover:bg-black transition-colors duration-500 overflow-hidden cursor-pointer h-[400px] flex flex-col justify-between"
+              className="group relative p-8 md:p-12 border-b border-r border-black hover:bg-black transition-none cursor-crosshair h-[500px] flex flex-col justify-between"
+              style={{
+                borderRightWidth: ((i + 1) % 3 === 0) ? '0px' : '1px',
+                // For mobile, we should probably keep borders consistent but since it's a grid, Tailwind's border utilities need strict manual enforcement if varying. 
+                // Using standard CSS borders on all elements forms a thick overlapping grid which is very brutalist.
+              }}
             >
-              <div className="relative z-10 transition-colors duration-500 text-charcoal group-hover:text-white">
-                <item.icon className="w-8 h-8 mb-6 opacity-70 group-hover:opacity-100" strokeWidth={1.5} />
-                <h3 className="text-2xl font-bold mb-4 tracking-tight">{item.title}</h3>
+              <div className="relative z-10 text-black group-hover:text-[#FAF9F6]">
+                <div className="flex justify-between items-start mb-12 border-b border-current pb-4">
+                  <span className="font-mono text-xs font-black tracking-widest uppercase">[{item.code}]</span>
+                  <span className="font-mono text-xs font-black tracking-widest uppercase">{item.label}</span>
+                </div>
                 
-                <motion.div
-                  initial={{ height: 0, opacity: 0 }}
-                  animate={{ 
-                    height: hoveredIndex === i ? "auto" : 0, 
-                    opacity: hoveredIndex === i ? 1 : 0 
-                  }}
-                  transition={{ duration: 0.4, ease: "easeInOut" }}
-                  className="overflow-hidden"
-                >
-                  <p className="text-white/80 text-[15px] font-light leading-relaxed pb-6">
-                    {item.description}
-                  </p>
-                  <ul className="text-white/60 text-sm font-medium space-y-3 pb-2">
-                    {item.features.map((feat, idx) => (
-                      <li key={idx} className="flex items-center gap-3">
-                        <div className="w-[3px] h-[3px] bg-white opacity-50 rounded-full" />
-                        {feat}
-                      </li>
-                    ))}
-                  </ul>
-                </motion.div>
+                <h3 className="text-3xl md:text-4xl font-black mb-6 tracking-tighter uppercase">{item.title}</h3>
+                
+                <p className="text-[14px] md:text-[15px] font-bold leading-relaxed tracking-tight mb-8 uppercase opacity-80">
+                  {item.description}
+                </p>
+
+                <ul className="text-xs font-mono font-bold tracking-wider space-y-2 uppercase">
+                  {item.features.map((feat, idx) => (
+                    <li key={idx} className="flex items-center gap-3">
+                      <span className="opacity-50">+</span> {feat}
+                    </li>
+                  ))}
+                </ul>
               </div>
-
-              {/* Empty placeholder to maintain grid alignment if necessary, else just space */}
-              <div className="relative z-10 h-6"></div>
-
-              {/* Background gradient flare on hover */}
-              <div className="absolute inset-0 bg-gradient-to-tr from-charcoal to-black opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
             </motion.div>
           ))}
         </motion.div>

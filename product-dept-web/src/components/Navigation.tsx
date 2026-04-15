@@ -1,61 +1,46 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
 
 export function Navigation() {
   const [isOpen, setIsOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 50);
-    };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  const pathname = usePathname();
-  const isDarkTheme = pathname === "/" && !scrolled;
 
   const links = [
-    { name: "Capabilities", href: "/#capabilities" },
-    { name: "Process", href: "/#process" },
-    { name: "About", href: "/about" },
-    { name: "Contact", href: "/contact" },
+    { name: "CAPABILITIES", href: "/#capabilities" },
+    { name: "PROCESS", href: "/#process" },
+    { name: "ABOUT", href: "/about" },
+    { name: "CONTACT", href: "/contact" },
   ];
 
   return (
-    <nav
-      className={`fixed top-0 w-full z-50 transition-colors duration-300 ${
-        scrolled ? "bg-background/90 backdrop-blur-md border-b border-charcoal/10" : "bg-transparent"
-      }`}
-    >
-      <div className="w-full px-6 h-20 flex items-center justify-between">
-        <Link href="/" className="flex items-center gap-3">
+    <nav className="fixed top-0 w-full z-50 bg-[#FAF9F6] border-b border-black">
+      <div className="w-full pl-6 pr-0 md:pr-6 h-[72px] flex items-center justify-between">
+        
+        {/* LOGO BLOCK */}
+        <Link href="/" className="flex items-center gap-4 h-full py-4 border-r border-transparent md:border-black pr-8 hover:opacity-70 transition-opacity">
           <img 
-            src={isDarkTheme ? "/PD logo white line.svg" : "/PD Logo Black line.svg"} 
+            src={"/PD Logo Black line.svg"} 
             alt="PD Logo" 
             className="h-6 w-auto" 
           />
           <img 
-            src={isDarkTheme ? "/PD white wordmark.svg" : "/PD wordmark.svg"} 
+            src={"/PD wordmark.svg"} 
             alt="Product Dept." 
-            className="h-4 w-auto" 
+            className="h-4 w-auto hidden sm:block" 
           />
         </Link>
 
-        {/* Desktop Nav */}
-        <div className="hidden md:flex gap-8">
-          {links.map((link) => (
+        {/* DESKTOP NAV */}
+        <div className="hidden md:flex items-center h-full">
+          {links.map((link, idx) => (
             <Link
               key={link.name}
               href={link.href}
-              className={`text-sm font-medium transition-colors ${
-                isDarkTheme ? "text-white/80 hover:text-white" : "text-foreground/80 hover:text-foreground"
+              className={`h-full flex items-center justify-center px-8 text-xs font-black tracking-widest text-black transition-colors hover:bg-black hover:text-[#FAF9F6] ${
+                idx !== 0 ? 'border-l border-black' : ''
               }`}
             >
               {link.name}
@@ -63,31 +48,31 @@ export function Navigation() {
           ))}
         </div>
 
-        {/* Mobile Toggle */}
+        {/* MOBILE TOGGLE */}
         <button
-          className={isDarkTheme ? "text-white md:hidden" : "text-foreground md:hidden"}
+          className="md:hidden text-black h-full px-6 border-l border-black flex items-center hover:bg-black hover:text-[#FAF9F6] transition-colors"
           onClick={() => setIsOpen(!isOpen)}
           aria-label="Toggle Menu"
         >
-          {isOpen ? <X size={24} /> : <Menu size={24} />}
+          {isOpen ? <X size={24} strokeWidth={3} /> : <Menu size={24} strokeWidth={3} />}
         </button>
       </div>
 
-      {/* Mobile Menu */}
+      {/* MOBILE DROPDOWN */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            className="md:hidden absolute top-20 left-0 w-full bg-background border-b border-charcoal/10 flex flex-col items-center py-8 gap-6 shadow-xl"
+            initial={{ height: 0 }}
+            animate={{ height: "auto" }}
+            exit={{ height: 0 }}
+            className="md:hidden absolute top-[72px] left-0 w-full bg-[#FAF9F6] border-b border-black overflow-hidden flex flex-col shadow-2xl"
           >
             {links.map((link) => (
               <Link
                 key={link.name}
                 href={link.href}
                 onClick={() => setIsOpen(false)}
-                className="text-lg font-medium text-foreground tracking-tight"
+                className="w-full text-center py-6 text-sm font-black tracking-widest text-black border-t border-black hover:bg-black hover:text-[#FAF9F6] transition-colors uppercase"
               >
                 {link.name}
               </Link>

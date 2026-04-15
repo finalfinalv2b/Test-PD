@@ -2,24 +2,39 @@ import { Hero } from "@/components/Hero";
 import { CoreOffering } from "@/components/CoreOffering";
 import { ProcessSequence } from "@/components/ProcessSequence";
 import { FadeIn } from "@/components/FadeIn";
+import Link from "next/link";
 
 export default function Home() {
   return (
     <>
       <Hero />
 
-      {/* Positioning Statement */}
-      <section className="py-40 px-6 bg-charcoal text-white flex items-center justify-center min-h-[60vh] border-t border-white/5 relative overflow-hidden">
-        <FadeIn className="w-full max-w-5xl px-4 md:px-8 text-center relative z-10">
-          <h2 className="text-4xl md:text-6xl lg:text-7xl font-medium tracking-tighter leading-[1.05] text-white/95">
-            We are the product team ambitious companies wish they had in-house.
-          </h2>
-          <div className="mt-16 w-full max-w-2xl mx-auto h-[1px] bg-white/10" />
-          <p className="mt-16 text-xl md:text-3xl font-light text-mid-gray/90 w-full tracking-tight leading-relaxed max-w-4xl mx-auto">
-            We bring rigor to creativity, clarity to complexity, and momentum to vision. For every brief, every sketch, and every unit on the shelf, we ask: How can this be better?
-          </p>
-        </FadeIn>
-      </section>
+      {/* Slide UP and OVER the Hero video layer below it */}
+      <div className="relative z-20 -mt-[100vh]">
+        
+        {/* Action Button */}
+        <div className="w-full border-t border-white/20 bg-black/40 backdrop-blur-md">
+          <Link
+            href="/contact"
+            className="flex items-center justify-center text-[#FAF9F6] transition-colors py-8 w-full font-black text-xl md:text-3xl tracking-tighter uppercase hover:bg-[#FAF9F6] hover:text-black"
+          >
+            EXECUTE PROJECT NOW &rarr;
+          </Link>
+        </div>
+
+        {/* Positioning Statement */}
+        <section className="py-40 px-6 bg-charcoal text-white flex items-center justify-center min-h-[60vh] border-t border-white/5 relative overflow-hidden">
+          <FadeIn className="w-full max-w-5xl px-4 md:px-8 text-center relative z-10">
+            <h2 className="text-4xl md:text-6xl lg:text-7xl font-medium tracking-tighter leading-[1.05] text-white/95">
+              We are the product team ambitious companies wish they had in-house.
+            </h2>
+            <div className="mt-16 w-full max-w-2xl mx-auto h-[1px] bg-white/10" />
+            <p className="mt-16 text-xl md:text-3xl font-light text-mid-gray/90 w-full tracking-tight leading-relaxed max-w-4xl mx-auto">
+              We bring structure to creativity, clarity to complexity, and momentum to vision. For every brief, every sketch, and every unit on the shelf, we ask: How can this be better?
+            </p>
+          </FadeIn>
+        </section>
+      </div>
 
       {/* Capabilities / Core Offering */}
       <div id="capabilities">
@@ -57,7 +72,7 @@ export default function Home() {
       <section className="py-48 px-6 bg-background flex flex-col items-center justify-center text-center">
         <FadeIn className="w-full px-4 md:px-8 max-w-6xl">
           <blockquote className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tighter text-charcoal leading-[1.05] mb-24">
-            "We bring rigor to creativity, <br className="hidden md:block" />
+            "We bring structure to creativity, <br className="hidden md:block" />
             clarity to complexity, <br className="hidden md:block" />
             and momentum to vision."
           </blockquote>

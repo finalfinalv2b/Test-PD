@@ -73,10 +73,8 @@ export function Hero() {
 
   // We only begin the fade out AFTER 85% progress to guarantee full animation playback.
   const canvasOpacity = useTransform(smoothProgress, [0, 0.85, 1], [1, 1, 0]);
-  const videoY = useTransform(smoothProgress, [0, 1], ["0%", "25%"]);
   // Text fades out a little early, but not the button.
   const textOpacity = useTransform(smoothProgress, [0, 0.8], [1, 0]);
-  const buttonTextColor = useTransform(smoothProgress, [0, 0.8], ["#FAF9F6", "#000000"]);
 
   return (
     <section ref={containerRef} className="relative h-[250vh] bg-black border-b border-black">
@@ -86,8 +84,8 @@ export function Hero() {
         
         {/* SCRUBBING SEQUENCED IMAGES (CANVAS LAYER) */}
         <motion.div 
-          style={{ y: videoY, opacity: canvasOpacity }} 
-          className="absolute inset-0 w-full h-full z-0 pointer-events-none origin-bottom flex items-center justify-center"
+          style={{ opacity: canvasOpacity }} 
+          className="absolute inset-0 w-full h-full z-0 pointer-events-none flex items-center justify-center"
         >
           <canvas 
             ref={canvasRef}
@@ -117,18 +115,6 @@ export function Hero() {
           </p>
         </motion.div>
 
-        {/* Action Button */}
-        <motion.div
-           className="absolute bottom-0 w-full z-20 border-t border-[#FAF9F6]/20 bg-black/40 backdrop-blur-md"
-        >
-          <motion.a
-            href="/contact"
-            style={{ color: buttonTextColor }}
-            className="flex items-center justify-center bg-transparent hover:bg-[#FAF9F6] hover:text-black transition-colors py-8 w-full font-black text-xl md:text-3xl tracking-tighter uppercase"
-          >
-            EXECUTE PROJECT NOW &rarr;
-          </motion.a>
-        </motion.div>
       </div>
     </section>
   );

@@ -553,6 +553,15 @@ We officially thank the following contributors for their help in making this rep
 - [@sebastiondev](https://github.com/sebastiondev)
 - [@WHOISABHISHEKADHIKARI](https://github.com/WHOISABHISHEKADHIKARI)
 - [@zhangyanxs](https://github.com/zhangyanxs)
+- [@edudeftones-cloud](https://github.com/edudeftones-cloud)
+- [@emanoelCarvalho](https://github.com/emanoelCarvalho)
+- [@Evozim](https://github.com/Evozim)
+- [@globalchatapp](https://github.com/globalchatapp)
+- [@Imasaikiran](https://github.com/Imasaikiran)
+- [@jiawei248](https://github.com/jiawei248)
+- [@justmiroslav](https://github.com/justmiroslav)
+- [@tanveer-farooq](https://github.com/tanveer-farooq)
+- [@unitedideas](https://github.com/unitedideas)
 
 ## Star History
 

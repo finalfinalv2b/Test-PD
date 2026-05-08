@@ -2,6 +2,17 @@ import type { Metadata } from "next";
 import localFont from 'next/font/local';
 import "./globals.css";
 
+const elza = localFont({
+  src: [
+    {
+      path: '../fonts/ElzaTrial-Black.otf',
+      weight: '900',
+      style: 'normal',
+    }
+  ],
+  variable: '--font-elza'
+});
+
 const neueHaas = localFont({
   src: [
     {
@@ -33,6 +44,17 @@ const neueHaas = localFont({
   variable: '--font-neue-haas'
 });
 
+const neueHaasUnica = localFont({
+  src: [
+    {
+      path: '../fonts/Neue_Haas_Unica_W1G_Light.otf',
+      weight: '300',
+      style: 'normal',
+    }
+  ],
+  variable: '--font-neue-haas-unica'
+});
+
 export const metadata: Metadata = {
   title: "Product Dept.",
   description: "Where Great Ideas Become Exceptional Products. Full-Stack Product Creation.",
@@ -49,7 +71,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${neueHaas.variable} h-full antialiased`}
+      className={`${elza.variable} ${neueHaas.variable} ${neueHaasUnica.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col font-sans bg-background text-foreground tracking-tight">
         <Cursor />

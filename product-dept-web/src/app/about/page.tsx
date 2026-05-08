@@ -40,7 +40,7 @@ export default function About() {
 
             {/* MISSION */}
             <div className="p-8 md:p-16 border-b border-black bg-black text-[#FAF9F6]">
-              <h2 className="text-sm font-black tracking-widest uppercase mb-8 text-[#FAF9F6]/50">[ MISSION_DIRECTIVE ]</h2>
+              <h2 className="text-sm font-black tracking-widest uppercase mb-8 text-[#F41C06]">[ MISSION_DIRECTIVE ]</h2>
               <div className="font-bold text-xl md:text-3xl tracking-tighter uppercase leading-tight">
                 <p>
                   BRING RIGOR TO CREATIVITY. CLARITY TO COMPLEXITY. MOMENTUM TO VISION. EXCEPTIONAL PRODUCTS REQUIRE STRICT HOLISTIC INTEGRATION FROM DAY ONE.
@@ -78,7 +78,7 @@ export default function About() {
               <div className="space-y-0 border-l-2 border-black ml-2 pl-8 relative">
                 
                 <div className="relative mb-16 group">
-                  <div className="absolute w-4 h-4 bg-black -left-[39px] top-1"></div>
+                  <div className="absolute w-4 h-4 bg-[#F41C06] -left-[39px] top-1"></div>
                   <span className="font-black tracking-widest text-black mb-2 block border-b border-black pb-2 uppercase max-w-[150px]">
                     EPOCH // 1996
                   </span>
@@ -88,7 +88,7 @@ export default function About() {
                 </div>
 
                 <div className="relative mb-16 group">
-                  <div className="absolute w-4 h-4 bg-black -left-[39px] top-1"></div>
+                  <div className="absolute w-4 h-4 bg-[#F41C06] -left-[39px] top-1"></div>
                   <span className="font-black tracking-widest text-black mb-2 block border-b border-black pb-2 uppercase max-w-[150px]">
                     EPOCH // 2010
                   </span>
@@ -98,7 +98,7 @@ export default function About() {
                 </div>
 
                 <div className="relative group">
-                  <div className="absolute w-4 h-4 bg-black -left-[39px] top-1"></div>
+                  <div className="absolute w-4 h-4 bg-[#F41C06] -left-[39px] top-1"></div>
                   <span className="font-black tracking-widest text-black mb-2 block border-b border-black pb-2 uppercase max-w-[150px]">
                     STATUS // ACTIVE
                   </span>

@@ -8,42 +8,42 @@ const offerings = [
     code: "01",
     label: "STRATEGY",
     title: "THE VISION",
-    description: "WE HUNT DOWN LUCRATIVE MARKET WHITESPACE AND OUTPACE THE COMPETITION. WE TRANSFORM AMBIGUOUS IDEAS INTO HIGHLY DE-RISKED, BULLETPROOF BLUEPRINTS.",
+    description: "We identify clear market opportunities and map out constraints early. By establishing rigid requirements, we turn your ideas into focused, scalable plans.",
     features: ["FEASIBILITY MATRIX", "IP ROADMAPPING", "MVP DEPLOYMENT"],
   },
   {
     code: "02",
     label: "INDUSTRIAL",
     title: "FORM & FUNCTION",
-    description: "WE DRAFT BEAUTIFUL, ERGONOMIC GEOMETRY ENGINEERED TO CAPTIVATE CONSUMERS. PURE BRAND EQUITY CONSTRUCTED THROUGH PHYSICAL TOUCHPOINTS.",
+    description: "We design intuitive, ergonomic products that resonate with your customers. Our focus is on bringing your vision to life through thoughtful physical touchpoints.",
     features: ["CONCEPT GENERATION", "CMF PROTOCOLS", "UX ERGONOMICS"],
   },
   {
     code: "03",
     label: "ENGINEERING",
     title: "RAW GEOMETRY",
-    description: "WE BRIDGE THE GAP BETWEEN PURE AESTHETICS AND PHYSICAL REALITY. OUR ENGINEERING GUARANTEES MAXIMUM PERFORMANCE WITHOUT SACRIFICING THE VISION.",
+    description: "We bridge the gap between creative design and physical reality, ensuring reliable performance while carefully preserving the original aesthetic.",
     features: ["MECHANICAL ARCHITECTURE", "FIRMWARE LOGIC", "DFM / DFA"],
   },
   {
     code: "04",
     label: "PRODUCTION",
     title: "MASS SCALE",
-    description: "WE TRANSITION COMPLEX ENGINEERING DIRECTLY ONTO THE FACTORY FLOOR WITH AIRTIGHT QUALITY CONTROL AND UNCOMPROMISING SCALABILITY.",
+    description: "We transition your product to the factory floor with precision and care, maintaining strict quality control to deliver high-quality outcomes at scale.",
     features: ["TOOLING FORMULATION", "QA / QC PATHWAYS", "ASSEMBLY AUTOMATION"],
   },
   {
     code: "05",
     label: "SOURCING",
     title: "THE NETWORK",
-    description: "WE BUILD RESILIENT, COST-EFFECTIVE GLOBAL CHAINS. WE SECURE PREMIUM MATERIALS AND NEGOTIATE AGGRESSIVE MARGINS TO PROTECT YOUR BOTTOM LINE.",
-    features: ["ELITE VENDOR AUDITS", "BOM OPTIMIZATION", "CONTRACT LOCKS"],
+    description: "We build resilient, transparent supply chains. By leveraging our global network, we secure the right materials to meet your business goals.",
+    features: ["VENDOR AUDITS", "BOM OPTIMIZATION", "CONTRACT NEGOTIATION"],
   },
   {
     code: "06",
     label: "LOGISTICS",
     title: "GLOBAL FREIGHT",
-    description: "DELIVER AT SCALE WITH ABSOLUTE PRECISION. WE ORCHESTRATE ALL TRANS-CONTINENTAL SHIPPING AND WAREHOUSING. YOU NEVER MISS A LAUNCH DATE.",
+    description: "We orchestrate global shipping and fulfillment with close attention to detail, ensuring your product arrives on time, every time.",
     features: ["CUSTOMS & FREIGHT", "3PL INTEGRATION", "LAST-MILE DISTRIBUTION"],
   },
 ];
@@ -62,15 +62,15 @@ export function CoreOffering() {
   };
 
   return (
-    <section className="bg-[#FAF9F6] border-b border-black">
-      <div className="w-full">
+    <section className="bg-[#FAF9F6] border-b border-black w-full h-auto md:h-[calc(100vh-152px)] flex flex-col">
+      <div className="w-full flex-1 flex flex-col h-full overflow-hidden">
         {/* HEADER BLOCK */}
-        <div className="border-b border-black p-6 md:p-12 lg:p-16 flex flex-col md:flex-row justify-between items-start md:items-end gap-8 bg-black text-[#FAF9F6]">
-          <h2 className="text-5xl md:text-7xl lg:text-[7vw] font-black tracking-tighter uppercase leading-none">
-            CORE <br/> STANDARDS.
+        <div className="shrink-0 border-b border-black p-4 md:p-8 flex flex-col md:flex-row justify-between items-start md:items-end gap-2 bg-black text-[#FAF9F6]">
+          <h2 className="text-4xl md:text-5xl lg:text-7xl font-black tracking-tighter uppercase leading-none">
+            CORE <br className="hidden md:block"/> STANDARDS.
           </h2>
-          <p className="font-mono text-sm tracking-widest uppercase max-w-sm border-t border-[#FAF9F6]/20 pt-4">
-            END-TO-END SUPREMACY. NO FRAGMENTATION. WE CONTROL THE ENTIRE BOARD.
+          <p className="font-sans font-light text-[10px] md:text-xs tracking-widest max-w-xs md:max-w-sm border-t border-[#F41C06] text-[#F41C06] pt-2">
+            Seamless integration from start to finish. We handle the complexity so you can focus on growth.
           </p>
         </div>
 
@@ -80,7 +80,7 @@ export function CoreOffering() {
           initial="hidden"
           whileInView="show"
           viewport={{ once: true, margin: "-100px" }}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 md:grid-rows-3 lg:grid-rows-2 flex-1 w-full h-full min-h-0"
         >
           {offerings.map((item, i) => (
             <motion.div
@@ -88,28 +88,25 @@ export function CoreOffering() {
               variants={itemVariants}
               onMouseEnter={() => setHoveredIndex(i)}
               onMouseLeave={() => setHoveredIndex(null)}
-              className="group relative p-8 md:p-12 border-b border-r border-black hover:bg-black transition-none cursor-crosshair h-[500px] flex flex-col justify-between"
-              style={{
-                borderRightWidth: ((i + 1) % 3 === 0) ? '0px' : '1px',
-                // For mobile, we should probably keep borders consistent but since it's a grid, Tailwind's border utilities need strict manual enforcement if varying. 
-                // Using standard CSS borders on all elements forms a thick overlapping grid which is very brutalist.
-              }}
+              className="group relative p-5 md:p-4 lg:p-6 border-b md:border-b border-r-0 md:border-r border-black hover:bg-black transition-none cursor-crosshair flex flex-col justify-between overflow-hidden min-h-[250px] md:min-h-0 h-full"
             >
-              <div className="relative z-10 text-black group-hover:text-[#FAF9F6]">
-                <div className="flex justify-between items-start mb-12 border-b border-current pb-4">
-                  <span className="font-mono text-xs font-black tracking-widest uppercase">[{item.code}]</span>
-                  <span className="font-mono text-xs font-black tracking-widest uppercase">{item.label}</span>
+              <div className="relative z-10 text-black group-hover:text-[#FAF9F6] flex flex-col h-full justify-between">
+                <div>
+                  <div className="flex justify-between items-start mb-2 md:mb-6 border-b border-current pb-2">
+                    <span className="font-sans font-light text-xs tracking-widest uppercase">[{item.code}]</span>
+                    <span className="font-sans font-light text-xs tracking-widest uppercase text-[#F41C06] truncate ml-2">{item.label}</span>
+                  </div>
+                  
+                  <h3 className="text-2xl md:text-2xl lg:text-3xl font-sans font-medium mb-3 md:mb-2 lg:mb-4 tracking-tighter uppercase leading-none md:leading-tight line-clamp-2 md:line-clamp-none">{item.title}</h3>
+                  
+                  <p className="text-sm md:text-[11px] lg:text-sm font-sans font-light leading-relaxed md:leading-snug tracking-tight mb-6 md:mb-4 lg:mb-6 opacity-80 line-clamp-3 md:line-clamp-none">
+                    {item.description}
+                  </p>
                 </div>
-                
-                <h3 className="text-3xl md:text-4xl font-black mb-6 tracking-tighter uppercase">{item.title}</h3>
-                
-                <p className="text-[14px] md:text-[15px] font-bold leading-relaxed tracking-tight mb-8 uppercase opacity-80">
-                  {item.description}
-                </p>
 
-                <ul className="text-xs font-mono font-bold tracking-wider space-y-2 uppercase">
+                <ul className="text-xs font-sans font-light tracking-wider space-y-1.5 md:space-y-1 uppercase mt-auto">
                   {item.features.map((feat, idx) => (
-                    <li key={idx} className="flex items-center gap-3">
+                    <li key={idx} className="flex items-center gap-1.5 md:gap-2 truncate">
                       <span className="opacity-50">+</span> {feat}
                     </li>
                   ))}
@@ -118,6 +115,8 @@ export function CoreOffering() {
             </motion.div>
           ))}
         </motion.div>
+        {/* Absolute 12vh Margin Boundary Block corresponding to ~25% Bento Height calculation */}
+        <div className="w-full bg-[#FAF9F6] shrink-0 border-t border-black" style={{ height: '12vh' }} />
       </div>
     </section>
   );

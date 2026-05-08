@@ -17,21 +17,25 @@ export function Navigation() {
 
   return (
     <nav className="fixed top-0 w-full z-50 bg-[#FAF9F6] border-b border-black">
-      <div className="w-full pl-6 pr-0 md:pr-6 h-[72px] flex items-center justify-between">
-        
-        {/* LOGO BLOCK */}
-        <Link href="/" className="flex items-center gap-4 h-full py-4 border-r border-transparent md:border-black pr-8 hover:opacity-70 transition-opacity">
-          <img 
-            src={"/PD Logo Black line.svg"} 
-            alt="PD Logo" 
-            className="h-6 w-auto" 
-          />
-          <img 
-            src={"/PD wordmark.svg"} 
-            alt="Product Dept." 
-            className="h-4 w-auto hidden sm:block" 
+      <div className="w-full pl-6 pr-0 md:pr-6 h-[72px] flex items-center justify-between relative">
+
+        {/* LOGO BLOCK (LEFT) */}
+        <Link href="/" className="flex items-center h-full py-4 border-r border-transparent md:border-black md:pr-8 hover:opacity-70 transition-opacity z-10">
+          <img
+            src={"/PD Logo - Black no Words.svg"}
+            alt="PD Logo"
+            className="h-6 md:h-8 w-auto"
           />
         </Link>
+
+        {/* WORDMARK (CENTER) */}
+        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-0 pointer-events-none hidden xl:block">
+          <img
+            src={"/PD Wordmark.svg"}
+            alt="Product Dept."
+            className="h-4 md:h-5 w-auto"
+          />
+        </div>
 
         {/* DESKTOP NAV */}
         <div className="hidden md:flex items-center h-full">
@@ -39,9 +43,8 @@ export function Navigation() {
             <Link
               key={link.name}
               href={link.href}
-              className={`h-full flex items-center justify-center px-8 text-xs font-black tracking-widest text-black transition-colors hover:bg-black hover:text-[#FAF9F6] ${
-                idx !== 0 ? 'border-l border-black' : ''
-              }`}
+              className={`h-full flex items-center justify-center px-8 text-xs font-black tracking-widest text-black transition-colors hover:bg-black hover:text-[#FAF9F6] ${idx !== 0 ? 'border-l border-black' : ''
+                }`}
             >
               {link.name}
             </Link>

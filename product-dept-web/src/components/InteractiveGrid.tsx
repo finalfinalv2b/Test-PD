@@ -39,15 +39,13 @@ export function InteractiveGrid() {
 
     const handleResize = () => {
       width = window.innerWidth;
-      height = window.innerHeight; // Or a specific height if needed, but we'll use parent's size
+      height = window.innerHeight;
       
       const dpr = window.devicePixelRatio || 1;
       
-      // Set actual size in memory (scaled to account for extra pixel density)
       canvas.width = width * dpr;
       canvas.height = height * dpr;
       
-      // Normalize coordinate system to use css pixels
       ctx.scale(dpr, dpr);
       
       initGrid();
@@ -73,7 +71,10 @@ export function InteractiveGrid() {
     const draw = () => {
       ctx.clearRect(0, 0, width, height);
 
-      // Update nodes
+      const cellWidth = width / cols;
+      const cellHeight = height / rows;
+
+      // Update nodes physics
       const spring = 0.1;
       const friction = 0.8;
       const magneticPull = 0.3;
@@ -97,10 +98,8 @@ export function InteractiveGrid() {
 
         node.vx += ax;
         node.vy += ay;
-
         node.vx *= friction;
         node.vy *= friction;
-
         node.x += node.vx;
         node.y += node.vy;
       });
@@ -122,9 +121,9 @@ export function InteractiveGrid() {
       const minRow = (rows - boxHeightCells) / 2;
       const maxRow = (rows + boxHeightCells) / 2;
 
-      // Draw horizontal lines
-      ctx.strokeStyle = "rgba(0, 0, 0, 0.1)"; // Very subtle grid lines
-      ctx.lineWidth = 1;
+      // Draw horizontal lines (Foreground layer)
+      ctx.strokeStyle = "#000000"; // Solid black lines matching the header
+      ctx.lineWidth = 1; // 1px width matching Tailwind's default border width
       ctx.beginPath();
       
       for (let j = 0; j <= rows; j++) {

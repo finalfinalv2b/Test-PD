@@ -6,62 +6,98 @@ import { useRef, useState, useEffect } from "react";
 const steps = [
   { 
     num: "01", title: "STRATEGY", label: "REQUIREMENTS SET",
-    description: "We outline clear product requirements, positioning, and constraints, ensuring ideas have genuine, scalable potential."
+    description: "We outline clear product requirements, positioning, and constraints, ensuring ideas have genuine, scalable potential.",
+    features: ["FEASIBILITY MATRIX", "IP ROADMAPPING", "MVP DEPLOYMENT"]
   },
   { 
     num: "02", title: "INDUSTRIAL DESIGN", label: "FORM DEFINED",
-    description: "We draft foundational geometry and establish the aesthetic, planning material viability to ensure the design is ready for the real world."
+    description: "We draft foundational geometry and establish the aesthetic, planning material viability to ensure the design is ready for the real world.",
+    features: ["CONCEPT GENERATION", "CMF PROTOCOLS", "UX ERGONOMICS"]
   },
   { 
     num: "03", title: "MECHANICAL ENGINEERING", label: "CAD ARCHITECTURE",
-    description: "The surface is converted into functional CAD. Every internal component is carefully optimized for structural integrity."
+    description: "The surface is converted into functional CAD. Every internal component is carefully optimized for structural integrity.",
+    features: ["MECHANICAL ARCHITECTURE", "HARDWARE LOGIC", "DESIGNED FOR MANUFACTURING / DESIGNED FOR ASSEMBLY"]
   },
   { 
     num: "04", title: "SOURCING", label: "VENDOR SELECTION",
-    description: "We leverage our global network to secure reliable vendors capable of high-quality manufacturing, establishing clear material streams."
+    description: "We leverage our global network to secure reliable vendors capable of high-quality manufacturing, establishing clear material streams.",
+    features: ["VENDOR AUDITS", "BOM OPTIMIZATION", "CONTRACT NEGOTIATION"]
   },
   { 
     num: "05", title: "MANUFACTURING", label: "MASS PRODUCTION",
-    description: "Tooling is verified alongside strict QA/QC protocols, establishing seamless assembly pathways to meet your deadlines."
+    description: "Tooling is verified alongside strict QA/QC protocols, establishing seamless assembly pathways to meet your deadlines.",
+    features: ["TOOLING FORMULATION", "QA / QC PATHWAYS", "ASSEMBLY AUTOMATION"]
   },
   { 
     num: "06", title: "LOGISTICS", label: "GLOBAL DELIVERY",
-    description: "Inventory transfers smoothly into freight channels. We orchestrate all shipping so you can confidently hit your launch timelines."
+    description: "Inventory transfers smoothly into freight channels. We orchestrate all shipping so you can confidently hit your launch timelines.",
+    features: ["CUSTOMS & FREIGHT", "3PL INTEGRATION", "LAST-MILE DISTRIBUTION"]
   },
 ];
 
 function StepNode({ step, index }: { step: typeof steps[0], index: number }) {
   return (
-    <div className="w-full relative px-6 md:px-10 py-6 md:py-8 bg-[#FAF9F6] border-2 border-black flex flex-col h-[450px] shadow-[8px_8px_0px_rgba(0,0,0,0.2)]">
-      <div className="absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 -z-10 text-[200px] md:text-[300px] font-black text-black opacity-[0.03] select-none pointer-events-none">
-        {index + 1}
+    <div className="w-full relative px-6 md:px-10 py-6 md:py-8 bg-[#FFFFFF] border border-black flex flex-col h-[450px]">
+      <div 
+        className="absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 -z-10 text-[200px] md:text-[300px] text-black opacity-[0.03] select-none pointer-events-none"
+        style={{ fontFamily: 'var(--font-elza)', fontWeight: 900 }}
+      >
+        {String(index + 1).padStart(2, '0')}
       </div>
 
-      <div className="border-b border-black/20 pb-4 mb-6">
-        <h3 className="text-2xl md:text-[32px] md:leading-[1.1] font-header font-black tracking-[0.05em] text-black uppercase">
-          {step.title}
-        </h3>
-        <p className="text-sm font-sans font-light tracking-widest text-[#F41C06] mt-2 uppercase">
-          [ {step.label} ]
-        </p>
+      <div className="flex justify-between items-start mb-4 border-b border-black pb-2">
+        <span className="font-sans font-light text-xs tracking-widest text-black uppercase">[{String(index + 1).padStart(2, '0')}]</span>
+        <span 
+          className="tracking-[0.05em] text-sm uppercase text-[#F41C06] truncate ml-2"
+          style={{ fontFamily: 'var(--font-elza)', fontWeight: 900 }}
+        >
+          {step.label}
+        </span>
       </div>
 
-      <div className="flex-1 flex items-start mt-4">
+      <h3 
+        className="text-2xl md:text-[32px] md:leading-[1.1] tracking-tighter text-black uppercase"
+        style={{ fontFamily: 'var(--font-elza)', fontWeight: 900 }}
+      >
+        {step.title}
+      </h3>
+
+      <div className="flex-1 flex flex-col justify-start mt-4">
         <p className="text-[25px] md:text-[28px] leading-relaxed text-black font-sans font-light max-w-3xl">
           {step.description}
         </p>
+
+        <ul className="mt-4 flex flex-col gap-2">
+          {step.features.map((feature, i) => (
+            <li key={i} className="text-base md:text-lg font-sans font-medium tracking-widest text-black uppercase flex items-center gap-3">
+              <span className="text-[#F41C06]">+</span> {feature}
+            </li>
+          ))}
+        </ul>
       </div>
     </div>
   );
 }
 
-function AnimatedCard({ step, index, smoothProgress, windowHeight }: any) {
-  // Gap of 110px ensures the title (which is ~100px tall) is ALWAYS visible behind the next card!
-  const gap = 110;
+function AnimatedCard({ step, index, smoothProgress, windowHeight, deckScale }: any) {
+  const [isShifted, setIsShifted] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
+
+  useEffect(() => {
+    return smoothProgress.on("change", (v: number) => {
+      // Enable hover effects only after the cards have started moving to the left (progress > 0.75)
+      if (v > 0.75 && !isShifted) setIsShifted(true);
+      else if (v <= 0.75 && isShifted) setIsShifted(false);
+    });
+  }, [smoothProgress, isShifted]);
+
+  // Gap of 140px ensures the title is ALWAYS visible behind the next card!
+  const gap = 140;
   const targetY = index * gap;
   
-  // Start off-screen (we use a large constant relative to screen size)
-  const startY = windowHeight * 1.5;
+  // Start just below the viewport so they appear immediately upon scroll, accounting for the container scale!
+  const startY = (windowHeight / deckScale) + 100;
 
   // Cards cascade in: 
   // Card 0: 0.00 -> 0.20
@@ -74,12 +110,23 @@ function AnimatedCard({ step, index, smoothProgress, windowHeight }: any) {
     [startY, startY, targetY, targetY]
   );
 
+  const baseZIndex = 20 + index;
+  const currentZIndex = isHovered && isShifted ? 50 : baseZIndex;
+
   return (
     <motion.div 
       className="absolute w-full origin-top"
-      style={{ y, zIndex: 20 + index }}
+      style={{ y, zIndex: currentZIndex }}
+      onHoverStart={() => setIsHovered(true)}
+      onHoverEnd={() => setIsHovered(false)}
     >
-      <StepNode step={step} index={index} />
+      <motion.div
+        animate={isHovered && isShifted ? { y: -16, scale: 1.02 } : { y: 0, scale: 1 }}
+        transition={{ type: "spring", stiffness: 400, damping: 30 }}
+        className="w-full h-full"
+      >
+        <StepNode step={step} index={index} />
+      </motion.div>
     </motion.div>
   );
 }
@@ -97,6 +144,7 @@ export function ProcessSequence() {
   const [windowHeight, setWindowHeight] = useState(1000);
   const [isMobile, setIsMobile] = useState(false);
   const [deckScale, setDeckScale] = useState(1);
+  const [textPanelWidth, setTextPanelWidth] = useState(800);
   const [headerHeight, setHeaderHeight] = useState(208);
   
   useEffect(() => {
@@ -110,14 +158,24 @@ export function ProcessSequence() {
       
       // Available space MUST subtract the 72px fixed top navigation, and the black header height
       const availableSpace = window.innerHeight - 72 - hh;
-      const deckNaturalHeight = 5 * 110 + 450; // 1000px
+      const deckNaturalHeight = 5 * 140 + 450; // 1150px
       
-      // We want a small top gap (40px) and safe bottom gap (40px) = 80px extra space
-      const requiredSpace = deckNaturalHeight + 80; 
+      // We want a small top gap (40px) and a massive safe bottom margin so it NEVER crops on any screen ratio (even with mobile browser UI)
+      const safeBuffer = mobile ? 450 : 350;
+      const requiredSpace = deckNaturalHeight + safeBuffer; 
       
       // Scale down to fit perfectly. Cap at 0.85
       const scale = Math.min(0.85, availableSpace / requiredSpace);
       setDeckScale(scale);
+      
+      // Calculate dynamic max width for the right text panel so it perfectly fills the space without overlapping the cards
+      const cardsWidth = 1024;
+      const marginSpace = mobile ? 48 : 80;
+      const gapBetween = 40;
+      const maxTextWidth = (window.innerWidth - marginSpace) / scale - cardsWidth - gapBetween;
+      const mobileWidth = (window.innerWidth - 48) / scale;
+      
+      setTextPanelWidth(mobile ? mobileWidth : Math.min(1800, Math.max(400, maxTextWidth)));
     };
     handleResize();
     window.addEventListener("resize", handleResize);
@@ -145,10 +203,9 @@ export function ProcessSequence() {
   const boxX = useTransform(smoothProgress, [0, 0.6], ["53.125vw", "3.125vw"]);
 
   return (
-    <section ref={targetRef} className="relative bg-[#FAF9F6] border-b border-black h-[600vh]">
+    <section ref={targetRef} className="relative bg-[#FFFFFF] border-b border-black h-[600vh]">
       {/* PINNED RIG */}
-      {/* Added pt-[72px] so the rig clears the fixed Navigation */}
-      <div className="sticky top-0 left-0 w-full h-screen overflow-hidden flex flex-col items-center pt-[72px]">
+      <div className="sticky top-0 left-0 w-full h-screen overflow-hidden flex flex-col items-center">
         
         {/* CINEMATIC BACKGROUND LAYER */}
         <motion.div 
@@ -173,7 +230,8 @@ export function ProcessSequence() {
         </motion.div>
 
         {/* HEADER BLOCK */}
-        <div className="shrink-0 border-b border-black p-4 md:p-8 flex flex-col md:flex-row justify-between items-start md:items-end gap-2 bg-black text-[#FAF9F6] w-full z-40 relative">
+        {/* Added pt-[calc(1rem+72px)] to clear the fixed Navigation while keeping the black background flush to the top */}
+        <div className="shrink-0 border-b border-black p-4 pt-[calc(1rem+72px)] md:p-8 md:pt-[calc(2rem+72px)] flex flex-col md:flex-row justify-between items-start md:items-end gap-2 bg-black text-[#FFFFFF] w-full z-40 relative">
           <h2 className="text-4xl md:text-5xl lg:text-7xl font-black tracking-tighter uppercase leading-none">
             FULL-STACK <br className="hidden md:block"/> PROCESS.
           </h2>
@@ -192,7 +250,7 @@ export function ProcessSequence() {
             style={{ 
               x: stackX,
               scale: deckScale,
-              height: 1000 // 5 gaps of 110 + 450 card = 1000px natural height
+              height: 1150 // 5 gaps of 140 + 450 card = 1150px natural height
             }}
           >
             <div className="absolute top-0 left-1/2 w-[2px] h-full bg-black -translate-x-1/2 -z-10 opacity-20" />
@@ -204,33 +262,38 @@ export function ProcessSequence() {
                 index={index} 
                 smoothProgress={smoothProgress} 
                 windowHeight={windowHeight} 
+                deckScale={deckScale}
               />
             ))}
           </motion.div>
 
           {/* RIGHT COLUMN: THE TEXT PANEL */}
           <motion.div 
-            className="absolute bottom-8 md:bottom-auto md:top-10 left-[5%] md:left-[40vw] w-[90%] md:w-[55vw] px-4 md:px-8 z-30 pointer-events-none flex flex-col items-center md:items-start justify-start"
-            style={{ opacity: quoteOpacity, y: quoteY, filter: quoteFilter }}
+            className="absolute top-24 md:top-10 z-30 pointer-events-none flex flex-col items-center md:items-start justify-between origin-top md:origin-top-right pb-10"
+            style={{ 
+              right: isMobile ? 24 : 40,
+              width: textPanelWidth,
+              opacity: quoteOpacity, y: quoteY, filter: quoteFilter, scale: deckScale, height: 1150 
+            }}
           >
-            <div className="text-xl sm:text-4xl md:text-5xl lg:text-6xl font-header tracking-[0.05em] text-black leading-[1.05] uppercase text-center md:text-left drop-shadow-2xl">
+            <div className="text-[60px] sm:text-[96px] md:text-[120px] lg:text-[140px] font-header tracking-tighter text-white leading-[0.95] uppercase text-center md:text-left drop-shadow-2xl">
               WE BRING RIGOR TO CREATIVITY, <br />
               CLARITY TO COMPLEXITY, <br />
               AND MOMENTUM TO VISION.
             </div>
 
-            <div className="w-full mt-12 md:mt-24 grid grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12">
+            <div className="w-full grid grid-cols-2 gap-x-4 gap-y-12 md:gap-x-8 md:gap-y-24">
               {[
                 { metric: "25+", label: "Years Experience" },
                 { metric: "8", label: "Countries Operated" },
                 { metric: "Global", label: "Vendor Network" },
                 { metric: "100%", label: "Supply Chain Visibility" }
               ].map((item, i) => (
-                <div key={item.label} className="flex flex-col items-center md:items-start">
-                  <div className="text-5xl md:text-6xl lg:text-7xl font-header tracking-tighter text-black mb-4 md:mb-6">
+                <div key={item.label} className="flex flex-col items-center md:items-start text-center md:text-left">
+                  <div className="text-6xl md:text-7xl lg:text-[90px] xl:text-[110px] font-header tracking-tighter text-black mb-2 md:mb-6 leading-none">
                     {item.metric}
                   </div>
-                  <div className="text-[10px] md:text-[11px] font-sans font-bold tracking-widest uppercase text-black">
+                  <div className="text-xs md:text-sm lg:text-base font-sans font-bold tracking-widest uppercase text-[#ffb000] leading-snug">
                     {item.label}
                   </div>
                 </div>

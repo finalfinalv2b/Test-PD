@@ -23,44 +23,34 @@ export default function Home() {
       {/* Content below Hero */}
       <div className="relative z-20">
 
-        {/* Action Button */}
-        <div className="w-full border-t border-white/20 bg-black/40 backdrop-blur-md">
-          <Link
-            href="/contact"
-            className="flex items-center justify-center text-[#FAF9F6] transition-colors py-8 w-full font-black text-xl md:text-3xl tracking-tighter uppercase hover:bg-[#FAF9F6] hover:text-black"
-          >
-            START YOUR PROJECT &rarr;
-          </Link>
-        </div>
+
 
 
       </div>
 
       {/* Capabilities / Core Offering */}
-      <div id="capabilities">
-        <CoreOffering />
-      </div>
 
       {/* Process */}
       <div id="process">
         <ProcessSequence />
       </div>
 
-
-      {/* Manifesto & CTA */}
-      <section className="py-48 px-6 bg-background flex flex-col items-center justify-center text-center">
-        <FadeIn className="w-full px-4 md:px-8 max-w-6xl">
-          <div className="pt-16 flex flex-col items-center">
-            <p className="text-2xl text-mid-gray mb-10 font-light tracking-tight">Start your product journey.</p>
-            <a
-              href="/contact"
-              className="inline-flex items-center justify-center bg-charcoal text-white hover:bg-black transition-all hover:scale-105 active:scale-95 px-12 py-6 rounded-full font-medium text-lg tracking-wide shadow-lg hover:shadow-2xl"
-            >
-              Contact Us
-            </a>
+      {/* Footer CTA */}
+      <Link 
+        href="/contact"
+        className="block w-full bg-black py-20 md:py-32 group border-t border-[#F41C06]/30 transition-colors duration-300 cursor-pointer"
+      >
+        <div className="container mx-auto px-4 text-center flex flex-col items-center">
+          <h2 className="text-5xl sm:text-6xl md:text-8xl lg:text-[120px] font-header tracking-tighter text-white uppercase group-hover:text-[#F41C06] transition-colors duration-300 leading-none drop-shadow-2xl">
+            START YOUR NEXT <br className="hidden md:block"/> PROJECT TODAY
+          </h2>
+          <div className="mt-8 md:mt-12 text-white group-hover:text-[#F41C06] transition-all duration-300 flex items-center justify-center opacity-50 group-hover:opacity-100">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="square">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
           </div>
-        </FadeIn>
-      </section>
-    </>
+        </div>
+      </Link>    </>
   );
 }

@@ -9,14 +9,13 @@ export function Navigation() {
   const [isOpen, setIsOpen] = useState(false);
 
   const links = [
-    { name: "CAPABILITIES", href: "/#capabilities" },
     { name: "PROCESS", href: "/#process" },
     { name: "ABOUT", href: "/about" },
     { name: "CONTACT", href: "/contact" },
   ];
 
   return (
-    <nav className="fixed top-0 w-full z-50 bg-[#FAF9F6] border-b border-black">
+    <nav className="fixed top-0 w-full z-50 bg-[#FFFFFF] border-b border-black">
       <div className="w-full pl-6 pr-0 md:pr-6 h-[72px] flex items-center justify-between relative">
 
         {/* LOGO BLOCK (LEFT) */}
@@ -31,7 +30,7 @@ export function Navigation() {
         {/* WORDMARK (CENTER) */}
         <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-0 pointer-events-none hidden xl:block">
           <img
-            src={"/PD Wordmark.svg"}
+            src={"/PD wordmark.svg"}
             alt="Product Dept."
             className="h-4 md:h-5 w-auto"
           />
@@ -43,7 +42,7 @@ export function Navigation() {
             <Link
               key={link.name}
               href={link.href}
-              className={`h-full flex items-center justify-center px-8 text-xs font-black tracking-widest text-black transition-colors hover:bg-black hover:text-[#FAF9F6] ${idx !== 0 ? 'border-l border-black' : ''
+              className={`h-full flex items-center justify-center px-8 text-xs font-black tracking-widest text-black transition-colors hover:bg-black hover:text-[#FFFFFF] ${idx !== 0 ? 'border-l border-black' : ''
                 }`}
             >
               {link.name}
@@ -53,7 +52,7 @@ export function Navigation() {
 
         {/* MOBILE TOGGLE */}
         <button
-          className="md:hidden text-black h-full px-6 border-l border-black flex items-center hover:bg-black hover:text-[#FAF9F6] transition-colors"
+          className="md:hidden text-black h-full px-6 border-l border-black flex items-center hover:bg-black hover:text-[#FFFFFF] transition-colors"
           onClick={() => setIsOpen(!isOpen)}
           aria-label="Toggle Menu"
         >
@@ -68,14 +67,14 @@ export function Navigation() {
             initial={{ height: 0 }}
             animate={{ height: "auto" }}
             exit={{ height: 0 }}
-            className="md:hidden absolute top-[72px] left-0 w-full bg-[#FAF9F6] border-b border-black overflow-hidden flex flex-col shadow-2xl"
+            className="md:hidden absolute top-[72px] left-0 w-full bg-[#FFFFFF] border-b border-black overflow-hidden flex flex-col shadow-2xl"
           >
             {links.map((link) => (
               <Link
                 key={link.name}
                 href={link.href}
                 onClick={() => setIsOpen(false)}
-                className="w-full text-center py-6 text-sm font-black tracking-widest text-black border-t border-black hover:bg-black hover:text-[#FAF9F6] transition-colors uppercase"
+                className="w-full text-center py-6 text-sm font-black tracking-widest text-black border-t border-black hover:bg-black hover:text-[#FFFFFF] transition-colors uppercase"
               >
                 {link.name}
               </Link>

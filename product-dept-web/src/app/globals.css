@@ -1,20 +1,21 @@
 @import "tailwindcss";
 
 @font-face {
-  font-family: 'AmpersandOverride';
+  font-family: 'SpecialCharOverride';
   src: local('Helvetica Neue'), local('Helvetica'), local('Arial');
-  unicode-range: U+0026;
+  unicode-range: U+0023-0026, U+002A-002B, U+003D, U+0040, U+007E, U+00A3, U+20AC;
 }
 
 :root {
-  --background: #F9F4EF;
+  --background: #FFFFFF;
   --foreground: #0A0A0A;
   --primary: #F41C06;
   --black: #0A0A0A;
-  --white: #F9F4EF;
+  --white: #FFFFFF;
   --gray-light: #C9C9C9;
   --gray-dark: #848484;
   --accent: #FFB000;
+  --font-header-stack: 'SpecialCharOverride', var(--font-elza), sans-serif;
 }
 
 @theme inline {
@@ -28,7 +29,7 @@
   --color-accent: var(--accent);
 
   --font-sans: var(--font-neue-haas-unica), sans-serif;
-  --font-header: 'AmpersandOverride', var(--font-elza), sans-serif;
+  --font-header: var(--font-header-stack);
 }
 
 h1,

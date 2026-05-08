@@ -62,10 +62,10 @@ export function CoreOffering() {
   };
 
   return (
-    <section className="bg-[#FAF9F6] border-b border-black w-full h-auto md:h-[calc(100vh-152px)] flex flex-col">
+    <section className="bg-[#FFFFFF] border-b border-black w-full h-auto md:h-[calc(100vh-152px)] flex flex-col">
       <div className="w-full flex-1 flex flex-col h-full overflow-hidden">
         {/* HEADER BLOCK */}
-        <div className="shrink-0 border-b border-black p-4 md:p-8 flex flex-col md:flex-row justify-between items-start md:items-end gap-2 bg-black text-[#FAF9F6]">
+        <div className="shrink-0 border-b border-black p-4 md:p-8 flex flex-col md:flex-row justify-between items-start md:items-end gap-2 bg-black text-[#FFFFFF]">
           <h2 className="text-4xl md:text-5xl lg:text-7xl font-black tracking-tighter uppercase leading-none">
             CORE <br className="hidden md:block"/> STANDARDS.
           </h2>
@@ -90,11 +90,11 @@ export function CoreOffering() {
               onMouseLeave={() => setHoveredIndex(null)}
               className="group relative p-5 md:p-4 lg:p-6 border-b md:border-b border-r-0 md:border-r border-black hover:bg-black transition-none cursor-crosshair flex flex-col justify-between overflow-hidden min-h-[250px] md:min-h-0 h-full"
             >
-              <div className="relative z-10 text-black group-hover:text-[#FAF9F6] flex flex-col h-full justify-between">
+              <div className="relative z-10 text-black group-hover:text-[#FFFFFF] flex flex-col h-full justify-between">
                 <div>
                   <div className="flex justify-between items-start mb-2 md:mb-6 border-b border-current pb-2">
                     <span className="font-sans font-light text-xs tracking-widest uppercase">[{item.code}]</span>
-                    <span className="font-sans font-light text-xs tracking-widest uppercase text-[#F41C06] truncate ml-2">{item.label}</span>
+                    <span className="font-header font-black tracking-[0.05em] text-sm uppercase text-[#F41C06] truncate ml-2">{item.label}</span>
                   </div>
                   
                   <h3 className="text-2xl md:text-2xl lg:text-3xl font-sans font-medium mb-3 md:mb-2 lg:mb-4 tracking-tighter uppercase leading-none md:leading-tight line-clamp-2 md:line-clamp-none">{item.title}</h3>
@@ -116,7 +116,7 @@ export function CoreOffering() {
           ))}
         </motion.div>
         {/* Absolute 12vh Margin Boundary Block corresponding to ~25% Bento Height calculation */}
-        <div className="w-full bg-[#FAF9F6] shrink-0 border-t border-black" style={{ height: '12vh' }} />
+        <div className="w-full bg-[#FFFFFF] shrink-0 border-t border-black" style={{ height: '12vh' }} />
       </div>
     </section>
   );

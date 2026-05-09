@@ -18,7 +18,7 @@ export default function About() {
             </p>
             <div className="w-full h-[2px] bg-black mb-8" />
             <p className="font-mono text-sm tracking-widest text-black/60 uppercase">
-              <span className="font-sans font-light">//</span> NO SILOS <br/> <span className="font-sans font-light">//</span> NO FRAGMENTATION
+              <span className="font-sans font-light">{"//"}</span> NO SILOS <br/> <span className="font-sans font-light">{"//"}</span> NO FRAGMENTATION
             </p>
           </div>
 
@@ -29,7 +29,7 @@ export default function About() {
             <div className="p-8 md:p-16 border-b border-black">
               <div className="font-sans font-light space-y-6 text-xl md:text-3xl tracking-tight leading-tight">
                 <p>
-                  Product Dept. is a full-stack product partner that helps ambitious companies bring physical products to life, from initial concept through design, engineering, sourcing, and delivery. Combining creative thinking with technical rigor and global manufacturing expertise, the company operates as an embedded extension of its clients' teams, focused on delivering high-quality, scalable outcomes with precision and care.
+                  Product Dept. is a full-stack product partner that helps ambitious companies bring physical products to life, from initial concept through design, engineering, sourcing, and delivery. Combining creative thinking with technical rigor and global manufacturing expertise, the company operates as an embedded extension of its clients&apos; teams, focused on delivering high-quality, scalable outcomes with precision and care.
                 </p>
                 <p>
                   Grounded in discipline, collaboration, and customer obsession, Product Dept. approaches every project with urgency, integrity, and deep attention to detail. The brand is defined by its quiet confidence, clear thinking, and commitment to making complex processes feel seamless, enabling clients to focus on growth while their ideas are brought to life.
@@ -46,7 +46,7 @@ export default function About() {
                 
                 <div className="border-t border-black pt-4">
                   <h3 className="font-black text-2xl mb-4 tracking-tighter uppercase">DISCIPLINED STRATEGY</h3>
-                  <p className="font-bold tracking-tight uppercase text-black/70">WE DON'T GUESS. WE MAP CONSTRAINTS, ESTABLISH RIGID REQUIREMENTS, AND DEPLOY WITH INTENTIONALITY.</p>
+                  <p className="font-bold tracking-tight uppercase text-black/70">WE DON&apos;T GUESS. WE MAP CONSTRAINTS, ESTABLISH RIGID REQUIREMENTS, AND DEPLOY WITH INTENTIONALITY.</p>
                 </div>
 
                 <div className="border-t border-black pt-4">
@@ -71,7 +71,7 @@ export default function About() {
                 <div className="relative mb-16 group">
                   <div className="absolute w-4 h-4 bg-[#F41C06] -left-[39px] top-1"></div>
                   <span className="font-black tracking-widest text-black mb-2 block border-b border-black pb-2 uppercase max-w-[150px]">
-                    EPOCH <span className="font-sans font-light">//</span> 1996
+                    EPOCH <span className="font-sans font-light">{"//"}</span> 1996
                   </span>
                   <p className="font-bold text-lg tracking-tight uppercase text-black/80 max-w-xl mt-4">
                     THE ORIGINAL FOUNDATION IS LAID, BRIDGING CREATIVE CONCEPTS WITH STRUCTURAL MECHANICAL ENGINEERING.
@@ -81,7 +81,7 @@ export default function About() {
                 <div className="relative mb-16 group">
                   <div className="absolute w-4 h-4 bg-[#F41C06] -left-[39px] top-1"></div>
                   <span className="font-black tracking-widest text-black mb-2 block border-b border-black pb-2 uppercase max-w-[150px]">
-                    EPOCH <span className="font-sans font-light">//</span> 2010
+                    EPOCH <span className="font-sans font-light">{"//"}</span> 2010
                   </span>
                   <p className="font-bold text-lg tracking-tight uppercase text-black/80 max-w-xl mt-4">
                     GLOBAL MANUFACTURING PRESENCE VASTLY EXPANDED ACROSS MULTIPLE STRATEGIC ASIAN AND EUROPEAN REGIONS.
@@ -91,7 +91,7 @@ export default function About() {
                 <div className="relative group">
                   <div className="absolute w-4 h-4 bg-[#F41C06] -left-[39px] top-1"></div>
                   <span className="font-black tracking-widest text-black mb-2 block border-b border-black pb-2 uppercase max-w-[150px]">
-                    STATUS <span className="font-sans font-light">//</span> ACTIVE
+                    STATUS <span className="font-sans font-light">{"//"}</span> ACTIVE
                   </span>
                   <p className="font-bold text-lg tracking-tight uppercase text-black/80 max-w-xl mt-4">
                     INTEGRATED FULL-STACK PRODUCT PLATFORM. LAUNCHING BEST-IN-CLASS CONSUMER PRODUCTS NATIVELY.

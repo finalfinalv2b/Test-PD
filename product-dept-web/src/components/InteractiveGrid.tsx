@@ -25,13 +25,13 @@ export function InteractiveGrid() {
 
     const initGrid = () => {
       nodes = [];
-      const cellWidth = width / cols;
-      const cellHeight = height / rows;
+      const currentCellWidth = width / cols;
+      const currentCellHeight = height / rows;
 
       for (let i = 0; i <= cols; i++) {
         for (let j = 0; j <= rows; j++) {
-          const x = i * cellWidth;
-          const y = j * cellHeight;
+          const x = i * currentCellWidth;
+          const y = j * currentCellHeight;
           nodes.push({ x, y, ox: x, oy: y, vx: 0, vy: 0 });
         }
       }
@@ -70,9 +70,6 @@ export function InteractiveGrid() {
 
     const draw = () => {
       ctx.clearRect(0, 0, width, height);
-
-      const cellWidth = width / cols;
-      const cellHeight = height / rows;
 
       // Update nodes physics
       const spring = 0.1;

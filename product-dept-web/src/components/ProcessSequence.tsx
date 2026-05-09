@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 
 import { motion, useScroll, useTransform, useSpring } from "framer-motion";
@@ -70,8 +71,8 @@ function StepNode({ step, index, isActive = false }: { step: typeof steps[0], in
         </p>
 
         <ul className="mt-4 flex flex-col gap-2">
-          {step.features.map((feature, i) => (
-            <li key={i} className={`text-[clamp(1rem,1.5vw,1.4rem)] font-sans font-medium tracking-widest uppercase flex items-center gap-3 transition-colors duration-300 ${isActive ? 'text-white' : 'text-black'}`}>
+          {step.features.map((feature, featureIndex) => (
+            <li key={featureIndex} className={`text-[clamp(1rem,1.5vw,1.4rem)] font-sans font-medium tracking-widest uppercase flex items-center gap-3 transition-colors duration-300 ${isActive ? 'text-white' : 'text-black'}`}>
               <span className="text-[#F41C06]">+</span> {feature}
             </li>
           ))}
@@ -87,24 +88,16 @@ function AnimatedCard({ step, index, smoothProgress, windowHeight, deckScale }: 
 
   useEffect(() => {
     return smoothProgress.on("change", (v: number) => {
-      // Enable hover effects only after the cards have started moving to the left (progress > 0.75)
       if (v > 0.75 && !isShifted) setIsShifted(true);
       else if (v <= 0.75 && isShifted) setIsShifted(false);
     });
   }, [smoothProgress, isShifted]);
 
-  // Gap of 140px ensures the title is ALWAYS visible behind the next card!
   const gap = 140;
   const targetY = index * gap;
   
-  // Start just below the viewport so they appear immediately upon scroll, accounting for the container scale!
   const startY = (windowHeight / deckScale) + 100;
 
-  // Cards cascade in: 
-  // Card 0: 0.00 -> 0.20
-  // Card 1: 0.08 -> 0.28
-  // ...
-  // Card 5: 0.40 -> 0.60
   const y = useTransform(
     smoothProgress,
     [0, index * 0.08, index * 0.08 + 0.2, 1],
@@ -146,7 +139,6 @@ export function ProcessSequence() {
   const [isMobile, setIsMobile] = useState(false);
   const [deckScale, setDeckScale] = useState(1);
   const [textPanelWidth, setTextPanelWidth] = useState(800);
-  const [headerHeight, setHeaderHeight] = useState(208);
   
   useEffect(() => {
     const handleResize = () => {
@@ -155,17 +147,13 @@ export function ProcessSequence() {
       setWindowHeight(window.innerHeight);
       
       const hh = mobile ? 120 : 180;
-      setHeaderHeight(hh);
       
-      // Available space MUST subtract the 72px fixed top navigation, and the black header height
       const availableSpace = window.innerHeight - 72 - hh;
-      const deckNaturalHeight = 5 * 140 + 450; // 1150px
+      const deckNaturalHeight = 5 * 140 + 450;
       
-      // We want a small top gap (40px) and a massive safe bottom margin so it NEVER crops on any screen ratio (even with mobile browser UI)
       const safeBuffer = mobile ? 450 : 350;
       const requiredSpace = deckNaturalHeight + safeBuffer; 
       
-      // Scale down to fit perfectly. Cap at 0.85
       const scale = Math.min(0.85, availableSpace / requiredSpace);
       setDeckScale(scale);
       

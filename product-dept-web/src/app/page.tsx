@@ -1,7 +1,5 @@
 import { Hero } from "@/components/Hero";
-import { CoreOffering } from "@/components/CoreOffering";
 import { ProcessSequence } from "@/components/ProcessSequence";
-import { FadeIn } from "@/components/FadeIn";
 import Link from "next/link";
 import Image from "next/image";
 

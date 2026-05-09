@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 
 import { useState } from "react";
@@ -38,7 +39,7 @@ export function Navigation() {
 
         {/* DESKTOP NAV */}
         <div className="hidden md:flex items-center h-full">
-          {links.map((link, idx) => (
+          {links.map((link) => (
             <Link
               key={link.name}
               href={link.href}

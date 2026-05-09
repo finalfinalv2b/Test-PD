@@ -3,16 +3,16 @@ import { InteractiveGrid } from "./InteractiveGrid";
 
 export function Hero() {
   return (
-    <section className="relative w-full h-[calc(100vh-72px)] min-h-[600px] mt-[72px] bg-background overflow-hidden flex flex-col justify-center p-6 md:p-12 lg:p-20">
+    <section className="relative w-full h-[calc(100vh-72px)] min-h-[max(500px,80vh)] mt-[72px] bg-background overflow-hidden flex flex-col justify-center p-[clamp(1.5rem,5vw,5rem)]">
       <div className="absolute inset-0 w-full h-full z-0">
         <InteractiveGrid />
       </div>
       
-      <div className="absolute right-4 md:right-8 top-1/2 -translate-y-1/2 z-10">
+      <div className="absolute right-[clamp(1rem,4vw,2rem)] top-1/2 -translate-y-1/2 z-10">
         <img 
           src="/scroll-arrow-01.svg" 
           alt="Scroll Arrow"
-          className="h-[15vh] md:h-[33vh] w-auto"
+          className="h-[clamp(180px,37.5vh,600px)] w-auto"
         />
       </div>
 

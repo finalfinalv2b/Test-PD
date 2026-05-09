@@ -8,10 +8,12 @@ import Image from "next/image";
 export default function Home() {
   return (
     <>
-      <Hero />
+      <div className="relative z-10 bg-background">
+        <Hero />
+      </div>
 
       {/* Image Section below Hero */}
-      <section className="relative w-full h-screen min-h-[600px] border-b border-black/20">
+      <section className="relative z-10 bg-background w-full h-screen min-h-[600px] border-b border-black/20">
         <Image
           src="/space-suit-and-michael.jpg"
           alt="Space Suit and Michael"
@@ -31,26 +33,31 @@ export default function Home() {
       {/* Capabilities / Core Offering */}
 
       {/* Process */}
-      <div id="process">
+      <div id="process" className="relative z-10 bg-[#FFFFFF]">
         <ProcessSequence />
       </div>
 
-      {/* Footer CTA */}
-      <Link 
-        href="/contact"
-        className="block w-full bg-black py-20 md:py-32 group border-t border-[#F41C06]/30 transition-colors duration-300 cursor-pointer"
-      >
-        <div className="container mx-auto px-4 text-center flex flex-col items-center">
-          <h2 className="text-5xl sm:text-6xl md:text-8xl lg:text-[120px] font-header tracking-tighter text-white uppercase group-hover:text-[#F41C06] transition-colors duration-300 leading-none drop-shadow-2xl">
-            START YOUR NEXT <br className="hidden md:block"/> PROJECT TODAY
-          </h2>
-          <div className="mt-8 md:mt-12 text-white group-hover:text-[#F41C06] transition-all duration-300 flex items-center justify-center opacity-50 group-hover:opacity-100">
-            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="square">
-              <line x1="5" y1="12" x2="19" y2="12"></line>
-              <polyline points="12 5 19 12 12 19"></polyline>
-            </svg>
+      {/* Spacer to reveal fixed Footer CTA */}
+      <div className="h-[120px] md:h-[160px] pointer-events-none bg-transparent" />
+
+      {/* Footer CTA (Fixed Parallax Reveal) */}
+      <div className="fixed bottom-0 left-0 w-full h-[120px] md:h-[160px] z-0 bg-black border-t border-[#ffb000]/30 pointer-events-auto">
+        <Link 
+          href="/contact"
+          className="w-full h-full group flex items-center justify-center cursor-pointer pointer-events-auto"
+        >
+          <div className="container mx-auto px-4 flex flex-row items-center justify-center gap-6 md:gap-10">
+            <h2 className="text-[clamp(1.2rem,2.5vw,2.5rem)] font-header tracking-tighter text-white uppercase group-hover:text-[#ffb000] transition-colors duration-300 leading-none drop-shadow-2xl whitespace-nowrap">
+              START YOUR NEXT PROJECT TODAY
+            </h2>
+            <div className="text-white group-hover:text-[#ffb000] transition-all duration-300 opacity-50 group-hover:opacity-100 flex-shrink-0">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="square">
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+                <polyline points="12 5 19 12 12 19"></polyline>
+              </svg>
+            </div>
           </div>
-        </div>
-      </Link>    </>
+        </Link>
+      </div>    </>
   );
 }

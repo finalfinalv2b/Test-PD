@@ -42,8 +42,7 @@ export function Navigation() {
             <Link
               key={link.name}
               href={link.href}
-              className={`h-full flex items-center justify-center px-8 text-xs font-black tracking-widest text-black transition-colors hover:bg-black hover:text-[#FFFFFF] ${idx !== 0 ? 'border-l border-black' : ''
-                }`}
+              className="h-full flex items-center justify-center px-8 text-xs font-black tracking-widest text-black transition-colors hover:bg-black hover:text-[#FFFFFF] border-l border-black"
             >
               {link.name}
             </Link>

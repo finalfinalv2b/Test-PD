@@ -62,7 +62,7 @@ export function CoreOffering() {
   };
 
   return (
-    <section className="bg-[#FFFFFF] border-b border-black w-full h-auto md:h-[calc(100vh-152px)] flex flex-col">
+    <section className="bg-[#FFFFFF] border-b border-black w-full min-h-[max(800px,calc(100vh-152px))] flex flex-col">
       <div className="w-full flex-1 flex flex-col h-full overflow-hidden">
         {/* HEADER BLOCK */}
         <div className="shrink-0 border-b border-black p-4 md:p-8 flex flex-col md:flex-row justify-between items-start md:items-end gap-2 bg-black text-[#FFFFFF]">
@@ -88,7 +88,7 @@ export function CoreOffering() {
               variants={itemVariants}
               onMouseEnter={() => setHoveredIndex(i)}
               onMouseLeave={() => setHoveredIndex(null)}
-              className="group relative p-5 md:p-4 lg:p-6 border-b md:border-b border-r-0 md:border-r border-black hover:bg-black transition-none cursor-crosshair flex flex-col justify-between overflow-hidden min-h-[250px] md:min-h-0 h-full"
+              className="group relative p-[clamp(1rem,2vw,1.5rem)] border-b md:border-b border-r-0 md:border-r border-black hover:bg-black transition-none cursor-crosshair flex flex-col justify-between overflow-hidden min-h-[250px] md:min-h-0 h-full"
             >
               <div className="relative z-10 text-black group-hover:text-[#FFFFFF] flex flex-col h-full justify-between">
                 <div>
@@ -97,9 +97,9 @@ export function CoreOffering() {
                     <span className="font-header font-black tracking-[0.05em] text-sm uppercase text-[#F41C06] truncate ml-2">{item.label}</span>
                   </div>
                   
-                  <h3 className="text-2xl md:text-2xl lg:text-3xl font-sans font-medium mb-3 md:mb-2 lg:mb-4 tracking-tighter uppercase leading-none md:leading-tight line-clamp-2 md:line-clamp-none">{item.title}</h3>
+                  <h3 className="text-[clamp(1.2rem,2vw,1.875rem)] font-sans font-medium mb-[clamp(0.5rem,1vw,1rem)] tracking-tighter uppercase leading-tight">{item.title}</h3>
                   
-                  <p className="text-sm md:text-[11px] lg:text-sm font-sans font-light leading-relaxed md:leading-snug tracking-tight mb-6 md:mb-4 lg:mb-6 opacity-80 line-clamp-3 md:line-clamp-none">
+                  <p className="text-[clamp(0.75rem,1vw,0.875rem)] font-sans font-light leading-snug tracking-tight mb-[clamp(1rem,2vw,1.5rem)] opacity-80">
                     {item.description}
                   </p>
                 </div>

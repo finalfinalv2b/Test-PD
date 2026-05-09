@@ -44,11 +44,11 @@ export default function Contact() {
             START <br /> MAKING.
           </h1>
           <p className="text-lg font-bold text-black uppercase tracking-widest max-w-sm mb-8">
-            NOT EXACTLY SURE WHAT YOU'RE LOOKING TO MAKE? THAT'S OKAY. WE HELP WITH THAT TOO.
+            NOT EXACTLY SURE WHAT YOU&apos;RE LOOKING TO MAKE? THAT&apos;S OKAY. WE HELP WITH THAT TOO.
           </p>
           <div className="w-full h-px bg-black mb-8" />
           <p className="font-mono text-sm tracking-widest text-black/60 uppercase">
-              // HQ_NEW_YORK
+              {"//"} HQ_NEW_YORK
           </p>
         </div>
 

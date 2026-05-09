@@ -82,6 +82,7 @@ function StepNode({ step, index, isActive = false }: { step: typeof steps[0], in
   );
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function AnimatedCard({ step, index, smoothProgress, windowHeight, deckScale }: any) {
   const [isShifted, setIsShifted] = useState(false);
   const [isHovered, setIsHovered] = useState(false);

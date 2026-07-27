@@ -538,7 +538,6 @@ We officially thank the following contributors for their help in making this rep
 - [@cryptoque](https://github.com/cryptoque)
 - [@umutbozdag](https://github.com/umutbozdag)
 - [@818cortex](https://github.com/818cortex)
-- [@connerlambden](https://github.com/connerlambden)
 - [@derricke](https://github.com/derricke)
 - [@fruitwyatt](https://github.com/fruitwyatt)
 - [@HMAKT99](https://github.com/HMAKT99)
@@ -673,6 +672,9 @@ We officially thank the following contributors for their help in making this rep
 - [@Simon-He95](https://github.com/Simon-He95)
 - [@Siphon880gh](https://github.com/Siphon880gh)
 - [@ymxlx](https://github.com/ymxlx)
+- [@maleksaadi0109](https://github.com/maleksaadi0109)
+- [@merc1305](https://github.com/merc1305)
+- [@nickdesi](https://github.com/nickdesi)
 
 ## Star History
 

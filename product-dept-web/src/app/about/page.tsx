@@ -58,7 +58,7 @@ export default function About() {
 
               <div className="border-t border-foreground transition-colors duration-500 pt-8 flex justify-start">
                 <Link
-                  href="/site5#contact-section"
+                  href="/#contact-section"
                   className="inline-block bg-[#f41c06] text-white hover:bg-transparent hover:text-[#f41c06] border border-[#f41c06] transition-colors px-8 py-4 font-black text-xs md:text-sm tracking-widest uppercase cursor-pointer"
                 >
                   Get in Touch

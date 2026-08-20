@@ -72,7 +72,7 @@ export function SecretKeyInteraction() {
       </Link>
 
       <Link 
-        href="/site5"
+        href="/"
         className="absolute z-20 flex justify-center items-center pointer-events-auto cursor-pointer"
         style={{
           left: `${(4.6 / 30) * 100}%`,

@@ -18,7 +18,7 @@ export function Navigation() {
 
   const pathname = usePathname();
   const isSecret = pathname === "/secret";
-  const isSite3 = pathname === "/site3" || pathname === "/site4" || pathname === "/site5";
+  const isSite3 = pathname === "/" || pathname === "/site3" || pathname === "/site4" || pathname === "/site5";
   const isSite3Only = pathname === "/site3";
   const isProductMgmt = pathname === "/product-mgmt";
 
@@ -40,7 +40,7 @@ export function Navigation() {
   const links = [
     { name: "PROCESS", href: "/#process" },
     { name: "ABOUT", href: "/about" },
-    { name: "GET IN TOUCH", href: "/site5#contact-section" },
+    { name: "GET IN TOUCH", href: "/#contact-section" },
   ];
 
   // Map theme variables based on current URL path and active global theme
@@ -58,7 +58,7 @@ export function Navigation() {
     textColor = "text-black";
     hoverClass = "hover:bg-black hover:text-[#f9f4ef]";
     useWhiteLogo = false;
-  } else if (pathname === "/site4" || pathname === "/site5") {
+  } else if (pathname === "/" || pathname === "/site4" || pathname === "/site5") {
     navBg = "bg-[#FFFFFF] border-black/15";
     borderColor = "border-black/15";
     textColor = "text-black";
@@ -116,12 +116,12 @@ export function Navigation() {
                 key={link.name}
                 href={
                   link.name === "GET IN TOUCH"
-                    ? (pathname === "/site5" ? "#contact-section" : "/site5#contact-section")
+                    ? (pathname === "/" || pathname === "/site5" ? "#contact-section" : "/#contact-section")
                     : (isSite3 && link.name === "PROCESS" ? "#process-section" : link.href)
                 }
                 onClick={(e) => {
                   if (link.name === "GET IN TOUCH") {
-                    if (pathname === "/site5") {
+                    if (pathname === "/" || pathname === "/site5") {
                       e.preventDefault();
                       const element = document.getElementById("contact-section");
                       if (element) element.scrollIntoView({ behavior: "smooth" });
@@ -169,13 +169,13 @@ export function Navigation() {
                   key={link.name}
                   href={
                     link.name === "GET IN TOUCH"
-                      ? (pathname === "/site5" ? "#contact-section" : "/site5#contact-section")
+                      ? (pathname === "/" || pathname === "/site5" ? "#contact-section" : "/#contact-section")
                       : (isSite3 && link.name === "PROCESS" ? "#process-section" : link.href)
                   }
                   onClick={(e) => {
                     setIsOpen(false);
                     if (link.name === "GET IN TOUCH") {
-                      if (pathname === "/site5") {
+                      if (pathname === "/" || pathname === "/site5") {
                         e.preventDefault();
                         const element = document.getElementById("contact-section");
                         if (element) element.scrollIntoView({ behavior: "smooth" });

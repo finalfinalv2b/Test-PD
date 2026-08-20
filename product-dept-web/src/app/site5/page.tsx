@@ -58,7 +58,7 @@ const bentoData = [
     num: "05",
     title: "MANUFACTURING",
     label: "MASS PRODUCTION",
-    bgImage: "/photo-flicker/manufacturing.jpg",
+    bgImage: "/photo-flicker/manufacturing_anim.mp4",
     longDesc: "We manage the entire transition to mass production. Our quality control teams work directly on-site to inspect machinery, validate assembly setups, and perform thorough inspections on the finished products. This ensures that every single unit matches the approved prototype.",
     longFeatures: [
       { name: "On-Site Inspection", desc: "Performing strict quality checks at key points along the production line." },

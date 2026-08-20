@@ -205,7 +205,16 @@ export default function Site5() {
   // Click handler that toggles on mobile, and scrolls to target position on desktop
   const handleItemClick = (index: number) => {
     if (isMobile) {
-      setActiveIndex(index === activeIndex ? null : index);
+      const nextIndex = index === activeIndex ? null : index;
+      setActiveIndex(nextIndex);
+      if (nextIndex !== null) {
+        setTimeout(() => {
+          const el = document.getElementById(`process-step-site5-${index}`);
+          if (el) {
+            el.scrollIntoView({ behavior: "smooth", block: "start" });
+          }
+        }, 150);
+      }
       return;
     }
 
@@ -469,7 +478,7 @@ export default function Site5() {
       className="relative w-full min-h-screen bg-background text-foreground transition-colors duration-500 font-sans font-light pt-[clamp(56px,6vh,72px)]"
     >
       {/* SECTION 1: Title Page with Logo Background & Copy */}
-      <section className="relative w-full h-[calc(100vh-clamp(56px,6vh,72px))] flex flex-col items-center justify-center border-b border-black/10 overflow-hidden px-4">
+      <section className={`relative w-full flex flex-col items-center justify-center border-b border-black/10 px-4 ${isMobile ? "min-h-[calc(100vh-clamp(56px,6vh,72px))] h-auto pt-16 pb-48 overflow-visible" : "h-[calc(100vh-clamp(56px,6vh,72px))] overflow-hidden"}`}>
         {/* Interactive Logo Watermark behind text */}
         <div className="absolute top-[45%] left-1/2 -translate-x-1/2 -translate-y-1/2 z-0 w-[125vw] max-w-[140vh] aspect-[564.03/288.69] pointer-events-none">
           <LogoInteractive brandColor={brandColor} />
@@ -589,7 +598,7 @@ export default function Site5() {
         <div className={isMobile ? "w-full" : "sticky top-[clamp(56px,6vh,72px)] left-0 w-full h-[calc(100vh-clamp(56px,6vh,72px))] overflow-hidden flex flex-col items-center justify-start bg-transparent"}>
           
           {/* SERVICE BACKGROUND PHOTOS LAYER */}
-          <div className="absolute inset-0 w-full h-full pointer-events-none z-0 overflow-hidden">
+          <div className={`absolute inset-0 w-full h-full pointer-events-none z-0 overflow-hidden ${isMobile ? "hidden" : ""}`}>
             {bentoData.map((step, index) => {
               const isOpen = activeIndex === index;
               return (
@@ -628,7 +637,7 @@ export default function Site5() {
               <h2 className="text-[clamp(1.5rem,2.2vw,3rem)] font-header font-black tracking-tighter uppercase leading-none text-white">
                 Services & Capabilities
               </h2>
-              <p className="font-sans font-light text-[clamp(10px,0.6vw,12px)] tracking-widest max-w-xs md:max-w-md border-t border-white/20 text-white/80 pt-2">
+              <p className="font-sans font-light text-xs md:text-[clamp(10px,0.6vw,12px)] tracking-widest max-w-xs md:max-w-md border-t border-white/20 text-white/80 pt-2">
                 We absorb operational friction and execution risk allowing businesses to focus on their core business goals, product vision, and growth.
               </p>
             </div>
@@ -742,7 +751,7 @@ export default function Site5() {
           
           {/* LEFT SIDE COPY BLOCK */}
           <div className="p-8 md:p-16 flex flex-col justify-between bg-transparent min-h-[400px] lg:h-full">
-            <h1 className="text-6xl md:text-8xl font-black tracking-tighter text-white uppercase leading-none mb-12">
+            <h1 className="text-5xl sm:text-6xl md:text-8xl font-black tracking-tighter text-white uppercase leading-none mb-12">
               GET IN <br /> TOUCH.
             </h1>
             <div>

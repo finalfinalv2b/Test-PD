@@ -34,7 +34,7 @@ const bentoData = [
     num: "03",
     title: "ENGINEERING",
     label: "CAD ARCHITECTURE",
-    bgImage: "/photo-flicker/engineering.jpeg",
+    bgImage: "/photo-flicker/engineering_anim.mp4",
     longDesc: "Our engineering team brings the design to life. We build detailed 3D models, design internal mechanics, and optimize the hardware layout. We focus on durability, safety, and reliability to ensure the product performs flawlessly in the real world.",
     longFeatures: [
       { name: "3D Blueprint Modeling", desc: "Creating precise digital blueprints of the product and its internal parts." },

@@ -281,6 +281,7 @@ export default function Site5() {
     if (isMobile) return;
 
     const lastSnapTimeRef = { current: 0 };
+    const ventureScrollCountRef = { current: 0 };
 
     const handleWheel = (e: WheelEvent) => {
       const section = processSectionRef.current;
@@ -320,18 +321,27 @@ export default function Site5() {
         const currentIdx = activeIndexRef.current;
         if (currentIdx !== null && currentIdx < 6) {
           lastSnapTimeRef.current = now;
+          ventureScrollCountRef.current = 0; // reset
           handleItemClickRef.current(currentIdx + 1);
         } else if (currentIdx === 6) {
-          // If on the last item, snap scroll to contact section
-          const contactSec = document.getElementById("contact-section");
-          if (contactSec) {
+          // If on the last item (Venture Infrastructure), snap to contact on the 2nd scroll down click
+          ventureScrollCountRef.current += 1;
+          if (ventureScrollCountRef.current >= 2) {
+            const contactSec = document.getElementById("contact-section");
+            if (contactSec) {
+              lastSnapTimeRef.current = now;
+              contactSec.scrollIntoView({ behavior: "smooth" });
+            }
+            ventureScrollCountRef.current = 0; // reset
+          } else {
+            // Cool down the input so they don't trigger both clicks in one quick stroke
             lastSnapTimeRef.current = now;
-            contactSec.scrollIntoView({ behavior: "smooth" });
           }
         }
       } else if (e.deltaY < 0) {
         // Scroll UP
         const currentIdx = activeIndexRef.current;
+        ventureScrollCountRef.current = 0; // reset
         if (currentIdx !== null && currentIdx > 0) {
           lastSnapTimeRef.current = now;
           handleItemClickRef.current(currentIdx - 1);

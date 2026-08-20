@@ -778,7 +778,7 @@ export default function Site5() {
 
                 <div className="flex flex-col gap-3">
                   <label htmlFor="description" className="text-xs font-black tracking-widest uppercase text-black">MESSAGE</label>
-                  <textarea id="description" name="description" rows={5} className="border border-black/10 bg-white text-black py-4 px-4 outline-none focus:border-black transition-colors resize-none font-mono uppercase text-sm" placeholder="TELL US EVERYTHING..." required></textarea>
+                  <textarea id="description" name="description" rows={5} className="border border-black/10 bg-white text-black py-4 px-4 outline-none focus:border-black transition-colors resize-none font-mono uppercase text-sm" placeholder="HOW CAN WE HELP?" required></textarea>
                 </div>
 
                 <div className="pt-8 flex justify-center">

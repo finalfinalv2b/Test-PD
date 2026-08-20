@@ -634,9 +634,9 @@ export default function Home() {
           {/* HEADER BLOCK */}
           <div className={`shrink-0 w-full bg-black border-t border-b border-white/10 pt-[clamp(16px,2.2vh,32px)] pb-[clamp(16px,2.2vh,32px)] px-6 relative ${isMobile ? "mb-16" : "mb-[clamp(16px,2vh,28px)]"}`}>
             <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-start md:items-end gap-6 w-full">
-              <h2 className="text-[clamp(1.5rem,2.2vw,3rem)] font-sans font-light tracking-tighter uppercase leading-none text-white">
+              <span className="text-[clamp(1.5rem,2.2vw,3rem)] font-sans font-light tracking-tighter uppercase leading-none text-white block">
                 Services & Capabilities
-              </h2>
+              </span>
               <p className="font-sans font-light text-xs md:text-[clamp(10px,0.6vw,12px)] tracking-widest max-w-xs md:max-w-md border-t border-white/20 text-white/80 pt-2">
                 We absorb operational friction and execution risk allowing businesses to focus on their core business goals, product vision, and growth.
               </p>

@@ -202,27 +202,6 @@ export default function Site5() {
   }, [isMobile]);
 
   // Update active index based on scroll on desktop
-  useEffect(() => {
-    if (isMobile) return;
-    
-    return scrollYProgress.on("change", (v) => {
-      if (isClickScrollingRef.current) return;
-      
-      const startProgress = 0.08;
-      const endProgress = 0.88;
-      
-      if (v < startProgress) {
-        setActiveIndex(0);
-      } else if (v > endProgress) {
-        setActiveIndex(6);
-      } else {
-        const progressPerItem = (endProgress - startProgress) / 7;
-        const idx = Math.min(6, Math.max(0, Math.floor((v - startProgress) / progressPerItem)));
-        setActiveIndex(idx);
-      }
-    });
-  }, [scrollYProgress, isMobile]);
-
   // Click handler that toggles on mobile, and scrolls to target position on desktop
   const handleItemClick = (index: number) => {
     if (isMobile) {
@@ -312,7 +291,13 @@ export default function Site5() {
       e.preventDefault();
 
       const now = Date.now();
-      if (now - lastSnapTimeRef.current < 1000) {
+      const timeSinceLastSnap = now - lastSnapTimeRef.current;
+      
+      // If we are waiting for the second click on Venture (count is 1), use a very short 200ms cooldown.
+      // Otherwise, use the standard 1000ms cooldown to block rapid scroll snaps.
+      const requiredCooldown = (activeIndexRef.current === 6 && ventureScrollCountRef.current === 1) ? 200 : 1000;
+      
+      if (timeSinceLastSnap < requiredCooldown) {
         return;
       }
 
@@ -334,7 +319,7 @@ export default function Site5() {
             }
             ventureScrollCountRef.current = 0; // reset
           } else {
-            // Cool down the input so they don't trigger both clicks in one quick stroke
+            // Log the timestamp of the first click
             lastSnapTimeRef.current = now;
           }
         }

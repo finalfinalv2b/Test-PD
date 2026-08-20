@@ -102,7 +102,7 @@ export function Navigation() {
           <img
             src={useWhiteLogo ? "/pd-wordmark-white.svg" : "/pd-wordmark-black.svg"}
             alt="Product Dept."
-            style={{ height: (isSecret || isSite3 || isProductMgmt) ? "clamp(10.5px, 1.4vw, 18.2px)" : "clamp(8.4px, 1.12vw, 15.4px)" }}
+            style={{ height: "clamp(8.4px, 1.12vw, 15.4px)" }}
             className="w-auto"
           />
         </div>

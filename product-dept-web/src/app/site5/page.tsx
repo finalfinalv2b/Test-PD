@@ -70,7 +70,7 @@ const bentoData = [
     num: "06",
     title: "LOGISTICS",
     label: "GLOBAL DELIVERY",
-    bgImage: "/photo-flicker/logistics.jpg",
+    bgImage: "/photo-flicker/logistics_anim.mp4",
     longDesc: "Our job is not done until your products arrive at your warehouse. We handle the entire shipping process, clear customs paperwork, and manage local distribution networks. We take care of the details so your launch is smooth and worry-free.",
     longFeatures: [
       { name: "Global Freight", desc: "Managing sea, air, and land transportation for your inventory." },
@@ -600,11 +600,22 @@ export default function Site5() {
                   transition={{ duration: 0.8, ease: "easeInOut" }}
                   className="absolute inset-0 w-full h-full"
                 >
-                  <img
-                    src={step.bgImage}
-                    alt=""
-                    className="w-full h-full object-cover grayscale"
-                  />
+                  {step.bgImage.endsWith(".mp4") ? (
+                    <video
+                      src={step.bgImage}
+                      autoPlay
+                      loop
+                      muted
+                      playsInline
+                      className="w-full h-full object-cover grayscale"
+                    />
+                  ) : (
+                    <img
+                      src={step.bgImage}
+                      alt=""
+                      className="w-full h-full object-cover grayscale"
+                    />
+                  )}
                 </motion.div>
               );
             })}

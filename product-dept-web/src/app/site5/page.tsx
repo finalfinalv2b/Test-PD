@@ -82,7 +82,7 @@ const bentoData = [
     num: "07",
     title: "VENTURE INFRASTRUCTURE",
     label: "OPERATIONAL BACKBONE",
-    bgImage: "/photo-flicker/venture.jpg",
+    bgImage: "/photo-flicker/venture_anim.mp4",
     longDesc: "Founders should focus on what they do best: taking their innovations to market. Product Dept. is a plug-and-play venture platform providing operational backbone for a fraction of the cost and learning curve of building a full team in-house.",
     longFeatures: [
       { name: "Operational Systems Build", desc: "Structuring your standard operating systems and tools." },

@@ -5,7 +5,45 @@
   - source-only contributor branch
   - Quality Bar checklist and maintainer validations from `.github/MAINTENANCE.md`
 - Reviewed open issues `#455` and `#456` during the maintainer sweep; neither had a matching accepted PR and both remain open pending a source-quality contributor submission.
-- Triaged PR `#454` as superseded by `#457` because `#457` rebuilds the Windows validation/test fixes on top of current `main` and includes the follow-up batch activation fix requested in review.
+- Triaged PR `#454` as superseded by `#457` because `#457` rebuilds the Windows validation/test fixes on top of current `main` and includes the follow-up batch activation fix re
+- Mapped matching matchups focus zoom, champion zoom, and coordinates fit bounds using Leaflet's equivalent camera APIs (`panTo` and `fitBounds`).
+
+---
+
+## 🛑 Removal of Mock / Invented Data Fallbacks
+
+To ensure 100% true and accurate physical locations, we have completely removed mock/fillers restaurant generation:
+1. **API Route Fallback Removed**: Disabled `getMockRestaurants` fallback in [route.ts](file:///c:/Users/Ryan/Product%20Dept.%20antigravity/product-dept-web/src/app/api/restaurants/route.ts). If the Google Places API key is missing and OpenStreetMap (Overpass API) returns 0 results, the route strictly returns 0 results rather than inventing fictional locations.
+2. **State Store Fillers Removed**: Cleaned up `setRadius` and `toggleWalkableOnly` in [game-store.ts](file:///c:/Users/Ryan/Product%20Dept.%20antigravity/product-dept-web/src/components/pokemon-battle/game-store.ts), deleting the logic that generated or injected mock fillers to reach 156 candidates.
+3. **100% Real coordinates**: All shown restaurants now strictly come from official Google Places API records or verified OpenStreetMap database markers (placing them precisely on actual storefront footprints).
+
+---
+
+## 🧠 Craving Trainer System & Trainer Choice Interface
+* **Pokemon Rivalry Matchups**: Replaced the legacy comfort/temperature survey with **10 static Pokémon Trainer matchups** associated with elemental types and specific food genres:
+  - Q1: **Fire (Blaine)** vs **Water (Misty)**
+  - Q2: **Grass (Erika)** vs **Fighting (Bruno)**
+  - Q3: **Dragon (Lance)** vs **Normal (Ash)**
+  - Q4: **Psychic (Sabrina)** vs **Dark (Koga)**
+  - Q5: **Electric (Volkner)** vs **Fairy (Dawn)**
+  - Q6: **Ground (Giovanni)** vs **Steel (Jasmine)**
+  - Q7: **Ice (Candice)** vs **Flying (Falkner)**
+  - Q8: **Fire + Ground (Flannery)** vs **Water + Fire (Wallace)**
+  - Q9: **Grass + Fairy (Nurse Joy)** vs **Psychic + Dragon (Cynthia)**
+  - Q10: **Ground + Fire (Team Rocket)** vs **Fairy + Fire (Valerie)**
+* **TCG Character Cards**: Questions are presented in a side-by-side rivalry card layout styled after standard Pokémon Trading Card Game cards. Each card features:
+  - Custom SVG character silhouettes and outline graphics, including brand new SVGs for **Jasmine**, **Falkner**, and **Valerie**.
+  - Unique gradient themes and badges corresponding to their signature element types (e.g., "🔥 FIRE TYPE" or "💧 WATER TYPE").
+  - Mapped lists of specific food genres for each type (e.g. "Sushi, Poke, Seafood, Fresh" for Misty/Water, "BBQ, Mexican, Thai, Spicy" for Blaine/Fire).
+  - Trainer names, attitudes, symbols, and one-tap selection buttons.
+* **Calibrated Recommendation Engine**: Instead of hard filtering, selections add weighted signals to a multi-variable recommendation algorithm:
+  - **40% Craving Profile**: Checked dynamically by `checkRestaurantMatch` in [game-store.ts](file:///c:/Users/Ryan/Product%20Dept.%20antigravity/product-dept-web/src/components/pokemon-battle/game-store.ts). It returns true if the candidate restaurant's cuisine matches any of the option's cuisines OR its assigned defender Pokémon types intersect with the option's Pokémon types.
+  - **30% Restaurant Quality**: Scaled from the restaurant's power rating.
+  - **20% Proximity Distance**: Inverse distance scaling.
+  - **10% Popularity**: Scaled review counts.
+* **Adjustable Sliders Panel**: Added a collapsible settings drawer at the bottom of the interface. Users can adjust the sliders for all four weights in real-time. The engine automatically normalizes the sum behind the scenes, ensuring safe ranking calculations.
+* **Enhanced Type Styling**: Extended the type badge color mapping in the battle screen card to support Ground, Steel, Ice, Flying, and Rock types.
+
 - Verified PR `#457` locally on the contributor head with:
   - `npm run validate`
   - `npm run validate:references`

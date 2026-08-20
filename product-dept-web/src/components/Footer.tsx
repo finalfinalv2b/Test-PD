@@ -10,33 +10,21 @@ export function Footer() {
         <div className="p-[clamp(2rem,5vw,3rem)] border-b md:border-b-0 md:border-r border-[#FFFFFF]/20 flex flex-col justify-between h-full min-h-[300px]">
           <div>
             <img 
-              src="/PD wordmark.svg" 
+              src="/product-department-logo-white.svg" 
               alt="Product Dept." 
-              className="w-[80%] max-w-[300px] h-auto mb-6 invert" 
+              className="w-[80%] max-w-[300px] h-auto mb-6" 
             />
-            <p className="font-sans font-light text-sm tracking-widest uppercase text-[#FFFFFF]/50">
-              PRODUCT GOALS // MANUFACTURED
-            </p>
           </div>
-          <p className="text-lg font-sans font-light tracking-tight max-w-md mt-16">
-            We are the engineering team ambitious companies wish they had in-house.
-          </p>
+
         </div>
         
         {/* RIGHT BLOCK */}
         <div className="p-[clamp(2rem,5vw,3rem)] flex flex-col justify-between">
-          <div className="grid grid-cols-2 gap-[clamp(1.5rem,4vw,2.5rem)]">
+          <div className="grid grid-cols-1 gap-[clamp(1.5rem,4vw,2.5rem)]">
             <div className="flex flex-col gap-4">
               <h4 className="border-b border-[#FFFFFF]/20 pb-2 text-xs font-sans font-medium tracking-widest uppercase text-[#FFFFFF]/40">INDEX</h4>
               <Link href="/about" className="font-sans font-light uppercase tracking-tight hover:text-[#FFFFFF]/60 transition-colors">ABOUT</Link>
               <Link href="/#process" className="font-sans font-light uppercase tracking-tight hover:text-[#FFFFFF]/60 transition-colors">PROCESS</Link>
-              <Link href="/#capabilities" className="font-sans font-light uppercase tracking-tight hover:text-[#FFFFFF]/60 transition-colors">CAPABILITIES</Link>
-            </div>
-            <div className="flex flex-col gap-4">
-              <h4 className="border-b border-[#FFFFFF]/20 pb-2 text-xs font-sans font-medium tracking-widest uppercase text-[#FFFFFF]/40">DISPATCH</h4>
-              <Link href="/contact" className="font-sans font-light uppercase tracking-tight hover:text-[#FFFFFF]/60 transition-colors">
-                CONTACT US &rarr;
-              </Link>
             </div>
           </div>
           

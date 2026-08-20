@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react";
 
-export function InteractiveGrid() {
+export function InteractiveGrid({ strokeColor = "#000000" }: { strokeColor?: string }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
@@ -17,8 +17,8 @@ export function InteractiveGrid() {
     let height = 0;
 
     // Grid configuration
-    const cols = 30;
-    const rows = 20;
+    let cols = 60;
+    let rows = 40;
     let nodes: { x: number; y: number; ox: number; oy: number; vx: number; vy: number }[] = [];
 
     const mouse = { x: -1000, y: -1000, radius: 150 };
@@ -40,6 +40,10 @@ export function InteractiveGrid() {
     const handleResize = () => {
       width = window.innerWidth;
       height = window.innerHeight;
+      
+      const cellSize = 28;
+      cols = Math.round(width / cellSize);
+      rows = Math.round(height / cellSize);
       
       const dpr = window.devicePixelRatio || 1;
       
@@ -65,8 +69,24 @@ export function InteractiveGrid() {
       mouse.y = -1000;
     };
 
+    const handleTouchMove = (e: TouchEvent) => {
+      if (e.touches.length > 0) {
+        const rect = canvas.getBoundingClientRect();
+        mouse.x = e.touches[0].clientX - rect.left;
+        mouse.y = e.touches[0].clientY - rect.top;
+      }
+    };
+
+    const handleTouchEnd = () => {
+      mouse.x = -1000;
+      mouse.y = -1000;
+    };
+
     canvas.addEventListener("mousemove", handleMouseMove);
     canvas.addEventListener("mouseleave", handleMouseLeave);
+    canvas.addEventListener("touchmove", handleTouchMove, { passive: true });
+    canvas.addEventListener("touchend", handleTouchEnd, { passive: true });
+    canvas.addEventListener("touchcancel", handleTouchEnd, { passive: true });
 
     const draw = () => {
       ctx.clearRect(0, 0, width, height);
@@ -101,16 +121,16 @@ export function InteractiveGrid() {
         node.y += node.vy;
       });
 
-      // Calculate box knockout bounds
-      let boxWidthCells = 18;
-      let boxHeightCells = 6;
+      // Calculate box knockout bounds dynamically relative to total cols/rows
+      let boxWidthCells = Math.round(cols * 0.6);
+      let boxHeightCells = Math.round(rows * 0.3);
       if (width < 1024) {
-        boxWidthCells = 20;
-        boxHeightCells = 8;
+        boxWidthCells = Math.round(cols * 0.67);
+        boxHeightCells = Math.round(rows * 0.4);
       }
       if (width < 768) {
-        boxWidthCells = 26;
-        boxHeightCells = 10;
+        boxWidthCells = Math.round(cols * 0.87);
+        boxHeightCells = Math.round(rows * 0.5);
       }
 
       const minCol = (cols - boxWidthCells) / 2;
@@ -118,8 +138,20 @@ export function InteractiveGrid() {
       const minRow = (rows - boxHeightCells) / 2;
       const maxRow = (rows + boxHeightCells) / 2;
 
+      // Widgets row: located at 90% to 95% of screen height
+      const widgetRowTop = Math.round(rows * 0.9);
+      const widgetRowBottom = Math.round(rows * 0.95);
+
+      // Weather widget (left 76.6% to 96.6% of screen width)
+      const weatherColStart = Math.round(cols * (23 / 30));
+      const weatherColEnd = Math.round(cols * (29 / 30));
+
+      // LocalTime widget (left 60.0% to 70.0% of screen width)
+      const timeColStart = Math.round(cols * (18 / 30));
+      const timeColEnd = Math.round(cols * (21 / 30));
+
       // Draw horizontal lines (Foreground layer)
-      ctx.strokeStyle = "#000000"; // Solid black lines matching the header
+      ctx.strokeStyle = strokeColor;
       ctx.lineWidth = 1; // 1px width matching Tailwind's default border width
       ctx.beginPath();
       
@@ -131,7 +163,9 @@ export function InteractiveGrid() {
             ctx.moveTo(node.x, node.y);
           } else {
             const isInsideBox = j > minRow && j < maxRow && i > minCol && i <= maxCol;
-            if (isInsideBox) {
+            const isInsideWidget = j > widgetRowTop && j < widgetRowBottom && i > weatherColStart && i <= weatherColEnd;
+            const isInsideTimeWidget = j > widgetRowTop && j < widgetRowBottom && i > timeColStart && i <= timeColEnd;
+            if (isInsideBox || isInsideWidget || isInsideTimeWidget) {
               ctx.moveTo(node.x, node.y);
             } else {
               ctx.lineTo(node.x, node.y);
@@ -151,7 +185,9 @@ export function InteractiveGrid() {
             ctx.moveTo(node.x, node.y);
           } else {
             const isInsideBox = i > minCol && i < maxCol && j > minRow && j <= maxRow;
-            if (isInsideBox) {
+            const isInsideWidget = i > weatherColStart && i < weatherColEnd && j > widgetRowTop && j <= widgetRowBottom;
+            const isInsideTimeWidget = i > timeColStart && i < timeColEnd && j > widgetRowTop && j <= widgetRowBottom;
+            if (isInsideBox || isInsideWidget || isInsideTimeWidget) {
               ctx.moveTo(node.x, node.y);
             } else {
               ctx.lineTo(node.x, node.y);
@@ -170,6 +206,9 @@ export function InteractiveGrid() {
       window.removeEventListener("resize", handleResize);
       canvas.removeEventListener("mousemove", handleMouseMove);
       canvas.removeEventListener("mouseleave", handleMouseLeave);
+      canvas.removeEventListener("touchmove", handleTouchMove);
+      canvas.removeEventListener("touchend", handleTouchEnd);
+      canvas.removeEventListener("touchcancel", handleTouchEnd);
       cancelAnimationFrame(animationFrameId);
     };
   }, []);

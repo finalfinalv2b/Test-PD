@@ -22,16 +22,12 @@ export default function Home() {
 
       {/* Content below Hero */}
       <div className="relative z-20">
-
-
-
-
       </div>
 
       {/* Capabilities / Core Offering */}
 
       {/* Process */}
-      <div id="process" className="relative z-10 bg-[#FFFFFF]">
+      <div id="process" className="relative z-10 bg-background transition-colors duration-500">
         <ProcessSequence />
       </div>
 
@@ -56,6 +52,7 @@ export default function Home() {
             </div>
           </div>
         </Link>
-      </div>    </>
+      </div>
+    </>
   );
 }

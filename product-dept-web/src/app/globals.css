@@ -3,7 +3,7 @@
 @font-face {
   font-family: 'SpecialCharOverride';
   src: local('Helvetica Neue'), local('Helvetica'), local('Arial');
-  unicode-range: U+0023-0026, U+002A-002B, U+003D, U+0040, U+007E, U+00A3, U+20AC;
+  unicode-range: U+0021-002F, U+003A-0040, U+005B-0060, U+007B-007E, U+00A0-00BF, U+2000-206F, U+20A0-20CF, U+2100-28FF;
 }
 
 :root {
@@ -16,6 +16,21 @@
   --gray-dark: #848484;
   --accent: #FFB000;
   --font-header-stack: 'SpecialCharOverride', var(--font-elza), sans-serif;
+}
+
+:root[data-theme="black"] {
+  --background: #000000;
+  --foreground: #ffffff;
+}
+
+:root[data-theme="red"] {
+  --background: #e31a1c;
+  --foreground: #ffffff;
+}
+
+:root[data-theme="beige"] {
+  --background: #f5f2eb;
+  --foreground: #0a0a0a;
 }
 
 @theme inline {
@@ -42,10 +57,6 @@ h4,
 h5,
 h6 {
   @apply font-sans font-medium tracking-tight;
-}
-
-* {
-  cursor: none !important;
 }
 
 body {

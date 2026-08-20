@@ -61,7 +61,6 @@ export const metadata: Metadata = {
 };
 
 import { Navigation } from "@/components/Navigation";
-import { Cursor } from "@/components/Cursor";
 
 export default function RootLayout({
   children,
@@ -74,7 +73,6 @@ export default function RootLayout({
       className={`${elza.variable} ${neueHaas.variable} ${neueHaasUnica.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col font-sans bg-background text-foreground tracking-tight overflow-x-hidden">
-        <Cursor />
         <Navigation />
         <main className="flex-1 flex flex-col w-full">
           {children}

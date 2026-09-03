@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
-import { LogoInteractive } from "@/components/LogoInteractive";
 
 const bentoData = [
   {
@@ -489,68 +488,96 @@ export default function Home() {
       } as React.CSSProperties}
       className="relative w-full min-h-screen bg-black text-white transition-colors duration-500 font-sans font-light pt-[clamp(56px,6vh,72px)]"
     >
-      {/* SECTION 1: Title Page with Logo Background & Copy */}
-      <section className={`relative w-full flex flex-col items-center justify-center border-b border-white/10 px-4 bg-black text-white ${isMobile ? "min-h-[calc(100vh-clamp(56px,6vh,72px))] h-auto pt-16 pb-48 overflow-visible" : "h-[calc(100vh-clamp(56px,6vh,72px))] overflow-hidden"}`}>
-        {/* Interactive Logo Watermark behind text */}
-        <div className="absolute top-[45%] left-1/2 -translate-x-1/2 -translate-y-1/2 z-0 w-[125vw] max-w-[140vh] aspect-[564.03/288.69] pointer-events-none">
-          <LogoInteractive brandColor={brandColor} />
-        </div>
-
-        {/* Foreground Content */}
-        <div className="relative z-10 flex flex-col items-center justify-center text-center max-w-[clamp(280px,85vw,850px)] pb-12 mt-[-40px]">
-          {/* Wordmark Logo Image */}
-          <motion.img 
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            src="/pd-wordmark-white.svg" 
-            alt="Product Dept." 
-            className="h-[clamp(30px,5.25vw,54px)] w-auto object-contain mb-4 select-none pointer-events-none"
-          />
-
-          <motion.h1 
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.15 }}
-            className="text-[clamp(1rem,2vw,2rem)] tracking-normal normal-case font-sans font-light text-white/80 mb-8"
-          >
-            Where great ideas become exceptional products.
-          </motion.h1>
-
-          <motion.div 
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.3 }}
-            className="text-[clamp(0.82rem,1.1vw,1.15rem)] font-sans font-light tracking-wide text-white/90 leading-relaxed space-y-4"
-          >
-            <p>
-              Product Dept. is an industry agnostic, full-stack product creation company partnering with venture and established companies to scale physical product lines quickly, reliably, and profitably.
-            </p>
-            <p>
-              We provide product design, engineering, sourcing, manufacturing, and infrastructure to build new supply chains and optimize existing ones. By drawing on decades of global manufacturing relationships and corporate operations experience we bring vision to life, from concept to commercialization, and provide the foundation for profitable enterprises. We absorb operational friction and execution risk allowing businesses to focus on their core business goals, product vision, and growth.
-            </p>
-          </motion.div>
-
+      {/* SECTION 1: Title Page with Dual Logo Shapes & Content */}
+      <section className={`relative w-full flex flex-col items-center justify-center border-b border-white/10 px-4 bg-black text-white ${isMobile ? "min-h-[calc(100vh-clamp(56px,6vh,72px))] h-auto pt-10 pb-44 overflow-visible" : "h-[calc(100vh-clamp(56px,6vh,72px))] overflow-hidden"}`}>
+        
+        {/* Dual Shapes Container */}
+        <div className={`relative z-10 flex ${isMobile ? "flex-col gap-8 my-6" : "flex-row items-center justify-center gap-6 md:gap-8 lg:gap-10 xl:gap-14 my-auto pb-16 lg:pb-20"} w-full max-w-7xl mx-auto`}>
+          
+          {/* SHAPE 1: RED CIRCLE */}
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 1, delay: 0.8 }}
-            className="mt-8 pointer-events-auto"
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.8 }}
+            className={`relative flex items-center justify-center ${isMobile ? "w-[min(340px,82vw)]" : "w-[clamp(260px,34vw,min(450px,calc(100vh-230px)))]"} aspect-square shrink-0 mx-auto`}
           >
-            <button
-              onClick={() => {
-                const element = document.getElementById("process-section");
-                if (element) element.scrollIntoView({ behavior: "smooth" });
-              }}
-              className="text-white font-sans font-bold tracking-widest text-xs md:text-sm hover:text-[var(--brand)] whitespace-nowrap cursor-pointer bg-transparent border-none outline-none border-b border-white/20 pb-1 transition-colors"
+            {/* SVG Circle Background */}
+            <svg
+              viewBox="0 0 100 100"
+              className="absolute inset-0 w-full h-full pointer-events-none drop-shadow-xl"
             >
-              EXPLORE OUR SERVICES & CAPABILITIES
-            </button>
+              <circle cx="50" cy="50" r="50" fill={brandColor || "#f41c06"} />
+            </svg>
+
+            {/* Circle Content: Wordmark & Tagline */}
+            <div className="relative z-10 flex flex-col items-center justify-center text-center p-6 sm:p-8 max-w-[80%] max-h-[80%]">
+              <motion.img
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.2 }}
+                src="/pd-wordmark-white.svg"
+                alt="Product Dept."
+                className="h-[clamp(20px,2.4vw,34px)] w-auto object-contain mb-3 md:mb-5 select-none pointer-events-none"
+              />
+              <motion.h1
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.3 }}
+                className="text-[clamp(1rem,1.6vw,1.85rem)] font-sans font-light tracking-tight leading-[1.25] text-white text-center"
+              >
+                Where great ideas become exceptional products.
+              </motion.h1>
+            </div>
           </motion.div>
+
+          {/* SHAPE 2: RED SQUARE (POLYGON) */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.8, delay: 0.15 }}
+            className={`relative flex items-center justify-center ${isMobile ? "w-[min(350px,86vw)]" : "w-[clamp(270px,36vw,min(470px,calc(100vh-220px)))]"} aspect-[986.41/1016.36] shrink-0 mx-auto`}
+          >
+            {/* SVG Square Polygon Background */}
+            <svg
+              viewBox="0 0 986.41 1016.36"
+              className="absolute inset-0 w-full h-full pointer-events-none drop-shadow-xl"
+              preserveAspectRatio="none"
+            >
+              <polygon
+                points="953.92 1016.36 91.46 1016.36 0 0 986.41 241.25 953.92 1016.36"
+                fill={brandColor || "#f41c06"}
+              />
+            </svg>
+
+            {/* Square Content: Paragraphs & CTA Button */}
+            <div className="relative z-10 flex flex-col items-center justify-center text-center px-6 py-6 sm:px-8 sm:py-8 md:px-9 md:py-9 max-w-[88%] max-h-[88%] pt-[10%] pb-[5%]">
+              <div className="text-[clamp(0.66rem,0.76vw,0.85rem)] font-sans font-light tracking-wide text-white leading-relaxed space-y-2 md:space-y-3">
+                <p>
+                  Product Dept. is an industry agnostic, full-stack product creation company partnering with venture and established companies to scale physical product lines quickly, reliably, and profitably.
+                </p>
+                <p>
+                  We provide product design, engineering, sourcing, manufacturing, and infrastructure to build new supply chains and optimize existing ones. By drawing on decades of global manufacturing relationships and corporate operations experience we bring vision to life, from concept to commercialization, and provide the foundation for profitable enterprises. We absorb operational friction and execution risk allowing businesses to focus on their core business goals, product vision, and growth.
+                </p>
+              </div>
+
+              <div className="mt-3 md:mt-5 pointer-events-auto">
+                <button
+                  onClick={() => {
+                    const element = document.getElementById("process-section");
+                    if (element) element.scrollIntoView({ behavior: "smooth" });
+                  }}
+                  className="text-white font-sans font-bold tracking-widest text-[clamp(9.5px,0.68vw,11.5px)] hover:text-black hover:border-black whitespace-nowrap cursor-pointer bg-transparent border-none outline-none border-b border-white/50 pb-1 transition-all uppercase"
+                >
+                  EXPLORE OUR SERVICES & CAPABILITIES
+                </button>
+              </div>
+            </div>
+          </motion.div>
+
         </div>
 
         {/* Partners Banner */}
-        <div className="absolute bottom-6 md:bottom-12 left-0 w-full flex flex-col gap-2 overflow-hidden select-none z-10">
+        <div className="absolute bottom-4 md:bottom-8 left-0 w-full flex flex-col gap-2 overflow-hidden select-none z-10">
           <div className="px-8 md:px-16 text-left">
             <span className="font-sans text-[9px] md:text-xs font-black tracking-[0.2em] uppercase text-white/50">
               Select Partners

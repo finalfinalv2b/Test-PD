@@ -488,70 +488,79 @@ export default function Home() {
       } as React.CSSProperties}
       className="relative w-full min-h-screen bg-black text-white transition-colors duration-500 font-sans font-light pt-[clamp(56px,6vh,72px)]"
     >
-      {/* SECTION 1: Title Page with Dual Logo Shapes & Content */}
-      <section className={`relative w-full flex flex-col items-center justify-center border-b border-white/10 px-4 bg-black text-white ${isMobile ? "min-h-[calc(100vh-clamp(56px,6vh,72px))] h-auto pt-10 pb-44 overflow-visible" : "h-[calc(100vh-clamp(56px,6vh,72px))] overflow-hidden"}`}>
+      {/* SECTION 1: Title Page with Unified Company Logo & Content */}
+      <section className={`relative w-full flex flex-col items-center justify-center border-b border-white/10 px-4 bg-black text-white ${isMobile ? "min-h-[calc(100vh-clamp(56px,6vh,72px))] h-auto pt-10 pb-36 overflow-visible" : "h-[calc(100vh-clamp(56px,6vh,72px))] overflow-hidden"}`}>
         
-        {/* Dual Shapes Container */}
-        <div className={`relative z-10 flex ${isMobile ? "flex-col gap-8 my-6" : "flex-row items-center justify-center gap-6 md:gap-8 lg:gap-10 xl:gap-14 my-auto pb-16 lg:pb-20"} w-full max-w-7xl mx-auto`}>
+        {/* Unified Official Company Logo Container with Embedded Content */}
+        <div className={`relative z-10 aspect-[564.03/288.69] mx-auto select-none ${isMobile ? "w-full max-w-[560px] my-6" : "w-[min(94vw,1200px,calc((100vh-210px)*1.9537))] my-auto pb-12 md:pb-16"}`}>
           
-          {/* SHAPE 1: RED CIRCLE */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.8 }}
-            className={`relative flex items-center justify-center ${isMobile ? "w-[min(340px,82vw)]" : "w-[clamp(260px,34vw,min(450px,calc(100vh-230px)))]"} aspect-square shrink-0 mx-auto`}
+          {/* Background: Official Company Logo Vector (Circle & Square with exact distance and proportions) */}
+          <svg
+            viewBox="0 0 564.03 288.69"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            className="absolute inset-0 w-full h-full pointer-events-none drop-shadow-2xl"
           >
-            {/* SVG Circle Background */}
-            <svg
-              viewBox="0 0 100 100"
-              className="absolute inset-0 w-full h-full pointer-events-none drop-shadow-xl"
-            >
-              <circle cx="50" cy="50" r="50" fill={brandColor || "#f41c06"} />
-            </svg>
+            {/* Circle Shape */}
+            <path
+              d="M136.64,15.41c75.46,0,136.64,61.17,136.64,136.64s-61.17,136.64-136.64,136.64S0,227.51,0,152.05,61.17,15.41,136.64,15.41"
+              fill={brandColor || "#f41c06"}
+            />
+            {/* Square Shape */}
+            <polygon
+              points="553.22 284.38 311.9 284.38 286.31 0 562.31 67.5 553.22 284.38"
+              fill={brandColor || "#f41c06"}
+            />
+          </svg>
 
-            {/* Circle Content: Wordmark & Tagline */}
-            <div className="relative z-10 flex flex-col items-center justify-center text-center p-6 sm:p-8 max-w-[80%] max-h-[80%]">
-              <motion.img
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.2 }}
+          {/* CIRCLE CONTENT OVERLAY */}
+          <div
+            style={{
+              left: "0%",
+              top: "5.34%",
+              width: "48.45%",
+              height: "94.66%"
+            }}
+            className="absolute flex flex-col items-center justify-center text-center p-3 sm:p-5 md:p-8 pointer-events-none"
+          >
+            <motion.div
+              initial={{ opacity: 0, scale: 0.96 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.8 }}
+              className="flex flex-col items-center justify-center text-center max-w-[86%]"
+            >
+              {/* Wordmark Logo */}
+              <img
                 src="/pd-wordmark-white.svg"
                 alt="Product Dept."
-                className="h-[clamp(20px,2.4vw,34px)] w-auto object-contain mb-3 md:mb-5 select-none pointer-events-none"
+                className="h-[clamp(14px,2.2vw,30px)] w-auto object-contain mb-1.5 sm:mb-2 md:mb-2.5 select-none"
               />
-              <motion.h1
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.3 }}
-                className="text-[clamp(1rem,1.6vw,1.85rem)] font-sans font-light tracking-tight leading-[1.25] text-white text-center"
-              >
+
+              {/* Tagline: Single line in smaller text under the wordmark */}
+              <span className="text-[clamp(7.5px,0.92vw,13px)] font-sans font-light tracking-tight text-white whitespace-nowrap select-none text-center block">
                 Where great ideas become exceptional products.
-              </motion.h1>
-            </div>
-          </motion.div>
+              </span>
+            </motion.div>
+          </div>
 
-          {/* SHAPE 2: RED SQUARE (POLYGON) */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.8, delay: 0.15 }}
-            className={`relative flex items-center justify-center ${isMobile ? "w-[min(350px,86vw)]" : "w-[clamp(270px,36vw,min(470px,calc(100vh-220px)))]"} aspect-[986.41/1016.36] shrink-0 mx-auto`}
+          {/* SQUARE (POLYGON) CONTENT OVERLAY */}
+          <div
+            style={{
+              left: "50.76%",
+              top: "0%",
+              width: "48.93%",
+              height: "98.51%"
+            }}
+            className="absolute flex flex-col items-center justify-center text-center px-3 sm:px-6 md:px-8 pt-[9%] pb-[5%]"
           >
-            {/* SVG Square Polygon Background */}
-            <svg
-              viewBox="0 0 986.41 1016.36"
-              className="absolute inset-0 w-full h-full pointer-events-none drop-shadow-xl"
-              preserveAspectRatio="none"
+            <motion.div
+              initial={{ opacity: 0, scale: 0.96 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.8, delay: 0.15 }}
+              className="flex flex-col items-center justify-center text-center max-w-[88%]"
             >
-              <polygon
-                points="953.92 1016.36 91.46 1016.36 0 0 986.41 241.25 953.92 1016.36"
-                fill={brandColor || "#f41c06"}
-              />
-            </svg>
-
-            {/* Square Content: Paragraphs & CTA Button */}
-            <div className="relative z-10 flex flex-col items-center justify-center text-center px-6 py-6 sm:px-8 sm:py-8 md:px-9 md:py-9 max-w-[88%] max-h-[88%] pt-[10%] pb-[5%]">
-              <div className="text-[clamp(0.66rem,0.76vw,0.85rem)] font-sans font-light tracking-wide text-white leading-relaxed space-y-2 md:space-y-3">
+              {/* Paragraphs */}
+              <div className="text-[clamp(6.8px,0.76vw,11.5px)] font-sans font-light tracking-wide text-white leading-relaxed space-y-1 sm:space-y-1.5 md:space-y-2.5">
                 <p>
                   Product Dept. is an industry agnostic, full-stack product creation company partnering with venture and established companies to scale physical product lines quickly, reliably, and profitably.
                 </p>
@@ -560,19 +569,20 @@ export default function Home() {
                 </p>
               </div>
 
-              <div className="mt-3 md:mt-5 pointer-events-auto">
+              {/* CTA Action Button */}
+              <div className="mt-2 sm:mt-2.5 md:mt-4 pointer-events-auto">
                 <button
                   onClick={() => {
                     const element = document.getElementById("process-section");
                     if (element) element.scrollIntoView({ behavior: "smooth" });
                   }}
-                  className="text-white font-sans font-bold tracking-widest text-[clamp(9.5px,0.68vw,11.5px)] hover:text-black hover:border-black whitespace-nowrap cursor-pointer bg-transparent border-none outline-none border-b border-white/50 pb-1 transition-all uppercase"
+                  className="text-white font-sans font-bold tracking-widest text-[clamp(7.5px,0.68vw,10.5px)] hover:text-black hover:border-black whitespace-nowrap cursor-pointer bg-transparent border-none outline-none border-b border-white/50 pb-0.5 transition-all uppercase"
                 >
                   EXPLORE OUR SERVICES & CAPABILITIES
                 </button>
               </div>
-            </div>
-          </motion.div>
+            </motion.div>
+          </div>
 
         </div>
 

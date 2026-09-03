@@ -156,48 +156,43 @@ export default function Home() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // Scroll Snapping for Site 5 sections
+  // Synchronize active accordion index with natural/touchpad scroll progress on desktop
   useEffect(() => {
     if (isMobile) return;
-
-    const htmlEl = document.documentElement;
-    htmlEl.classList.add("snap-y", "snap-proximity", "scroll-smooth");
-
-    return () => {
-      htmlEl.classList.remove("snap-y", "snap-proximity", "scroll-smooth");
-    };
-  }, [isMobile]);
-
-  // Auto-snap scroll down from homepage to services section to reduce scroll wheel effort
-  useEffect(() => {
-    if (isMobile) return;
-
-    let isSnapping = false;
-    lastScrollYRef.current = window.scrollY;
 
     const handleScroll = () => {
-      const currentScrollY = window.scrollY;
-      const prevScrollY = lastScrollYRef.current;
-      lastScrollYRef.current = currentScrollY;
+      // If animating via click or mouse wheel notch snap, avoid overriding
+      if (isClickScrollingRef.current) return;
 
-      if (isSnapping) return;
+      const section = processSectionRef.current;
+      if (!section) return;
 
-      // If we start at the top (prevScrollY <= 5) and scroll down slightly (currentScrollY > prevScrollY)
-      if (prevScrollY <= 5 && currentScrollY > prevScrollY && currentScrollY < 150) {
-        const target = document.getElementById("process-section");
-        if (target) {
-          isSnapping = true;
-          target.scrollIntoView({ behavior: "smooth" });
-          
-          setTimeout(() => {
-            isSnapping = false;
-            lastScrollYRef.current = window.scrollY;
-          }, 1000);
+      const rect = section.getBoundingClientRect();
+      const scrollTop = window.scrollY || document.documentElement.scrollTop;
+      const sectionStart = rect.top + scrollTop;
+      const sectionHeight = rect.height;
+      const viewportHeight = window.innerHeight;
+      const scrollableHeight = sectionHeight - viewportHeight;
+
+      if (scrollableHeight <= 0) return;
+
+      // Progress through the pinned section (0 = top of section, 1 = bottom of section)
+      const progress = (scrollTop - sectionStart) / scrollableHeight;
+
+      if (progress >= 0 && progress <= 1) {
+        const startProgress = 0.04;
+        const endProgress = 0.96;
+        const clampedProgress = Math.max(startProgress, Math.min(endProgress, progress));
+        const normalized = (clampedProgress - startProgress) / (endProgress - startProgress);
+        const targetIndex = Math.min(6, Math.max(0, Math.floor(normalized * 7)));
+
+        if (targetIndex !== activeIndexRef.current) {
+          setActiveIndex(targetIndex);
         }
       }
     };
 
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, [isMobile]);
 
@@ -270,8 +265,31 @@ export default function Home() {
 
     const lastSnapTimeRef = { current: 0 };
     const ventureScrollCountRef = { current: 0 };
+    let isTrackpadActive = false;
+    let trackpadTimer: NodeJS.Timeout | null = null;
 
     const handleWheel = (e: WheelEvent) => {
+      // Touchpad detection:
+      // Touchpads produce non-integer deltas, horizontal drift (deltaX), or continuous small micro-deltas.
+      const hasDeltaX = Math.abs(e.deltaX) > 0;
+      const isFloatDelta = !Number.isInteger(e.deltaY);
+      const isSmallDelta = Math.abs(e.deltaY) > 0 && Math.abs(e.deltaY) < 40 && e.deltaMode === 0;
+
+      if (hasDeltaX || isFloatDelta || isSmallDelta) {
+        isTrackpadActive = true;
+        if (trackpadTimer) clearTimeout(trackpadTimer);
+        trackpadTimer = setTimeout(() => {
+          isTrackpadActive = false;
+        }, 300);
+      }
+
+      // If the user is on a touchpad, DO NOT intercept or preventDefault!
+      // This completely eliminates touchpad rubberbanding, delay, and momentum fights.
+      if (isTrackpadActive) {
+        return;
+      }
+
+      // For discrete mouse wheel notches, preserve step-by-step navigation
       const section = processSectionRef.current;
       if (!section) return;
 
@@ -279,16 +297,14 @@ export default function Home() {
       const sectionTop = section.offsetTop;
       const sectionHeight = section.offsetHeight;
       
-      // Determine if the scroll position is inside the services section
-      // We give it a buffer of 100px on top
       const isInside = scrollY >= sectionTop - 100 && scrollY < sectionTop + sectionHeight - window.innerHeight - 50;
 
       if (!isInside) {
-        // If we are at the top (scrollY < 10) and scrolling down, snap to services
+        // At the top (scrollY < 10) with mouse wheel scrolling down, snap to services
         if (scrollY < 10 && e.deltaY > 0) {
           e.preventDefault();
           const now = Date.now();
-          if (now - lastSnapTimeRef.current > 1000) {
+          if (now - lastSnapTimeRef.current > 400) {
             lastSnapTimeRef.current = now;
             handleItemClickRef.current(0);
           }
@@ -296,15 +312,13 @@ export default function Home() {
         return;
       }
 
-      // We are inside the services section: intercept ALL wheel scroll events!
+      // Inside services section with mouse wheel: step through items
       e.preventDefault();
 
       const now = Date.now();
       const timeSinceLastSnap = now - lastSnapTimeRef.current;
       
-      // If we are waiting for the second click on Venture (count is 1), use a very short 200ms cooldown.
-      // Otherwise, use the standard 1000ms cooldown to block rapid scroll snaps.
-      const requiredCooldown = (activeIndexRef.current === 6 && ventureScrollCountRef.current === 1) ? 200 : 1000;
+      const requiredCooldown = (activeIndexRef.current === 6 && ventureScrollCountRef.current === 1) ? 200 : 400;
       
       if (timeSinceLastSnap < requiredCooldown) {
         return;
@@ -315,10 +329,9 @@ export default function Home() {
         const currentIdx = activeIndexRef.current;
         if (currentIdx !== null && currentIdx < 6) {
           lastSnapTimeRef.current = now;
-          ventureScrollCountRef.current = 0; // reset
+          ventureScrollCountRef.current = 0;
           handleItemClickRef.current(currentIdx + 1);
         } else if (currentIdx === 6) {
-          // If on the last item (Venture Infrastructure), snap to contact on the 2nd scroll down click
           ventureScrollCountRef.current += 1;
           if (ventureScrollCountRef.current >= 2) {
             const contactSec = document.getElementById("contact-section");
@@ -326,21 +339,19 @@ export default function Home() {
               lastSnapTimeRef.current = now;
               contactSec.scrollIntoView({ behavior: "smooth" });
             }
-            ventureScrollCountRef.current = 0; // reset
+            ventureScrollCountRef.current = 0;
           } else {
-            // Log the timestamp of the first click
             lastSnapTimeRef.current = now;
           }
         }
       } else if (e.deltaY < 0) {
         // Scroll UP
         const currentIdx = activeIndexRef.current;
-        ventureScrollCountRef.current = 0; // reset
+        ventureScrollCountRef.current = 0;
         if (currentIdx !== null && currentIdx > 0) {
           lastSnapTimeRef.current = now;
           handleItemClickRef.current(currentIdx - 1);
         } else if (currentIdx === 0) {
-          // If on Strategy, scroll upward snaps to home screen
           lastSnapTimeRef.current = now;
           window.scrollTo({
             top: 0,
@@ -364,7 +375,7 @@ export default function Home() {
       if (e.key === "ArrowDown" || e.key === "PageDown" || (e.key === " " && !e.shiftKey)) {
         e.preventDefault();
         const now = Date.now();
-        if (now - lastSnapTimeRef.current < 1000) return;
+        if (now - lastSnapTimeRef.current < 400) return;
         
         const currentIdx = activeIndexRef.current;
         if (currentIdx !== null && currentIdx < 6) {
@@ -380,7 +391,7 @@ export default function Home() {
       } else if (e.key === "ArrowUp" || e.key === "PageUp" || (e.key === " " && e.shiftKey)) {
         e.preventDefault();
         const now = Date.now();
-        if (now - lastSnapTimeRef.current < 1000) return;
+        if (now - lastSnapTimeRef.current < 400) return;
         
         const currentIdx = activeIndexRef.current;
         if (currentIdx !== null && currentIdx > 0) {
@@ -399,6 +410,7 @@ export default function Home() {
     window.addEventListener("wheel", handleWheel, { passive: false });
     window.addEventListener("keydown", handleKeyDown);
     return () => {
+      if (trackpadTimer) clearTimeout(trackpadTimer);
       window.removeEventListener("wheel", handleWheel);
       window.removeEventListener("keydown", handleKeyDown);
     };
@@ -592,7 +604,7 @@ export default function Home() {
       <section 
         ref={processSectionRef} 
         id="process-section" 
-        className={`relative bg-[#FFFFFF] border-b border-black w-full snap-start scroll-mt-[clamp(56px,6vh,72px)] ${isMobile ? "py-24" : "h-[450vh]"}`}
+        className={`relative bg-[#FFFFFF] border-b border-black w-full scroll-mt-[clamp(56px,6vh,72px)] ${isMobile ? "py-24" : "h-[450vh]"}`}
       >
         {/* Pinned Wrapper for Desktop */}
         <div className={isMobile ? "w-full" : "sticky top-[clamp(56px,6vh,72px)] left-0 w-full h-[calc(100vh-clamp(56px,6vh,72px))] overflow-hidden flex flex-col items-center justify-start bg-transparent"}>
@@ -746,7 +758,7 @@ export default function Home() {
       </section>
 
       {/* SECTION 5: Contact Us */}
-      <section id="contact-section" className="w-full border-t border-black/20 scroll-mt-[clamp(56px,6vh,72px)] bg-[var(--brand)] snap-start lg:h-[calc(100vh-clamp(56px,6vh,72px))] min-h-screen lg:min-h-0">
+      <section id="contact-section" className="w-full border-t border-black/20 scroll-mt-[clamp(56px,6vh,72px)] bg-[var(--brand)] lg:h-[calc(100vh-clamp(56px,6vh,72px))] min-h-screen lg:min-h-0">
         <div className="grid grid-cols-1 lg:grid-cols-2 lg:h-full h-auto">
           
           {/* LEFT SIDE COPY BLOCK */}

@@ -489,10 +489,10 @@ export default function Home() {
       className="relative w-full min-h-screen bg-black text-white transition-colors duration-500 font-sans font-light pt-[clamp(56px,6vh,72px)]"
     >
       {/* SECTION 1: Title Page with Unified Company Logo & Content */}
-      <section className={`relative w-full flex flex-col items-center justify-center border-b border-white/10 px-4 bg-black text-white ${isMobile ? "min-h-[calc(100vh-clamp(56px,6vh,72px))] h-auto pt-10 pb-36 overflow-visible" : "h-[calc(100vh-clamp(56px,6vh,72px))] overflow-hidden"}`}>
+      <section className={`relative w-full flex flex-col items-center justify-center border-b border-white/10 px-4 bg-black text-white ${isMobile ? "min-h-[calc(100vh-clamp(56px,6vh,72px))] h-auto pt-10 pb-36 overflow-visible" : "min-h-[calc(100vh-clamp(56px,6vh,72px))] py-8 pb-20 overflow-visible"}`}>
         
-        {/* Unified Official Company Logo Container with Embedded Content */}
-        <div className={`relative z-10 aspect-[564.03/288.69] mx-auto select-none ${isMobile ? "w-full max-w-[560px] my-6" : "w-[min(94vw,1200px,calc((100vh-210px)*1.9537))] my-auto pb-12 md:pb-16"}`}>
+        {/* Unified Official Company Logo Container with Embedded Content (Scaled up 30%) */}
+        <div className={`relative z-10 aspect-[564.03/288.69] mx-auto select-none ${isMobile ? "w-full max-w-[728px] my-6" : "w-[min(96vw,1560px,calc((100vh-140px)*2.54))] my-auto mb-14 md:mb-18"}`}>
           
           {/* Background: Official Company Logo Vector (Circle & Square with exact distance and proportions) */}
           <svg
@@ -533,11 +533,11 @@ export default function Home() {
               <img
                 src="/pd-wordmark-white.svg"
                 alt="Product Dept."
-                className="h-[clamp(14px,2.2vw,30px)] w-auto object-contain mb-1.5 sm:mb-2 md:mb-2.5 select-none"
+                className="h-[clamp(18px,2.86vw,39px)] w-auto object-contain mb-2 sm:mb-2.5 md:mb-3 select-none"
               />
 
               {/* Tagline: Single line in smaller text under the wordmark */}
-              <span className="text-[clamp(7.5px,0.92vw,13px)] font-sans font-light tracking-tight text-white whitespace-nowrap select-none text-center block">
+              <span className="text-[clamp(9.8px,1.2vw,17px)] font-sans font-light tracking-tight text-white whitespace-nowrap select-none text-center block">
                 Where great ideas become exceptional products.
               </span>
             </motion.div>
@@ -560,7 +560,7 @@ export default function Home() {
               className="flex flex-col items-center justify-center text-center max-w-[88%]"
             >
               {/* Paragraphs */}
-              <div className="text-[clamp(6.8px,0.76vw,11.5px)] font-sans font-light tracking-wide text-white leading-relaxed space-y-1 sm:space-y-1.5 md:space-y-2.5">
+              <div className="text-[clamp(8.8px,0.98vw,15px)] font-sans font-light tracking-wide text-white leading-relaxed space-y-1 sm:space-y-2 md:space-y-3">
                 <p>
                   Product Dept. is an industry agnostic, full-stack product creation company partnering with venture and established companies to scale physical product lines quickly, reliably, and profitably.
                 </p>
@@ -570,13 +570,13 @@ export default function Home() {
               </div>
 
               {/* CTA Action Button */}
-              <div className="mt-2 sm:mt-2.5 md:mt-4 pointer-events-auto">
+              <div className="mt-2.5 sm:mt-3.5 md:mt-5 pointer-events-auto">
                 <button
                   onClick={() => {
                     const element = document.getElementById("process-section");
                     if (element) element.scrollIntoView({ behavior: "smooth" });
                   }}
-                  className="text-white font-sans font-bold tracking-widest text-[clamp(7.5px,0.68vw,10.5px)] hover:text-black hover:border-black whitespace-nowrap cursor-pointer bg-transparent border-none outline-none border-b border-white/50 pb-0.5 transition-all uppercase"
+                  className="text-white font-sans font-bold tracking-widest text-[clamp(9.8px,0.88vw,13.7px)] hover:text-black hover:border-black whitespace-nowrap cursor-pointer bg-transparent border-none outline-none border-b border-white/50 pb-0.5 transition-all uppercase"
                 >
                   EXPLORE OUR SERVICES & CAPABILITIES
                 </button>

@@ -59,11 +59,11 @@ export function Navigation() {
     hoverClass = "hover:bg-black hover:text-[#f9f4ef]";
     useWhiteLogo = false;
   } else if (pathname === "/" || pathname === "/site4" || pathname === "/site5") {
-    navBg = "bg-[#FFFFFF] border-black/15";
-    borderColor = "border-black/15";
-    textColor = "text-black";
-    hoverClass = "hover:bg-black hover:text-[#FFFFFF]";
-    useWhiteLogo = false;
+    navBg = "bg-black border-white/10";
+    borderColor = "border-white/10";
+    textColor = "text-white";
+    hoverClass = "hover:bg-white hover:text-black";
+    useWhiteLogo = true;
   } else if (currentTheme === "red") {
     navBg = "bg-[#e31a1c] border-white";
     borderColor = "border-white";

@@ -481,16 +481,16 @@ export default function Home() {
   return (
     <main
       style={{
-        backgroundColor: "#FFFFFF",
-        color: "#000000",
-        "--background": "#FFFFFF",
-        "--foreground": "#000000",
+        backgroundColor: "#000000",
+        color: "#FFFFFF",
+        "--background": "#000000",
+        "--foreground": "#FFFFFF",
         "--brand": brandColor
       } as React.CSSProperties}
-      className="relative w-full min-h-screen bg-background text-foreground transition-colors duration-500 font-sans font-light pt-[clamp(56px,6vh,72px)]"
+      className="relative w-full min-h-screen bg-black text-white transition-colors duration-500 font-sans font-light pt-[clamp(56px,6vh,72px)]"
     >
       {/* SECTION 1: Title Page with Logo Background & Copy */}
-      <section className={`relative w-full flex flex-col items-center justify-center border-b border-black/10 px-4 ${isMobile ? "min-h-[calc(100vh-clamp(56px,6vh,72px))] h-auto pt-16 pb-48 overflow-visible" : "h-[calc(100vh-clamp(56px,6vh,72px))] overflow-hidden"}`}>
+      <section className={`relative w-full flex flex-col items-center justify-center border-b border-white/10 px-4 bg-black text-white ${isMobile ? "min-h-[calc(100vh-clamp(56px,6vh,72px))] h-auto pt-16 pb-48 overflow-visible" : "h-[calc(100vh-clamp(56px,6vh,72px))] overflow-hidden"}`}>
         {/* Interactive Logo Watermark behind text */}
         <div className="absolute top-[45%] left-1/2 -translate-x-1/2 -translate-y-1/2 z-0 w-[125vw] max-w-[140vh] aspect-[564.03/288.69] pointer-events-none">
           <LogoInteractive brandColor={brandColor} />
@@ -503,7 +503,7 @@ export default function Home() {
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
-            src="/pd-wordmark-black.svg" 
+            src="/pd-wordmark-white.svg" 
             alt="Product Dept." 
             className="h-[clamp(30px,5.25vw,54px)] w-auto object-contain mb-4 select-none pointer-events-none"
           />
@@ -512,7 +512,7 @@ export default function Home() {
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.15 }}
-            className="text-[clamp(1rem,2vw,2rem)] tracking-normal normal-case font-sans font-light text-black/60 mb-8"
+            className="text-[clamp(1rem,2vw,2rem)] tracking-normal normal-case font-sans font-light text-white/80 mb-8"
           >
             Where great ideas become exceptional products.
           </motion.h1>
@@ -521,7 +521,7 @@ export default function Home() {
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.3 }}
-            className="text-[clamp(0.82rem,1.1vw,1.15rem)] font-sans font-light tracking-wide text-black/75 leading-relaxed space-y-4"
+            className="text-[clamp(0.82rem,1.1vw,1.15rem)] font-sans font-light tracking-wide text-white/90 leading-relaxed space-y-4"
           >
             <p>
               Product Dept. is an industry agnostic, full-stack product creation company partnering with venture and established companies to scale physical product lines quickly, reliably, and profitably.
@@ -542,7 +542,7 @@ export default function Home() {
                 const element = document.getElementById("process-section");
                 if (element) element.scrollIntoView({ behavior: "smooth" });
               }}
-              className="text-black font-sans font-bold tracking-widest text-xs md:text-sm hover:text-[var(--brand)] whitespace-nowrap cursor-pointer bg-transparent border-none outline-none border-b border-black/10 pb-1"
+              className="text-white font-sans font-bold tracking-widest text-xs md:text-sm hover:text-[var(--brand)] whitespace-nowrap cursor-pointer bg-transparent border-none outline-none border-b border-white/20 pb-1 transition-colors"
             >
               EXPLORE OUR SERVICES & CAPABILITIES
             </button>
@@ -552,12 +552,12 @@ export default function Home() {
         {/* Partners Banner */}
         <div className="absolute bottom-6 md:bottom-12 left-0 w-full flex flex-col gap-2 overflow-hidden select-none z-10">
           <div className="px-8 md:px-16 text-left">
-            <span className="font-sans text-[9px] md:text-xs font-black tracking-[0.2em] uppercase opacity-45">
+            <span className="font-sans text-[9px] md:text-xs font-black tracking-[0.2em] uppercase text-white/50">
               Select Partners
             </span>
           </div>
 
-          <div className="w-full overflow-hidden relative py-3.5 border-y border-black/10 flex">
+          <div className="w-full overflow-hidden relative py-3.5 border-y border-white/10 flex">
             <motion.div
               className="flex gap-16 pr-16 whitespace-nowrap min-w-full shrink-0"
               animate={{ x: [0, "-50%"] }}
@@ -569,15 +569,15 @@ export default function Home() {
             >
               {[...partners, ...partners, ...partners, ...partners, ...partners, ...partners, ...partners, ...partners].map((partner, index) => (
                 <div key={index} className="flex items-center gap-3.5 opacity-60 hover:opacity-100 transition-opacity duration-300">
-                  <div className="w-6 h-6 border border-black/35 flex items-center justify-center rounded">
-                    {partner.shape === 'circle' && <div className="w-3 h-3 rounded-full bg-black" />}
-                    {partner.shape === 'square' && <div className="w-3 h-3 bg-black" />}
+                  <div className="w-6 h-6 border border-white/35 flex items-center justify-center rounded">
+                    {partner.shape === 'circle' && <div className="w-3 h-3 rounded-full bg-white" />}
+                    {partner.shape === 'square' && <div className="w-3 h-3 bg-white" />}
                     {partner.shape === 'triangle' && (
-                      <div className="w-0 h-0 border-l-[6px] border-l-transparent border-r-[6px] border-r-transparent border-b-[10px] border-b-black" />
+                      <div className="w-0 h-0 border-l-[6px] border-l-transparent border-r-[6px] border-r-transparent border-b-[10px] border-b-white" />
                     )}
-                    {partner.shape === 'diamond' && <div className="w-2.5 h-2.5 bg-black rotate-45" />}
+                    {partner.shape === 'diamond' && <div className="w-2.5 h-2.5 bg-white rotate-45" />}
                   </div>
-                  <span className="font-header font-black tracking-widest text-[clamp(10px,1vw,12px)] uppercase">{partner.name}</span>
+                  <span className="font-header font-black tracking-widest text-[clamp(10px,1vw,12px)] uppercase text-white">{partner.name}</span>
                 </div>
               ))}
             </motion.div>

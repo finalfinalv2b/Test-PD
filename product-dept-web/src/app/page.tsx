@@ -583,21 +583,6 @@ export default function Home() {
             </motion.div>
           </div>
         </div>
-        {/* Color Theme Selector */}
-        <div className="absolute bottom-[108px] right-6 md:bottom-[140px] md:right-12 z-20 flex flex-col items-center gap-2">
-          {/* Teal Circle Button */}
-          <button
-            onClick={() => setBrandColor("#00c3ff")}
-            aria-label="Set theme to teal"
-            className="w-4 h-4 md:w-5 md:h-5 rounded-full bg-[#00c3ff] border border-white/60 shadow-md hover:scale-125 active:scale-95 transition-all cursor-pointer outline-none"
-          />
-          {/* Red Circle Button */}
-          <button
-            onClick={() => setBrandColor("#f41c06")}
-            aria-label="Set theme to red"
-            className="w-4 h-4 md:w-5 md:h-5 rounded-full bg-[#f41c06] border border-white/60 shadow-md hover:scale-125 active:scale-95 transition-all cursor-pointer outline-none"
-          />
-        </div>
       </section>
 
       {/* SECTION 3: Pinned Services Accordion */}
@@ -690,8 +675,7 @@ export default function Home() {
                           {step.label}
                         </motion.span>
                         <motion.div
-                          style={isOpen ? { borderColor: activeColor, color: activeColor } : {}}
-                          className={`w-8 h-8 rounded-full border flex items-center justify-center bg-white shadow-sm transition-all ${isOpen ? 'rotate-[135deg]' : 'border-black/10 text-black group-hover:border-[var(--brand)] group-hover:text-[var(--brand)]'}`}
+                          className={`w-8 h-8 rounded-full border border-black/15 flex items-center justify-center bg-white shadow-sm text-black transition-all ${isOpen ? 'rotate-[135deg]' : ''}`}
                         >
                           <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M7 1v12M1 7h12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />

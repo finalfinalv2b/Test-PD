@@ -149,8 +149,8 @@ export function LogoInteractive({ brandColor }: LogoInteractiveProps) {
       // Vector clip path
       ctx.clip();
 
-      // 1. Draw base gray watermark color
-      ctx.fillStyle = "rgba(0, 0, 0, 0.04)";
+      // 1. Draw base logo watermark in brand red
+      ctx.fillStyle = brandColor || "#f41c06";
       ctx.fillRect(0, 0, 564.03, 288.69);
 
       // 2. Draw red/teal heat trail gradients

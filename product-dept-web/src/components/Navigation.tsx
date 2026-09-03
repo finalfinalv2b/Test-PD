@@ -40,7 +40,7 @@ export function Navigation() {
   const links = [
     { name: "PROCESS", href: "/#process" },
     { name: "ABOUT", href: "/about" },
-    { name: "GET IN TOUCH", href: "/#contact-section" },
+    { name: "CONTACT US", href: "/#contact-section" },
   ];
 
   // Map theme variables based on current URL path and active global theme
@@ -84,6 +84,9 @@ export function Navigation() {
     useWhiteLogo = true;
   }
 
+  const contactTextColor = currentTheme === "red" ? textColor : "text-[#f41c06]";
+  const contactHoverClass = currentTheme === "red" ? hoverClass : "hover:bg-[#f41c06] hover:text-white";
+
   return (
     <nav className={`fixed top-0 w-full z-50 ${navBg} border-b transition-colors duration-300`}>
       <div className="w-full pl-6 pr-0 md:pr-6 h-[clamp(56px,6vh,72px)] flex items-center justify-between relative">
@@ -98,29 +101,39 @@ export function Navigation() {
         </Link>
 
         {/* WORDMARK (CENTER) */}
-        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-0 pointer-events-none">
+        <Link 
+          href="/"
+          aria-label="Product Dept. Home"
+          onClick={() => {
+            if (pathname === "/") {
+              window.scrollTo({ top: 0, behavior: "smooth" });
+            }
+          }}
+          className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10 pointer-events-auto hover:opacity-70 transition-opacity flex items-center justify-center py-2"
+        >
           <img
             src={useWhiteLogo ? "/pd-wordmark-white.svg" : "/pd-wordmark-black.svg"}
             alt="Product Dept."
             style={{ height: "clamp(8.4px, 1.12vw, 15.4px)" }}
             className="w-auto"
           />
-        </div>
+        </Link>
 
         {/* DESKTOP NAV */}
         <div className="hidden md:flex items-center h-full">
           {links.map((link) => {
             const isProcessLink = link.name === "PROCESS";
+            const isContactLink = link.name === "CONTACT US" || link.name === "GET IN TOUCH";
             return (
               <Link
                 key={link.name}
                 href={
-                  link.name === "GET IN TOUCH"
+                  isContactLink
                     ? (pathname === "/" || pathname === "/site5" ? "#contact-section" : "/#contact-section")
                     : (isSite3 && link.name === "PROCESS" ? "#process-section" : link.href)
                 }
                 onClick={(e) => {
-                  if (link.name === "GET IN TOUCH") {
+                  if (isContactLink) {
                     if (pathname === "/" || pathname === "/site5") {
                       e.preventDefault();
                       const element = document.getElementById("contact-section");
@@ -135,7 +148,7 @@ export function Navigation() {
                     window.dispatchEvent(new CustomEvent("scroll-to-process-details"));
                   }
                 }}
-                className={`h-full flex items-center justify-center px-8 text-xs font-black tracking-widest ${textColor} transition-colors ${hoverClass} border-l ${borderColor}`}
+                className={`h-full flex items-center justify-center px-8 text-xs font-black tracking-widest ${isContactLink ? contactTextColor : textColor} transition-colors ${isContactLink ? contactHoverClass : hoverClass} border-l ${borderColor}`}
               >
                 {link.name}
               </Link>
@@ -164,17 +177,18 @@ export function Navigation() {
           >
             {links.map((link) => {
               const isProcessLink = link.name === "PROCESS";
+              const isContactLink = link.name === "CONTACT US" || link.name === "GET IN TOUCH";
               return (
                 <Link
                   key={link.name}
                   href={
-                    link.name === "GET IN TOUCH"
+                    isContactLink
                       ? (pathname === "/" || pathname === "/site5" ? "#contact-section" : "/#contact-section")
                       : (isSite3 && link.name === "PROCESS" ? "#process-section" : link.href)
                   }
                   onClick={(e) => {
                     setIsOpen(false);
-                    if (link.name === "GET IN TOUCH") {
+                    if (isContactLink) {
                       if (pathname === "/" || pathname === "/site5") {
                         e.preventDefault();
                         const element = document.getElementById("contact-section");
@@ -189,7 +203,7 @@ export function Navigation() {
                       window.dispatchEvent(new CustomEvent("scroll-to-process-details"));
                     }
                   }}
-                  className={`w-full text-center py-6 text-sm font-black tracking-widest ${textColor} border-t ${borderColor} ${hoverClass} transition-colors uppercase`}
+                  className={`w-full text-center py-6 text-sm font-black tracking-widest ${isContactLink ? contactTextColor : textColor} border-t ${borderColor} ${isContactLink ? contactHoverClass : hoverClass} transition-colors uppercase`}
                 >
                   {link.name}
                 </Link>

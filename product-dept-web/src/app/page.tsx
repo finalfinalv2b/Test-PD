@@ -556,10 +556,10 @@ export default function Home() {
                 style={{ textAlign: "justify", textAlignLast: "left" }}
                 className="text-justify [text-align-last:left] text-[clamp(10px,0.8vw,14px)] font-sans font-light tracking-wide text-white leading-[1.62] space-y-3 sm:space-y-4"
               >
-                <p className="m-0 p-0">
+                <p className="m-0 p-0 font-bold mb-5 sm:mb-6">
                   Product Dept. is an industry agnostic, full-stack product creation company partnering with venture and established companies to scale physical product lines quickly, reliably, and profitably.
                 </p>
-                <p className="m-0 p-0">
+                <p className="m-0 p-0 font-light">
                   We provide product design, engineering, sourcing, manufacturing, and infrastructure to build new supply chains and optimize existing ones. By drawing on decades of global manufacturing relationships and corporate operations experience we bring vision to life, from concept to commercialization, and provide the foundation for profitable enterprises. We absorb operational friction and execution risk allowing businesses to focus on their core business goals, product vision, and growth.
                 </p>
               </div>

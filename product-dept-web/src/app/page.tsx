@@ -488,18 +488,17 @@ export default function Home() {
       } as React.CSSProperties}
       className="relative w-full min-h-screen bg-black text-white transition-colors duration-500 font-sans font-light pt-[clamp(56px,6vh,72px)]"
     >
-      {/* SECTION 1: Title Page with Unified Company Logo & Content */}
-      <section className={`relative w-full flex flex-col items-center justify-center border-b border-white/10 px-4 bg-black text-white ${isMobile ? "min-h-[calc(100vh-clamp(56px,6vh,72px))] h-auto pt-10 pb-36 overflow-visible" : "min-h-[calc(100vh-clamp(56px,6vh,72px))] py-8 pb-20 overflow-visible"}`}>
+      {/* SECTION 1: Title Page with Cropped Background Logo & Two-Column Layout */}
+      <section className={`relative w-full flex flex-col items-center justify-center border-b border-white/10 px-4 sm:px-8 bg-black text-white ${isMobile ? "min-h-[calc(100vh-clamp(56px,6vh,72px))] h-auto pt-10 pb-44 overflow-visible" : "h-[calc(100vh-clamp(56px,6vh,72px))] overflow-hidden"}`}>
         
-        {/* Unified Official Company Logo Container with Embedded Content (Scaled up 30%) */}
-        <div className={`relative z-10 aspect-[564.03/288.69] mx-auto select-none ${isMobile ? "w-full max-w-[728px] my-6" : "w-[min(96vw,1560px,calc((100vh-140px)*2.54))] my-auto mb-14 md:mb-18"}`}>
-          
-          {/* Background: Official Company Logo Vector (Circle & Square with exact distance and proportions) */}
+        {/* Background Logo: Much larger so it gets cropped by header, left and right sides, and client animation */}
+        <div className={`absolute left-1/2 -translate-x-1/2 -translate-y-1/2 z-0 aspect-[564.03/288.69] pointer-events-none select-none ${isMobile ? "top-[40%] w-[230vw] min-w-[750px]" : "top-[48%] w-[138vw] min-w-[1350px]"}`}>
           <svg
             viewBox="0 0 564.03 288.69"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
-            className="absolute inset-0 w-full h-full pointer-events-none drop-shadow-2xl"
+            className="w-full h-full"
+            preserveAspectRatio="xMidYMid slice"
           >
             {/* Circle Shape */}
             <path
@@ -512,71 +511,52 @@ export default function Home() {
               fill={brandColor || "#f41c06"}
             />
           </svg>
+        </div>
 
-          {/* CIRCLE CONTENT OVERLAY */}
-          <div
-            style={{
-              left: "0%",
-              top: "5.34%",
-              width: "48.45%",
-              height: "94.66%"
-            }}
-            className="absolute flex flex-col items-center justify-center text-center p-3 sm:p-5 md:p-8 pointer-events-none"
-          >
-            <motion.div
-              initial={{ opacity: 0, scale: 0.96 }}
-              animate={{ opacity: 1, scale: 1 }}
+        {/* Content Container: Wordmark on Left, Justified Paragraph on Right */}
+        <div className={`relative z-10 w-full max-w-[1520px] mx-auto px-4 sm:px-8 md:px-12 lg:px-16 xl:px-20 ${isMobile ? "flex flex-col items-center my-6" : "grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-14 xl:gap-20 items-start my-auto pb-16 lg:pb-20"}`}>
+          
+          {/* LEFT SIDE: PD Title Page Wordmark SVG */}
+          <div className={`${isMobile ? "w-full max-w-[460px] mb-8" : "w-full flex flex-col justify-start items-start"}`}>
+            <motion.img
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8 }}
-              className="flex flex-col items-center justify-center text-center max-w-[86%]"
-            >
-              {/* Wordmark Logo */}
-              <img
-                src="/pd-wordmark-white.svg"
-                alt="Product Dept."
-                className="h-[clamp(18px,2.86vw,39px)] w-auto object-contain mb-2 sm:mb-2.5 md:mb-3 select-none"
-              />
-
-              {/* Tagline: Single line in smaller text under the wordmark */}
-              <span className="text-[clamp(9.8px,1.2vw,17px)] font-sans font-light tracking-tight text-white whitespace-nowrap select-none text-center block">
-                Where great ideas become exceptional products.
-              </span>
-            </motion.div>
+              src="/pd-title-page-wordmark.svg"
+              alt="Product Dept. - Where great ideas become exceptional products."
+              className="w-full max-w-[560px] xl:max-w-[620px] h-auto object-contain select-none pointer-events-none mt-0"
+            />
           </div>
 
-          {/* SQUARE (POLYGON) CONTENT OVERLAY */}
-          <div
-            style={{
-              left: "50.76%",
-              top: "0%",
-              width: "48.93%",
-              height: "98.51%"
-            }}
-            className="absolute flex flex-col items-center justify-center text-center px-3 sm:px-6 md:px-8 pt-[9%] pb-[5%]"
-          >
+          {/* RIGHT SIDE: Paragraph Justified Left and Right + Center-Justified CTA 3 spaces below */}
+          <div className={`${isMobile ? "w-full max-w-[460px]" : "w-full flex flex-col justify-start items-start lg:pl-4 xl:pl-8"}`}>
             <motion.div
-              initial={{ opacity: 0, scale: 0.96 }}
-              animate={{ opacity: 1, scale: 1 }}
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.15 }}
-              className="flex flex-col items-center justify-center text-center max-w-[88%]"
+              className="flex flex-col justify-start w-full max-w-[540px] xl:max-w-[580px]"
             >
-              {/* Paragraphs */}
-              <div className="text-[clamp(8.8px,0.98vw,15px)] font-sans font-light tracking-wide text-white leading-relaxed space-y-1 sm:space-y-2 md:space-y-3">
-                <p>
+              {/* Paragraphs: Justified left and right, with last line left justified */}
+              <div
+                style={{ textAlign: "justify", textAlignLast: "left" }}
+                className="text-justify [text-align-last:left] text-[clamp(11px,0.85vw,14.5px)] font-sans font-light tracking-wide text-white leading-[1.65] space-y-4"
+              >
+                <p className="m-0 p-0">
                   Product Dept. is an industry agnostic, full-stack product creation company partnering with venture and established companies to scale physical product lines quickly, reliably, and profitably.
                 </p>
-                <p>
+                <p className="m-0 p-0">
                   We provide product design, engineering, sourcing, manufacturing, and infrastructure to build new supply chains and optimize existing ones. By drawing on decades of global manufacturing relationships and corporate operations experience we bring vision to life, from concept to commercialization, and provide the foundation for profitable enterprises. We absorb operational friction and execution risk allowing businesses to focus on their core business goals, product vision, and growth.
                 </p>
               </div>
 
-              {/* CTA Action Button */}
-              <div className="mt-2.5 sm:mt-3.5 md:mt-5 pointer-events-auto">
+              {/* Centered CTA 3 spaces below the paragraph */}
+              <div className="w-full text-center mt-7 sm:mt-8 md:mt-10 pointer-events-auto">
                 <button
                   onClick={() => {
                     const element = document.getElementById("process-section");
                     if (element) element.scrollIntoView({ behavior: "smooth" });
                   }}
-                  className="text-white font-sans font-bold tracking-widest text-[clamp(9.8px,0.88vw,13.7px)] hover:text-black hover:border-black whitespace-nowrap cursor-pointer bg-transparent border-none outline-none border-b border-white/50 pb-0.5 transition-all uppercase"
+                  className="text-white font-sans font-bold tracking-widest text-[clamp(10px,0.72vw,12px)] hover:text-white/75 transition-colors uppercase cursor-pointer bg-transparent border-none outline-none"
                 >
                   EXPLORE OUR SERVICES & CAPABILITIES
                 </button>
@@ -586,15 +566,15 @@ export default function Home() {
 
         </div>
 
-        {/* Partners Banner */}
-        <div className="absolute bottom-4 md:bottom-8 left-0 w-full flex flex-col gap-2 overflow-hidden select-none z-10">
-          <div className="px-8 md:px-16 text-left">
-            <span className="font-sans text-[9px] md:text-xs font-black tracking-[0.2em] uppercase text-white/50">
+        {/* Client Name Scrolling Animation (Partners Banner) */}
+        <div className="absolute bottom-0 left-0 w-full flex flex-col gap-1.5 overflow-hidden select-none z-20 bg-black/85 backdrop-blur-[2px]">
+          <div className="px-6 md:px-12 text-left pt-2">
+            <span className="font-sans text-[8px] md:text-[10px] font-black tracking-[0.2em] uppercase text-white/50">
               Select Partners
             </span>
           </div>
 
-          <div className="w-full overflow-hidden relative py-3.5 border-y border-white/10 flex">
+          <div className="w-full overflow-hidden relative py-2.5 md:py-3 border-y border-white/10 flex">
             <motion.div
               className="flex gap-16 pr-16 whitespace-nowrap min-w-full shrink-0"
               animate={{ x: [0, "-50%"] }}
@@ -606,15 +586,15 @@ export default function Home() {
             >
               {[...partners, ...partners, ...partners, ...partners, ...partners, ...partners, ...partners, ...partners].map((partner, index) => (
                 <div key={index} className="flex items-center gap-3.5 opacity-60 hover:opacity-100 transition-opacity duration-300">
-                  <div className="w-6 h-6 border border-white/35 flex items-center justify-center rounded">
-                    {partner.shape === 'circle' && <div className="w-3 h-3 rounded-full bg-white" />}
-                    {partner.shape === 'square' && <div className="w-3 h-3 bg-white" />}
+                  <div className="w-5 h-5 border border-white/35 flex items-center justify-center rounded">
+                    {partner.shape === 'circle' && <div className="w-2.5 h-2.5 rounded-full bg-white" />}
+                    {partner.shape === 'square' && <div className="w-2.5 h-2.5 bg-white" />}
                     {partner.shape === 'triangle' && (
-                      <div className="w-0 h-0 border-l-[6px] border-l-transparent border-r-[6px] border-r-transparent border-b-[10px] border-b-white" />
+                      <div className="w-0 h-0 border-l-[5px] border-l-transparent border-r-[5px] border-r-transparent border-b-[8px] border-b-white" />
                     )}
-                    {partner.shape === 'diamond' && <div className="w-2.5 h-2.5 bg-white rotate-45" />}
+                    {partner.shape === 'diamond' && <div className="w-2 h-2 bg-white rotate-45" />}
                   </div>
-                  <span className="font-header font-black tracking-widest text-[clamp(10px,1vw,12px)] uppercase text-white">{partner.name}</span>
+                  <span className="font-header font-black tracking-widest text-[clamp(9px,0.85vw,11px)] uppercase text-white">{partner.name}</span>
                 </div>
               ))}
             </motion.div>

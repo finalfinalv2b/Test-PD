@@ -125,6 +125,8 @@ export default function Home() {
   const windowHeightRef = useRef(1080);
   const isClickScrollingRef = useRef(false);
   const lastScrollYRef = useRef(0);
+  const wordmarkRef = useRef<HTMLImageElement>(null);
+  const [wordmarkHalfHeight, setWordmarkHalfHeight] = useState<number | null>(null);
 
   useEffect(() => {
     const handleResize = () => {
@@ -133,6 +135,10 @@ export default function Home() {
 
       windowWidthRef.current = window.innerWidth;
       windowHeightRef.current = window.innerHeight;
+
+      if (wordmarkRef.current) {
+        setWordmarkHalfHeight(wordmarkRef.current.offsetHeight / 2);
+      }
 
       if (mobile) {
         setContentScale(1);
@@ -513,28 +519,37 @@ export default function Home() {
           </svg>
         </div>
 
-        {/* Content Container: Wordmark on Left (~50% Monitor Width), Justified Paragraph on Right (20% narrower) */}
-        <div className={`relative z-10 w-full max-w-[1720px] mx-auto px-2 sm:px-6 md:px-10 lg:px-12 xl:px-16 flex flex-col lg:flex-row items-center lg:items-start justify-between gap-6 lg:gap-10 xl:gap-16 my-auto ${isMobile ? "pb-24 pt-2" : "pb-16 lg:pb-20"}`}>
+        {/* Content Container: Wordmark on Left (15% larger, vertically centered), Justified Paragraph on Right (level with top of wordmark) */}
+        <div
+          style={!isMobile ? { transform: `translateY(-${wordmarkHalfHeight !== null ? `${wordmarkHalfHeight}px` : '4.5vw'})` } : undefined}
+          className={`relative z-10 w-full max-w-[1780px] mx-auto px-2 sm:px-6 md:px-10 lg:px-12 xl:px-16 flex flex-col lg:flex-row items-center lg:items-start justify-between gap-6 lg:gap-10 xl:gap-14 ${isMobile ? "my-auto pb-24 pt-2" : "absolute top-1/2 left-0 right-0"}`}
+        >
           
-          {/* LEFT SIDE: PD Title Page Wordmark SVG (About 50% width of monitor) */}
+          {/* LEFT SIDE: PD Title Page Wordmark SVG (15% larger, vertically centered on screen) */}
           <div className="w-full lg:w-auto flex-1 flex flex-col justify-start items-center lg:items-start">
             <motion.img
+              ref={wordmarkRef}
+              onLoad={() => {
+                if (wordmarkRef.current) {
+                  setWordmarkHalfHeight(wordmarkRef.current.offsetHeight / 2);
+                }
+              }}
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8 }}
               src="/pd-title-page-wordmark.svg"
               alt="Product Dept. - Where great ideas become exceptional products."
-              className="w-[88vw] max-w-[360px] sm:max-w-[420px] lg:max-w-none lg:w-[48vw] xl:w-[50vw] 2xl:max-w-[980px] h-auto object-contain select-none pointer-events-none mt-0"
+              className="w-[88vw] max-w-[415px] lg:max-w-none lg:w-[55vw] xl:w-[57.5vw] 2xl:max-w-[1125px] h-auto object-contain select-none pointer-events-none mt-0"
             />
           </div>
 
-          {/* RIGHT SIDE: Paragraph (20% narrower, taller) + Center-Justified CTA 3 spaces below */}
+          {/* RIGHT SIDE: Paragraph (20% narrower, level with top of wordmark) + Center-Justified CTA 3 spaces below */}
           <div className="w-full lg:w-auto shrink-0 flex flex-col justify-start items-center lg:items-start lg:pl-2 xl:pl-6">
             <motion.div
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.15 }}
-              className="flex flex-col justify-start w-full max-w-[330px] sm:max-w-[360px] lg:max-w-[400px] xl:max-w-[435px]"
+              className="flex flex-col justify-start w-full max-w-[330px] sm:max-w-[360px] lg:max-w-[390px] xl:max-w-[420px]"
             >
               {/* Paragraphs: Justified left and right, with last line left justified */}
               <div

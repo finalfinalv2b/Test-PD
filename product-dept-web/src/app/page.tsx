@@ -497,8 +497,8 @@ export default function Home() {
       {/* SECTION 1: Title Page with Cropped Background Logo & Two-Column Layout */}
       <section className="relative w-full h-[calc(100dvh-clamp(56px,6vh,72px))] min-h-[540px] flex flex-col items-center justify-between border-b border-white/10 bg-black text-white overflow-hidden px-4 sm:px-8">
         
-        {/* Background Logo: Scaled down 20% */}
-        <div className={`absolute left-1/2 -translate-x-1/2 -translate-y-1/2 z-0 aspect-[564.03/288.69] pointer-events-none select-none ${isMobile ? "top-[44%] w-[192vw] min-w-[600px]" : "top-[48%] w-[110vw] min-w-[1080px]"}`}>
+        {/* Background Logo: Scaled down 8% */}
+        <div className={`absolute left-1/2 -translate-x-1/2 -translate-y-1/2 z-0 aspect-[564.03/288.69] pointer-events-none select-none ${isMobile ? "top-[44%] w-[176vw] min-w-[550px]" : "top-[48%] w-[101vw] min-w-[990px]"}`}>
           <svg
             viewBox="0 0 564.03 288.69"
             fill="none"

@@ -185,11 +185,7 @@ export default function Home() {
       const progress = (scrollTop - sectionStart) / scrollableHeight;
 
       if (progress >= 0 && progress <= 1) {
-        const startProgress = 0.04;
-        const endProgress = 0.96;
-        const clampedProgress = Math.max(startProgress, Math.min(endProgress, progress));
-        const normalized = (clampedProgress - startProgress) / (endProgress - startProgress);
-        const targetIndex = Math.min(6, Math.max(0, Math.floor(normalized * 7)));
+        const targetIndex = Math.min(6, Math.max(0, Math.floor(progress * 7)));
 
         if (targetIndex !== activeIndexRef.current) {
           setActiveIndex(targetIndex);
@@ -200,6 +196,36 @@ export default function Home() {
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, [isMobile]);
+
+  // Smooth scroll to Get In Touch section
+  const scrollToContact = () => {
+    const contactSec = document.getElementById("contact-section");
+    if (!contactSec) return;
+
+    isClickScrollingRef.current = true;
+    const navbarHeight = Math.min(72, Math.max(56, window.innerHeight * 0.06));
+    const rect = contactSec.getBoundingClientRect();
+    const targetY = window.scrollY + rect.top - navbarHeight;
+
+    const handleScrollEnd = () => {
+      isClickScrollingRef.current = false;
+      window.removeEventListener("scrollend", handleScrollEnd);
+    };
+    window.addEventListener("scrollend", handleScrollEnd);
+
+    setTimeout(() => {
+      isClickScrollingRef.current = false;
+      window.removeEventListener("scrollend", handleScrollEnd);
+    }, 1000);
+
+    window.scrollTo({
+      top: targetY,
+      behavior: "smooth"
+    });
+  };
+
+  const scrollToContactRef = useRef(scrollToContact);
+  scrollToContactRef.current = scrollToContact;
 
   // Update active index based on scroll on desktop
   // Click handler that toggles on mobile, and scrolls to target position on desktop
@@ -231,10 +257,7 @@ export default function Home() {
       const scrollableHeight = sectionHeight - viewportHeight;
       
       // Calculate target progress coordinate at middle of the index range
-      const startProgress = 0.08;
-      const endProgress = 0.88;
-      const progressPerItem = (endProgress - startProgress) / 7;
-      const targetProgress = startProgress + (index + 0.5) * progressPerItem;
+      const targetProgress = (index + 0.5) / 7;
       const targetScrollY = sectionStart + (targetProgress * scrollableHeight);
 
       // Disable scroll index changes while click scrolling
@@ -269,7 +292,6 @@ export default function Home() {
     if (isMobile) return;
 
     const lastSnapTimeRef = { current: 0 };
-    const ventureScrollCountRef = { current: 0 };
     let isTrackpadActive = false;
     let trackpadTimer: NodeJS.Timeout | null = null;
 
@@ -313,6 +335,14 @@ export default function Home() {
             lastSnapTimeRef.current = now;
             handleItemClickRef.current(0);
           }
+        } else if (scrollY >= sectionTop + sectionHeight - window.innerHeight - 100 && e.deltaY < 0) {
+          // In the contact section scrolling up, snap back to Venture Infrastructure
+          e.preventDefault();
+          const now = Date.now();
+          if (now - lastSnapTimeRef.current > 400) {
+            lastSnapTimeRef.current = now;
+            handleItemClickRef.current(6);
+          }
         }
         return;
       }
@@ -323,9 +353,7 @@ export default function Home() {
       const now = Date.now();
       const timeSinceLastSnap = now - lastSnapTimeRef.current;
       
-      const requiredCooldown = (activeIndexRef.current === 6 && ventureScrollCountRef.current === 1) ? 200 : 400;
-      
-      if (timeSinceLastSnap < requiredCooldown) {
+      if (timeSinceLastSnap < 350) {
         return;
       }
 
@@ -334,25 +362,14 @@ export default function Home() {
         const currentIdx = activeIndexRef.current;
         if (currentIdx !== null && currentIdx < 6) {
           lastSnapTimeRef.current = now;
-          ventureScrollCountRef.current = 0;
           handleItemClickRef.current(currentIdx + 1);
         } else if (currentIdx === 6) {
-          ventureScrollCountRef.current += 1;
-          if (ventureScrollCountRef.current >= 2) {
-            const contactSec = document.getElementById("contact-section");
-            if (contactSec) {
-              lastSnapTimeRef.current = now;
-              contactSec.scrollIntoView({ behavior: "smooth" });
-            }
-            ventureScrollCountRef.current = 0;
-          } else {
-            lastSnapTimeRef.current = now;
-          }
+          lastSnapTimeRef.current = now;
+          scrollToContactRef.current();
         }
       } else if (e.deltaY < 0) {
         // Scroll UP
         const currentIdx = activeIndexRef.current;
-        ventureScrollCountRef.current = 0;
         if (currentIdx !== null && currentIdx > 0) {
           lastSnapTimeRef.current = now;
           handleItemClickRef.current(currentIdx - 1);
@@ -387,11 +404,8 @@ export default function Home() {
           lastSnapTimeRef.current = now;
           handleItemClickRef.current(currentIdx + 1);
         } else if (currentIdx === 6) {
-          const contactSec = document.getElementById("contact-section");
-          if (contactSec) {
-            lastSnapTimeRef.current = now;
-            contactSec.scrollIntoView({ behavior: "smooth" });
-          }
+          lastSnapTimeRef.current = now;
+          scrollToContactRef.current();
         }
       } else if (e.key === "ArrowUp" || e.key === "PageUp" || (e.key === " " && e.shiftKey)) {
         e.preventDefault();
@@ -568,8 +582,7 @@ export default function Home() {
               <div className="w-full text-center mt-5 sm:mt-7 md:mt-9 pointer-events-auto">
                 <button
                   onClick={() => {
-                    const element = document.getElementById("process-section");
-                    if (element) element.scrollIntoView({ behavior: "smooth" });
+                    handleItemClick(0);
                   }}
                   className="text-white font-sans font-bold tracking-widest text-[clamp(9.5px,0.7vw,12px)] hover:text-white/75 transition-colors uppercase cursor-pointer bg-transparent border-none outline-none"
                 >
@@ -770,7 +783,6 @@ export default function Home() {
             </div>
           </motion.div>
         </div>
-        {!isMobile && <div className="h-[40vh] bg-white pointer-events-none" />}
       </section>
 
       {/* SECTION 5: Contact Us */}

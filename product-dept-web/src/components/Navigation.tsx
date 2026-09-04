@@ -38,9 +38,9 @@ export function Navigation() {
   }, []);
 
   const links = [
-    { name: "PROCESS", href: "/#process" },
+    { name: "PROCESS", href: "/#process-section" },
     { name: "ABOUT", href: "/about" },
-    { name: "CONTACT US", href: "/#contact-section" },
+    { name: "GET IN TOUCH", href: "/#contact-section" },
   ];
 
   // Map theme variables based on current URL path and active global theme

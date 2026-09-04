@@ -519,13 +519,13 @@ export default function Home() {
           </svg>
         </div>
 
-        {/* Content Container: Wordmark on Left (15% larger, vertically centered), Justified Paragraph on Right (level with top of wordmark) */}
+        {/* Content Container: Wordmark on Left, Justified Paragraph on Right with Equal Buffer from Monitor Edges */}
         <div
           style={!isMobile ? { transform: `translateY(-${wordmarkHalfHeight !== null ? `${wordmarkHalfHeight}px` : '4.5vw'})` } : undefined}
-          className={`relative z-10 w-full max-w-[1780px] mx-auto px-2 sm:px-6 md:px-10 lg:px-12 xl:px-16 flex flex-col lg:flex-row items-center lg:items-start justify-between gap-6 lg:gap-10 xl:gap-14 ${isMobile ? "my-auto pb-24 pt-2" : "absolute top-1/2 left-0 right-0"}`}
+          className={`relative z-10 w-full px-[clamp(20px,5vw,96px)] flex flex-col lg:flex-row items-center lg:items-start justify-between gap-6 lg:gap-10 xl:gap-14 ${isMobile ? "my-auto pb-24 pt-2" : "absolute top-1/2 left-0 right-0"}`}
         >
           
-          {/* LEFT SIDE: PD Title Page Wordmark SVG (15% larger, vertically centered on screen) */}
+          {/* LEFT SIDE: PD Title Page Wordmark SVG (Scales with monitor width) */}
           <div className="w-full lg:w-auto flex-1 flex flex-col justify-start items-center lg:items-start">
             <motion.img
               ref={wordmarkRef}
@@ -539,22 +539,22 @@ export default function Home() {
               transition={{ duration: 0.8 }}
               src="/pd-title-page-wordmark.svg"
               alt="Product Dept. - Where great ideas become exceptional products."
-              className="w-[88vw] max-w-[415px] lg:max-w-none lg:w-[55vw] xl:w-[57.5vw] 2xl:max-w-[1125px] h-auto object-contain select-none pointer-events-none mt-0"
+              className="w-[88vw] max-w-[415px] lg:max-w-none lg:w-[clamp(420px,49vw,1050px)] h-auto object-contain select-none pointer-events-none mt-0"
             />
           </div>
 
-          {/* RIGHT SIDE: Paragraph (20% narrower, level with top of wordmark) + Center-Justified CTA 3 spaces below */}
-          <div className="w-full lg:w-auto shrink-0 flex flex-col justify-start items-center lg:items-start lg:pl-2 xl:pl-6">
+          {/* RIGHT SIDE: Paragraph (Scales with monitor, flush right with equal buffer) + Center-Justified CTA 3 spaces below */}
+          <div className="w-full lg:w-auto shrink-0 flex flex-col justify-start items-center lg:items-end">
             <motion.div
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.15 }}
-              className="flex flex-col justify-start w-full max-w-[330px] sm:max-w-[360px] lg:max-w-[390px] xl:max-w-[420px]"
+              className="flex flex-col justify-start w-full max-w-[340px] sm:max-w-[380px] lg:max-w-none lg:w-[clamp(280px,25vw,460px)]"
             >
               {/* Paragraphs: Justified left and right, with last line left justified */}
               <div
                 style={{ textAlign: "justify", textAlignLast: "left" }}
-                className="text-justify [text-align-last:left] text-[clamp(10px,0.8vw,14px)] font-sans font-light tracking-wide text-white leading-[1.62] space-y-3 sm:space-y-4"
+                className="text-justify [text-align-last:left] text-[clamp(10px,0.76vw,13.5px)] font-sans font-light tracking-wide text-white leading-[1.62] space-y-3 sm:space-y-4"
               >
                 <p className="m-0 p-0 font-bold mb-5 sm:mb-6">
                   Product Dept. is an industry agnostic, full-stack product creation company partnering with venture and established companies to scale physical product lines quickly, reliably, and profitably.

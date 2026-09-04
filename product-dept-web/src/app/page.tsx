@@ -489,10 +489,10 @@ export default function Home() {
       className="relative w-full min-h-screen bg-black text-white transition-colors duration-500 font-sans font-light pt-[clamp(56px,6vh,72px)]"
     >
       {/* SECTION 1: Title Page with Cropped Background Logo & Two-Column Layout */}
-      <section className={`relative w-full flex flex-col items-center justify-center border-b border-white/10 px-4 sm:px-8 bg-black text-white ${isMobile ? "min-h-[calc(100vh-clamp(56px,6vh,72px))] h-auto pt-10 pb-44 overflow-visible" : "h-[calc(100vh-clamp(56px,6vh,72px))] overflow-hidden"}`}>
+      <section className="relative w-full h-[calc(100dvh-clamp(56px,6vh,72px))] min-h-[540px] flex flex-col items-center justify-between border-b border-white/10 bg-black text-white overflow-hidden px-4 sm:px-8">
         
         {/* Background Logo: Much larger so it gets cropped by header, left and right sides, and client animation */}
-        <div className={`absolute left-1/2 -translate-x-1/2 -translate-y-1/2 z-0 aspect-[564.03/288.69] pointer-events-none select-none ${isMobile ? "top-[40%] w-[230vw] min-w-[750px]" : "top-[48%] w-[138vw] min-w-[1350px]"}`}>
+        <div className={`absolute left-1/2 -translate-x-1/2 -translate-y-1/2 z-0 aspect-[564.03/288.69] pointer-events-none select-none ${isMobile ? "top-[44%] w-[240vw] min-w-[750px]" : "top-[48%] w-[138vw] min-w-[1350px]"}`}>
           <svg
             viewBox="0 0 564.03 288.69"
             fill="none"
@@ -513,33 +513,33 @@ export default function Home() {
           </svg>
         </div>
 
-        {/* Content Container: Wordmark on Left, Justified Paragraph on Right */}
-        <div className={`relative z-10 w-full max-w-[1520px] mx-auto px-4 sm:px-8 md:px-12 lg:px-16 xl:px-20 ${isMobile ? "flex flex-col items-center my-6" : "grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-14 xl:gap-20 items-start my-auto pb-16 lg:pb-20"}`}>
+        {/* Content Container: Wordmark on Left (~50% Monitor Width), Justified Paragraph on Right (20% narrower) */}
+        <div className={`relative z-10 w-full max-w-[1720px] mx-auto px-2 sm:px-6 md:px-10 lg:px-12 xl:px-16 flex flex-col lg:flex-row items-center lg:items-start justify-between gap-6 lg:gap-10 xl:gap-16 my-auto ${isMobile ? "pb-24 pt-2" : "pb-16 lg:pb-20"}`}>
           
-          {/* LEFT SIDE: PD Title Page Wordmark SVG */}
-          <div className={`${isMobile ? "w-full max-w-[460px] mb-8" : "w-full flex flex-col justify-start items-start"}`}>
+          {/* LEFT SIDE: PD Title Page Wordmark SVG (About 50% width of monitor) */}
+          <div className="w-full lg:w-auto flex-1 flex flex-col justify-start items-center lg:items-start">
             <motion.img
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8 }}
               src="/pd-title-page-wordmark.svg"
               alt="Product Dept. - Where great ideas become exceptional products."
-              className="w-full max-w-[560px] xl:max-w-[620px] h-auto object-contain select-none pointer-events-none mt-0"
+              className="w-[88vw] max-w-[360px] sm:max-w-[420px] lg:max-w-none lg:w-[48vw] xl:w-[50vw] 2xl:max-w-[980px] h-auto object-contain select-none pointer-events-none mt-0"
             />
           </div>
 
-          {/* RIGHT SIDE: Paragraph Justified Left and Right + Center-Justified CTA 3 spaces below */}
-          <div className={`${isMobile ? "w-full max-w-[460px]" : "w-full flex flex-col justify-start items-start lg:pl-4 xl:pl-8"}`}>
+          {/* RIGHT SIDE: Paragraph (20% narrower, taller) + Center-Justified CTA 3 spaces below */}
+          <div className="w-full lg:w-auto shrink-0 flex flex-col justify-start items-center lg:items-start lg:pl-2 xl:pl-6">
             <motion.div
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.15 }}
-              className="flex flex-col justify-start w-full max-w-[540px] xl:max-w-[580px]"
+              className="flex flex-col justify-start w-full max-w-[330px] sm:max-w-[360px] lg:max-w-[400px] xl:max-w-[435px]"
             >
               {/* Paragraphs: Justified left and right, with last line left justified */}
               <div
                 style={{ textAlign: "justify", textAlignLast: "left" }}
-                className="text-justify [text-align-last:left] text-[clamp(11px,0.85vw,14.5px)] font-sans font-light tracking-wide text-white leading-[1.65] space-y-4"
+                className="text-justify [text-align-last:left] text-[clamp(10px,0.8vw,14px)] font-sans font-light tracking-wide text-white leading-[1.62] space-y-3 sm:space-y-4"
               >
                 <p className="m-0 p-0">
                   Product Dept. is an industry agnostic, full-stack product creation company partnering with venture and established companies to scale physical product lines quickly, reliably, and profitably.
@@ -550,13 +550,13 @@ export default function Home() {
               </div>
 
               {/* Centered CTA 3 spaces below the paragraph */}
-              <div className="w-full text-center mt-7 sm:mt-8 md:mt-10 pointer-events-auto">
+              <div className="w-full text-center mt-5 sm:mt-7 md:mt-9 pointer-events-auto">
                 <button
                   onClick={() => {
                     const element = document.getElementById("process-section");
                     if (element) element.scrollIntoView({ behavior: "smooth" });
                   }}
-                  className="text-white font-sans font-bold tracking-widest text-[clamp(10px,0.72vw,12px)] hover:text-white/75 transition-colors uppercase cursor-pointer bg-transparent border-none outline-none"
+                  className="text-white font-sans font-bold tracking-widest text-[clamp(9.5px,0.7vw,12px)] hover:text-white/75 transition-colors uppercase cursor-pointer bg-transparent border-none outline-none"
                 >
                   EXPLORE OUR SERVICES & CAPABILITIES
                 </button>
@@ -566,7 +566,7 @@ export default function Home() {
 
         </div>
 
-        {/* Client Name Scrolling Animation (Partners Banner) */}
+        {/* Client Name Scrolling Animation (ALWAYS at the bottom of the homescreen - including on mobile) */}
         <div className="absolute bottom-0 left-0 w-full flex flex-col gap-1.5 overflow-hidden select-none z-20 bg-black/85 backdrop-blur-[2px]">
           <div className="px-6 md:px-12 text-left pt-2">
             <span className="font-sans text-[8px] md:text-[10px] font-black tracking-[0.2em] uppercase text-white/50">

@@ -148,12 +148,12 @@ export default function Home() {
       // Height logic: viewport height minus fixed navbar (clamp 56px to 72px) and bottom padding
       const navbarHeight = Math.min(72, Math.max(56, window.innerHeight * 0.06));
       const availableHeight = window.innerHeight - navbarHeight - 40;
-      // Safe maximum natural height budget to fit the tallest expanded item without clipping
-      const naturalHeight = 900;
+      // Natural height budget for pinned header + accordion with 1 item open is ~620px
+      const naturalHeight = 620;
 
       let scaleFactor = availableHeight / naturalHeight;
-      // Allow scale down on small screens (minimum 0.35 to prevent cropping), scale up on large monitors
-      scaleFactor = Math.min(1.35, Math.max(0.35, scaleFactor));
+      // Cap at 1 on desktop so standard screens have crisp, unscaled 1:1 rendering, gently scale on short screens
+      scaleFactor = Math.min(1, Math.max(0.65, scaleFactor));
       setContentScale(scaleFactor);
     };
     handleResize();
@@ -273,7 +273,7 @@ export default function Home() {
       setTimeout(() => {
         isClickScrollingRef.current = false;
         window.removeEventListener("scrollend", handleScrollEnd);
-      }, 800);
+      }, 500);
 
       window.scrollTo({
         top: targetScrollY,
@@ -307,7 +307,7 @@ export default function Home() {
         if (trackpadTimer) clearTimeout(trackpadTimer);
         trackpadTimer = setTimeout(() => {
           isTrackpadActive = false;
-        }, 300);
+        }, 500);
       }
 
       // If the user is on a touchpad, DO NOT intercept or preventDefault!
@@ -331,7 +331,7 @@ export default function Home() {
         if (scrollY < 10 && e.deltaY > 0) {
           e.preventDefault();
           const now = Date.now();
-          if (now - lastSnapTimeRef.current > 400) {
+          if (now - lastSnapTimeRef.current > 300) {
             lastSnapTimeRef.current = now;
             handleItemClickRef.current(0);
           }
@@ -339,7 +339,7 @@ export default function Home() {
           // In the contact section scrolling up, snap back to Venture Infrastructure
           e.preventDefault();
           const now = Date.now();
-          if (now - lastSnapTimeRef.current > 400) {
+          if (now - lastSnapTimeRef.current > 300) {
             lastSnapTimeRef.current = now;
             handleItemClickRef.current(6);
           }
@@ -353,7 +353,7 @@ export default function Home() {
       const now = Date.now();
       const timeSinceLastSnap = now - lastSnapTimeRef.current;
       
-      if (timeSinceLastSnap < 350) {
+      if (timeSinceLastSnap < 250) {
         return;
       }
 
@@ -698,16 +698,16 @@ export default function Home() {
                   <div
                     key={step.num}
                     id={`process-step-site5-${index}`}
-                    className={`border-b border-black/10 last:border-b-0 w-full transition-all duration-300 rounded-lg ${isOpen ? "bg-white backdrop-blur-none shadow-[0_10px_30px_rgba(0,0,0,0.04)]" : "bg-white/56 backdrop-blur-[9.6px] shadow-none"}`}
+                    className={`border-b border-black/10 last:border-b-0 w-full transition-[background-color,backdrop-filter,box-shadow] duration-300 rounded-lg ${isOpen ? "bg-white backdrop-blur-none shadow-[0_10px_30px_rgba(0,0,0,0.04)]" : "bg-white/56 backdrop-blur-[9.6px] shadow-none"}`}
                   >
                     <button
                       onClick={() => handleItemClick(index)}
-                      className={`w-full text-left flex flex-col md:flex-row md:items-center justify-between gap-4 cursor-pointer hover:bg-black/[0.01] transition-all px-4 rounded-lg group select-none border-none outline-none bg-transparent ${isOpen ? "py-3 md:py-4" : "py-1.5 md:py-2"}`}
+                      className="w-full text-left flex flex-col md:flex-row md:items-center justify-between gap-4 cursor-pointer hover:bg-black/[0.01] transition-colors duration-200 px-4 py-2.5 md:py-3.5 rounded-lg group select-none border-none outline-none bg-transparent"
                     >
                       <div className="flex items-baseline gap-4 md:gap-6">
                         <span className="font-sans font-light text-sm text-black/40">[{step.num}]</span>
                         <span 
-                          className={`font-header font-black text-2xl md:text-3xl tracking-tight transition-colors duration-300 uppercase ${isOpen ? 'text-[var(--brand)]' : 'text-black group-hover:text-[var(--brand)]'}`}
+                          className={`font-header font-black text-2xl md:text-3xl tracking-tight transition-colors duration-200 uppercase ${isOpen ? 'text-[var(--brand)]' : 'text-black group-hover:text-[var(--brand)]'}`}
                         >
                           {step.title}
                         </span>
@@ -719,64 +719,59 @@ export default function Home() {
                         >
                           {step.label}
                         </motion.span>
-                        <motion.div
-                          className={`w-8 h-8 rounded-full border border-black/15 flex items-center justify-center bg-white shadow-sm text-black transition-all ${isOpen ? 'rotate-[135deg]' : ''}`}
+                        <div
+                          className={`w-8 h-8 rounded-full border border-black/15 flex items-center justify-center bg-white shadow-sm text-black transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] ${isOpen ? 'rotate-[135deg]' : 'rotate-0'}`}
                         >
                           <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M7 1v12M1 7h12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
                           </svg>
-                        </motion.div>
+                        </div>
                       </div>
                     </button>
 
-                    <AnimatePresence initial={false}>
-                      {isOpen && (
-                        <motion.div
-                          key="content"
-                          initial={{ height: 0, opacity: 0 }}
-                          animate={{ height: "auto", opacity: 1 }}
-                          exit={{ height: 0, opacity: 0 }}
-                          transition={{ type: "spring", stiffness: 120, damping: 20 }}
-                          className="overflow-hidden"
-                        >
-                          <div className="px-4 pb-6 pt-2 grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 border-t border-black/5 mt-1">
-                            {/* Left Column: Description */}
-                            <div className="lg:col-span-4 flex flex-col justify-start pt-2">
-                              <div>
-                                <p className="font-sans font-light text-sm md:text-base text-black/75 leading-relaxed max-w-xl">
-                                  {step.longDesc}
-                                </p>
-                              </div>
-                            </div>
-
-                            {/* Right Column: Capabilities */}
-                            <div className="lg:col-span-8 flex flex-col justify-center lg:pl-8 lg:border-l border-black/10">
-                              <motion.h4 style={{ color: activeColor }} className="font-header font-black text-[15px] tracking-widest uppercase mb-4">
-                                Detailed Capabilities
-                              </motion.h4>
-                              <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-3">
-                                {step.longFeatures.map((feat) => (
-                                  <li
-                                    key={feat.name}
-                                    className="flex items-start gap-2"
-                                  >
-                                    <motion.span style={{ color: brandColor }} className="text-[18px] font-bold leading-none mt-0.5">+</motion.span>
-                                    <div>
-                                      <span className="font-header font-black text-[15px] text-black uppercase tracking-wider block">
-                                        {feat.name}
-                                      </span>
-                                      <span className="font-sans font-light text-[13.5px] text-black/60 leading-relaxed block">
-                                        {feat.desc}
-                                      </span>
-                                    </div>
-                                  </li>
-                                ))}
-                              </ul>
+                    {/* Expandable Content with buttery-smooth CSS Grid transition */}
+                    <div
+                      style={{ gridTemplateRows: isOpen ? "1fr" : "0fr" }}
+                      className="grid transition-[grid-template-rows] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]"
+                    >
+                      <div className="overflow-hidden">
+                        <div className={`px-4 pb-6 pt-2 grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 border-t border-black/5 mt-1 transition-opacity duration-250 ${isOpen ? "opacity-100 delay-50" : "opacity-0 pointer-events-none"}`}>
+                          {/* Left Column: Description */}
+                          <div className="lg:col-span-4 flex flex-col justify-start pt-2">
+                            <div>
+                              <p className="font-sans font-light text-sm md:text-base text-black/75 leading-relaxed max-w-xl">
+                                {step.longDesc}
+                              </p>
                             </div>
                           </div>
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
+
+                          {/* Right Column: Capabilities */}
+                          <div className="lg:col-span-8 flex flex-col justify-center lg:pl-8 lg:border-l border-black/10">
+                            <motion.h4 style={{ color: activeColor }} className="font-header font-black text-[15px] tracking-widest uppercase mb-4">
+                              Detailed Capabilities
+                            </motion.h4>
+                            <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-3">
+                              {step.longFeatures.map((feat) => (
+                                <li
+                                  key={feat.name}
+                                  className="flex items-start gap-2"
+                                >
+                                  <motion.span style={{ color: brandColor }} className="text-[18px] font-bold leading-none mt-0.5">+</motion.span>
+                                  <div>
+                                    <span className="font-header font-black text-[15px] text-black uppercase tracking-wider block">
+                                      {feat.name}
+                                    </span>
+                                    <span className="font-sans font-light text-[13.5px] text-black/60 leading-relaxed block">
+                                      {feat.desc}
+                                    </span>
+                                  </div>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 );
               })}

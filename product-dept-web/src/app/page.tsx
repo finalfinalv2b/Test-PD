@@ -147,13 +147,13 @@ export default function Home() {
 
       // Height logic: viewport height minus fixed navbar (clamp 56px to 72px) and bottom padding
       const navbarHeight = Math.min(72, Math.max(56, window.innerHeight * 0.06));
-      const availableHeight = window.innerHeight - navbarHeight - 40;
-      // Natural height budget for pinned header + accordion with 1 item open is ~620px
-      const naturalHeight = 620;
+      const availableHeight = window.innerHeight - navbarHeight - 30;
+      // Natural height budget for pinned header + accordion with tallest item (Venture) open
+      const naturalHeight = 780;
 
       let scaleFactor = availableHeight / naturalHeight;
-      // Cap at 1 on desktop so standard screens have crisp, unscaled 1:1 rendering, gently scale on short screens
-      scaleFactor = Math.min(1, Math.max(0.65, scaleFactor));
+      // Cap at 1 on large desktop screens, scale down smoothly on laptops/MacBooks so Venture tab is never cut off
+      scaleFactor = Math.min(1, Math.max(0.55, scaleFactor));
       setContentScale(scaleFactor);
     };
     handleResize();
@@ -674,12 +674,12 @@ export default function Home() {
 
 
           {/* HEADER BLOCK */}
-          <div className={`shrink-0 w-full bg-black border-t border-b border-white/10 pt-[clamp(16px,2.2vh,32px)] pb-[clamp(16px,2.2vh,32px)] px-6 relative ${isMobile ? "mb-16" : "mb-[clamp(16px,2vh,28px)]"}`}>
-            <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-start md:items-end gap-6 w-full">
+          <div className={`shrink-0 w-full bg-black border-t border-b border-white/10 pt-[clamp(10px,1.4vh,20px)] pb-[clamp(10px,1.4vh,20px)] px-6 relative ${isMobile ? "mb-12" : "mb-[clamp(10px,1.4vh,18px)]"}`}>
+            <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-start md:items-end gap-4 md:gap-6 w-full">
               <span className="text-[clamp(1.05rem,1.54vw,2.1rem)] font-sans font-light tracking-tighter uppercase leading-none text-white block">
                 Services & Capabilities
               </span>
-              <p className="font-sans font-light text-xs md:text-[clamp(10px,0.6vw,12px)] tracking-widest max-w-xs md:max-w-md border-t border-white/20 text-white/80 pt-2">
+              <p className="font-sans font-light text-xs md:text-[clamp(10px,0.6vw,12px)] tracking-widest max-w-xs md:max-w-md border-t border-white/20 text-white/80 pt-1.5">
                 We absorb operational friction and execution risk allowing businesses to focus on their core business goals, product vision, and growth.
               </p>
             </div>
@@ -691,7 +691,7 @@ export default function Home() {
             className="w-full flex flex-col items-center justify-start origin-top z-10 pt-0"
           >
             {/* ACCORDION LIST */}
-            <div className="w-full max-w-6xl mx-auto px-6 flex flex-col pb-8">
+            <div className="w-full max-w-6xl mx-auto px-6 flex flex-col pb-4 md:pb-5">
               {bentoData.map((step, index) => {
                 const isOpen = activeIndex === index;
                 return (
@@ -702,7 +702,7 @@ export default function Home() {
                   >
                     <button
                       onClick={() => handleItemClick(index)}
-                      className="w-full text-left flex flex-col md:flex-row md:items-center justify-between gap-4 cursor-pointer hover:bg-black/[0.01] transition-colors duration-200 px-4 py-2.5 md:py-3.5 rounded-lg group select-none border-none outline-none bg-transparent"
+                      className="w-full text-left flex flex-col md:flex-row md:items-center justify-between gap-3 md:gap-4 cursor-pointer hover:bg-black/[0.01] transition-colors duration-200 px-4 py-2 md:py-2.5 rounded-lg group select-none border-none outline-none bg-transparent"
                     >
                       <div className="flex items-baseline gap-4 md:gap-6">
                         <span className="font-sans font-light text-sm text-black/40">[{step.num}]</span>
@@ -735,11 +735,11 @@ export default function Home() {
                       className="grid transition-[grid-template-rows] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]"
                     >
                       <div className="overflow-hidden">
-                        <div className={`px-4 pb-6 pt-2 grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 border-t border-black/5 mt-1 transition-opacity duration-250 ${isOpen ? "opacity-100 delay-50" : "opacity-0 pointer-events-none"}`}>
+                        <div className={`px-4 pb-4 pt-1.5 grid grid-cols-1 lg:grid-cols-12 gap-5 lg:gap-8 border-t border-black/5 mt-1 transition-opacity duration-250 ${isOpen ? "opacity-100 delay-50" : "opacity-0 pointer-events-none"}`}>
                           {/* Left Column: Description */}
-                          <div className="lg:col-span-4 flex flex-col justify-start pt-2">
+                          <div className="lg:col-span-4 flex flex-col justify-start pt-1">
                             <div>
-                              <p className="font-sans font-light text-sm md:text-base text-black/75 leading-relaxed max-w-xl">
+                              <p className="font-sans font-light text-xs md:text-sm text-black/75 leading-relaxed max-w-xl">
                                 {step.longDesc}
                               </p>
                             </div>
@@ -747,21 +747,21 @@ export default function Home() {
 
                           {/* Right Column: Capabilities */}
                           <div className="lg:col-span-8 flex flex-col justify-center lg:pl-8 lg:border-l border-black/10">
-                            <motion.h4 style={{ color: activeColor }} className="font-header font-black text-[15px] tracking-widest uppercase mb-4">
+                            <motion.h4 style={{ color: activeColor }} className="font-header font-black text-xs md:text-[13.5px] tracking-widest uppercase mb-2">
                               Detailed Capabilities
                             </motion.h4>
-                            <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-3">
+                            <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-5 gap-y-1.5">
                               {step.longFeatures.map((feat) => (
                                 <li
                                   key={feat.name}
                                   className="flex items-start gap-2"
                                 >
-                                  <motion.span style={{ color: brandColor }} className="text-[18px] font-bold leading-none mt-0.5">+</motion.span>
+                                  <motion.span style={{ color: brandColor }} className="text-[16px] font-bold leading-none mt-0.5">+</motion.span>
                                   <div>
-                                    <span className="font-header font-black text-[15px] text-black uppercase tracking-wider block">
+                                    <span className="font-header font-black text-[13px] md:text-[13.5px] text-black uppercase tracking-wider block">
                                       {feat.name}
                                     </span>
-                                    <span className="font-sans font-light text-[13.5px] text-black/60 leading-relaxed block">
+                                    <span className="font-sans font-light text-[11.5px] md:text-[12px] text-black/60 leading-snug block">
                                       {feat.desc}
                                     </span>
                                   </div>

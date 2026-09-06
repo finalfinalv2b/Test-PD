@@ -147,9 +147,9 @@ export default function Home() {
 
       // Height logic: viewport height minus fixed navbar (clamp 56px to 72px) and bottom padding
       const navbarHeight = Math.min(72, Math.max(56, window.innerHeight * 0.06));
-      const availableHeight = window.innerHeight - navbarHeight - 30;
-      // Natural height budget for pinned header + accordion with tallest item (Venture) open
-      const naturalHeight = 780;
+      const availableHeight = window.innerHeight - navbarHeight - 35;
+      // Natural height budget for pinned header + tab bar + accordion with tallest item (Venture) open
+      const naturalHeight = 835;
 
       let scaleFactor = availableHeight / naturalHeight;
       // Cap at 1 on large desktop screens, scale down smoothly on laptops/MacBooks so Venture tab is never cut off
@@ -639,16 +639,21 @@ export default function Home() {
         {/* Pinned Wrapper for Desktop */}
         <div className={isMobile ? "w-full" : "sticky top-[clamp(56px,6vh,72px)] left-0 w-full h-[calc(100vh-clamp(56px,6vh,72px))] overflow-hidden flex flex-col items-center justify-start bg-transparent"}>
           
-          {/* SERVICE BACKGROUND PHOTOS LAYER */}
+          {/* SERVICE BACKGROUND PHOTOS LAYER WITH PARALLAX DRIFT */}
           <div className={`absolute inset-0 w-full h-full pointer-events-none z-0 overflow-hidden ${isMobile ? "hidden" : ""}`}>
             {bentoData.map((step, index) => {
               const isOpen = activeIndex === index;
+              const isEven = index % 2 === 0;
               return (
                 <motion.div
                   key={step.num}
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: isOpen ? 1 : 0 }}
-                  transition={{ duration: 0.8, ease: "easeInOut" }}
+                  initial={false}
+                  animate={{
+                    opacity: isOpen ? 1 : 0,
+                    x: isOpen ? 0 : (isEven ? -30 : 30),
+                    scale: isOpen ? 1 : 1.05
+                  }}
+                  transition={{ duration: 0.75, ease: [0.16, 1, 0.3, 1] }}
                   className="absolute inset-0 w-full h-full"
                 >
                   {step.bgImage.endsWith(".mp4") ? (
@@ -672,33 +677,67 @@ export default function Home() {
             })}
           </div>
 
-
           {/* HEADER BLOCK */}
-          <div className={`shrink-0 w-full bg-black border-t border-b border-white/10 pt-[clamp(10px,1.4vh,20px)] pb-[clamp(10px,1.4vh,20px)] px-6 relative ${isMobile ? "mb-12" : "mb-[clamp(10px,1.4vh,18px)]"}`}>
-            <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-start md:items-end gap-4 md:gap-6 w-full">
-              <span className="text-[clamp(1.05rem,1.54vw,2.1rem)] font-sans font-light tracking-tighter uppercase leading-none text-white block">
+          <div className="shrink-0 w-full bg-black border-t border-b border-white/10 pt-[clamp(8px,1.2vh,16px)] pb-[clamp(8px,1.2vh,16px)] px-6 relative z-20">
+            <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-start md:items-end gap-3 md:gap-6 w-full">
+              <span className="text-[clamp(1.05rem,1.5vw,2rem)] font-sans font-light tracking-tighter uppercase leading-none text-white block">
                 Services & Capabilities
               </span>
-              <p className="font-sans font-light text-xs md:text-[clamp(10px,0.6vw,12px)] tracking-widest max-w-xs md:max-w-md border-t border-white/20 text-white/80 pt-1.5">
+              <p className="font-sans font-light text-xs md:text-[clamp(10px,0.58vw,11.5px)] tracking-widest max-w-xs md:max-w-md border-t border-white/20 text-white/80 pt-1">
                 We absorb operational friction and execution risk allowing businesses to focus on their core business goals, product vision, and growth.
               </p>
+            </div>
+          </div>
+
+          {/* HORIZONTAL INTERACTIVE SERVICE TABS TRACK */}
+          <div className="shrink-0 w-full bg-black/90 border-b border-white/10 px-4 md:px-6 py-2 z-20 backdrop-blur-md overflow-x-auto no-scrollbar">
+            <div className="max-w-6xl mx-auto flex items-center justify-between gap-1 sm:gap-2">
+              {bentoData.map((step, index) => {
+                const isActive = activeIndex === index;
+                return (
+                  <button
+                    key={step.num}
+                    onClick={() => handleItemClick(index)}
+                    className={`relative py-1 px-2 sm:px-3 text-left transition-all duration-200 rounded flex items-center gap-1.5 sm:gap-2 group cursor-pointer border-none outline-none bg-transparent ${isActive ? "text-white" : "text-white/40 hover:text-white/80"}`}
+                  >
+                    <span className="font-mono text-[9.5px] tracking-wider opacity-60">[{step.num}]</span>
+                    <span className="font-header font-black text-[11px] sm:text-[12.5px] tracking-wider uppercase whitespace-nowrap">
+                      {step.title}
+                    </span>
+                    {isActive && (
+                      <motion.div
+                        layoutId="activeServiceTabIndicator"
+                        className="absolute bottom-[-9px] left-0 right-0 h-[2px] bg-[var(--brand)] z-30"
+                        transition={{ type: "spring", stiffness: 400, damping: 32 }}
+                      />
+                    )}
+                  </button>
+                );
+              })}
             </div>
           </div>
 
           {/* Top-Anchored Scale Container */}
           <motion.div 
             style={isMobile ? {} : { scale: contentScale }}
-            className="w-full flex flex-col items-center justify-start origin-top z-10 pt-0"
+            className="w-full flex flex-col items-center justify-start origin-top z-10 pt-[clamp(8px,1.2vh,16px)]"
           >
-            {/* ACCORDION LIST */}
+            {/* ACCORDION LIST WITH HORIZONTAL ALTERNATING MOTION */}
             <div className="w-full max-w-6xl mx-auto px-6 flex flex-col pb-4 md:pb-5">
               {bentoData.map((step, index) => {
                 const isOpen = activeIndex === index;
+                const isEven = index % 2 === 0;
                 return (
-                  <div
+                  <motion.div
                     key={step.num}
                     id={`process-step-site5-${index}`}
-                    className={`border-b border-black/10 last:border-b-0 w-full transition-[background-color,backdrop-filter,box-shadow] duration-300 rounded-lg ${isOpen ? "bg-white backdrop-blur-none shadow-[0_10px_30px_rgba(0,0,0,0.04)]" : "bg-white/56 backdrop-blur-[9.6px] shadow-none"}`}
+                    initial={false}
+                    animate={{
+                      x: isOpen ? 0 : (isEven ? -8 : 8),
+                      opacity: isOpen ? 1 : 0.72,
+                    }}
+                    transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+                    className={`border-b border-black/10 last:border-b-0 w-full transition-[background-color,backdrop-filter,box-shadow] duration-300 rounded-lg ${isOpen ? "bg-white backdrop-blur-none shadow-[0_12px_36px_rgba(0,0,0,0.06)]" : "bg-white/56 backdrop-blur-[9.6px] shadow-none hover:bg-white/80"}`}
                   >
                     <button
                       onClick={() => handleItemClick(index)}
@@ -729,31 +768,57 @@ export default function Home() {
                       </div>
                     </button>
 
-                    {/* Expandable Content with buttery-smooth CSS Grid transition */}
+                    {/* Expandable Content with buttery-smooth CSS Grid & Horizontal Reveal */}
                     <div
                       style={{ gridTemplateRows: isOpen ? "1fr" : "0fr" }}
                       className="grid transition-[grid-template-rows] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]"
                     >
                       <div className="overflow-hidden">
                         <div className={`px-4 pb-4 pt-1.5 grid grid-cols-1 lg:grid-cols-12 gap-5 lg:gap-8 border-t border-black/5 mt-1 transition-opacity duration-250 ${isOpen ? "opacity-100 delay-50" : "opacity-0 pointer-events-none"}`}>
-                          {/* Left Column: Description */}
-                          <div className="lg:col-span-4 flex flex-col justify-start pt-1">
+                          {/* Left Column: Description (Enters from Left) */}
+                          <motion.div 
+                            initial={false}
+                            animate={{
+                              x: isOpen ? 0 : -30,
+                              opacity: isOpen ? 1 : 0
+                            }}
+                            transition={{ duration: 0.45, delay: 0.05, ease: [0.16, 1, 0.3, 1] }}
+                            className="lg:col-span-4 flex flex-col justify-start pt-1"
+                          >
                             <div>
                               <p className="font-sans font-light text-xs md:text-sm text-black/75 leading-relaxed max-w-xl">
                                 {step.longDesc}
                               </p>
                             </div>
-                          </div>
+                          </motion.div>
 
-                          {/* Right Column: Capabilities */}
-                          <div className="lg:col-span-8 flex flex-col justify-center lg:pl-8 lg:border-l border-black/10">
+                          {/* Right Column: Capabilities (Enters from Right with Cascading Items) */}
+                          <motion.div 
+                            initial={false}
+                            animate={{
+                              x: isOpen ? 0 : 30,
+                              opacity: isOpen ? 1 : 0
+                            }}
+                            transition={{ duration: 0.45, delay: 0.08, ease: [0.16, 1, 0.3, 1] }}
+                            className="lg:col-span-8 flex flex-col justify-center lg:pl-8 lg:border-l border-black/10"
+                          >
                             <motion.h4 style={{ color: activeColor }} className="font-header font-black text-xs md:text-[13.5px] tracking-widest uppercase mb-2">
                               Detailed Capabilities
                             </motion.h4>
                             <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-5 gap-y-1.5">
-                              {step.longFeatures.map((feat) => (
-                                <li
+                              {step.longFeatures.map((feat, featIdx) => (
+                                <motion.li
                                   key={feat.name}
+                                  initial={false}
+                                  animate={{
+                                    x: isOpen ? 0 : (isEven ? -18 : 18),
+                                    opacity: isOpen ? 1 : 0
+                                  }}
+                                  transition={{
+                                    duration: 0.38,
+                                    delay: isOpen ? 0.08 + (featIdx * 0.03) : 0,
+                                    ease: [0.16, 1, 0.3, 1]
+                                  }}
                                   className="flex items-start gap-2"
                                 >
                                   <motion.span style={{ color: brandColor }} className="text-[16px] font-bold leading-none mt-0.5">+</motion.span>
@@ -765,14 +830,14 @@ export default function Home() {
                                       {feat.desc}
                                     </span>
                                   </div>
-                                </li>
+                                </motion.li>
                               ))}
                             </ul>
-                          </div>
+                          </motion.div>
                         </div>
                       </div>
                     </div>
-                  </div>
+                  </motion.div>
                 );
               })}
             </div>

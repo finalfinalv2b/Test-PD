@@ -481,7 +481,7 @@ export default function Home() {
     const data = Object.fromEntries(formData.entries());
 
     try {
-      await fetch("https://formsubmit.co/ajax/ryrorussell1@gmail.com", {
+      await fetch("https://formsubmit.co/ajax/info@productdept.com", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -795,7 +795,7 @@ export default function Home() {
           <div className="p-8 md:p-16 bg-white text-black flex flex-col justify-center lg:h-full">
             {!isSuccess ? (
               <form onSubmit={handleSubmit} className="space-y-8 max-w-2xl w-full mx-auto">
-                <input type="hidden" name="_subject" value="New Inquiry from Product Dept. (Site 5)" />
+                <input type="hidden" name="_subject" value="New Inquiry from Product Dept." />
                 <input type="hidden" name="_captcha" value="false" />
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">

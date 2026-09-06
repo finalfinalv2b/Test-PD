@@ -187,7 +187,7 @@ export default function Site4() {
     const data = Object.fromEntries(formData.entries());
 
     try {
-      await fetch("https://formsubmit.co/ajax/ryrorussell1@gmail.com", {
+      await fetch("https://formsubmit.co/ajax/info@productdept.com", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -801,22 +801,22 @@ export default function Home() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                   <div className="flex flex-col gap-3">
                     <label htmlFor="name" className="text-xs font-black tracking-widest uppercase text-black">NAME</label>
-                    <input type="text" id="name" name="name" className="border border-black/10 bg-white text-black py-4 px-4 outline-none focus:border-black transition-colors font-mono uppercase text-sm" placeholder="JANE DOE" required />
+                    <input type="text" id="name" name="name" className="border border-black/10 bg-white text-black py-4 px-4 outline-none focus:border-black transition-colors font-mono text-sm" placeholder="Jane Doe" required />
                   </div>
                   <div className="flex flex-col gap-3">
                     <label htmlFor="email" className="text-xs font-black tracking-widest uppercase text-black">EMAIL</label>
-                    <input type="email" id="email" name="email" className="border border-black/10 bg-white text-black py-4 px-4 outline-none focus:border-black transition-colors font-mono uppercase text-sm" placeholder="JANE@COMPANY.COM" required />
+                    <input type="email" id="email" name="email" className="border border-black/10 bg-white text-black py-4 px-4 outline-none focus:border-black transition-colors font-mono text-sm" placeholder="jane@company.com" required />
                   </div>
                 </div>
 
                 <div className="flex flex-col gap-3">
                   <label htmlFor="company" className="text-xs font-black tracking-widest uppercase text-black">ORGANIZATION</label>
-                  <input type="text" id="company" name="company" className="border border-black/10 bg-white text-black py-4 px-4 outline-none focus:border-black transition-colors font-mono uppercase text-sm" placeholder="ORGANIZATION NAME" />
+                  <input type="text" id="company" name="company" className="border border-black/10 bg-white text-black py-4 px-4 outline-none focus:border-black transition-colors font-mono text-sm" placeholder="Organization name" />
                 </div>
 
                 <div className="flex flex-col gap-3">
                   <label htmlFor="description" className="text-xs font-black tracking-widest uppercase text-black">MESSAGE</label>
-                  <textarea id="description" name="description" rows={5} className="border border-black/10 bg-white text-black py-4 px-4 outline-none focus:border-black transition-colors resize-none font-mono uppercase text-sm" placeholder="HOW CAN WE HELP?" required></textarea>
+                  <textarea id="description" name="description" rows={5} className="border border-black/10 bg-white text-black py-4 px-4 outline-none focus:border-black transition-colors resize-none font-mono text-sm" placeholder="How can we help?" required></textarea>
                 </div>
 
                 <div className="pt-8 flex justify-center">
@@ -831,11 +831,7 @@ export default function Home() {
               </form>
             ) : (
               <div className="flex flex-col items-start justify-center h-full max-w-2xl mx-auto py-12">
-                <div className="uppercase border-2 border-black p-4 font-mono font-black mb-8 text-xs tracking-widest text-black">
-                  [ INFO SENT ]
-                </div>
-                <h2 className="text-5xl md:text-6xl font-black tracking-tighter mb-6 uppercase text-black">DATA RECEIVED.</h2>
-                <p className="text-lg font-mono text-black/80 mb-12">
+                <p className="text-xl md:text-2xl font-mono text-black leading-relaxed">
                   Someone from the Product Dept. will get back to you shortly. Thank you.
                 </p>
               </div>

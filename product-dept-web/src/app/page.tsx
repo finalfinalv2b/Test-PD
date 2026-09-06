@@ -509,10 +509,10 @@ export default function Home() {
       className="relative w-full min-h-screen bg-black text-white transition-colors duration-500 font-sans font-light pt-[clamp(56px,6vh,72px)]"
     >
       {/* SECTION 1: Title Page with Cropped Background Logo & Two-Column Layout */}
-      <section className="relative w-full h-[calc(100dvh-clamp(56px,6vh,72px))] min-h-[540px] flex flex-col items-center justify-between border-b border-white/10 bg-black text-white overflow-hidden px-4 sm:px-8">
+      <section className="relative w-full h-[calc(100dvh-clamp(56px,6vh,72px))] min-h-[540px] flex flex-col items-center justify-between border-b border-white/10 bg-black text-white overflow-hidden">
         
-        {/* Background Logo: 8% larger, shifted 8% left and 4% up */}
-        <div className={`absolute left-[42%] -translate-x-1/2 -translate-y-1/2 z-0 aspect-[564.03/288.69] pointer-events-none select-none ${isMobile ? "top-[40%] w-[190vw] min-w-[595px]" : "top-[44%] w-[109vw] min-w-[1070px]"}`}>
+        {/* Background Logo: Centered horizontally, 8% larger and 4% up */}
+        <div className={`absolute left-1/2 -translate-x-1/2 -translate-y-1/2 z-0 aspect-[564.03/288.69] pointer-events-none select-none ${isMobile ? "top-[40%] w-[190vw] min-w-[595px]" : "top-[44%] w-[109vw] min-w-[1070px]"}`}>
           <svg
             viewBox="0 0 564.03 288.69"
             fill="none"
@@ -533,14 +533,14 @@ export default function Home() {
           </svg>
         </div>
 
-        {/* Content Container: Wordmark on Left, Justified Paragraph on Right with 7.5% More Buffer from Monitor Edges (15% closer) */}
+        {/* Content Container: Wordmark on Left, Justified Paragraph on Right with Equal Buffer from Monitor Edges */}
         <div
           style={!isMobile ? { transform: `translateY(-${wordmarkHalfHeight !== null ? `${wordmarkHalfHeight}px` : '4.5vw'})` } : undefined}
-          className={`relative z-10 w-full max-w-[1400px] mx-auto px-4 sm:px-8 lg:px-[12.5vw] flex flex-col lg:flex-row items-center lg:items-start justify-between gap-6 lg:gap-10 xl:gap-14 ${isMobile ? "my-auto pb-24 pt-2" : "absolute top-1/2 left-0 right-0"}`}
+          className={`relative z-10 w-full px-6 sm:px-10 lg:px-[10.5vw] flex flex-col lg:flex-row items-center lg:items-start justify-between gap-6 lg:gap-8 ${isMobile ? "my-auto pb-24 pt-2" : "absolute top-1/2 left-0 right-0"}`}
         >
           
-          {/* LEFT SIDE: PD Title Page Wordmark SVG (Scales with monitor width) */}
-          <div className="w-full lg:w-auto flex-1 flex flex-col justify-start items-center lg:items-start">
+          {/* LEFT SIDE: PD Title Page Wordmark SVG (Equal buffer from left screen edge) */}
+          <div className="w-full lg:w-auto flex flex-col justify-start items-center lg:items-start">
             <motion.img
               ref={wordmarkRef}
               onLoad={() => {
@@ -553,17 +553,17 @@ export default function Home() {
               transition={{ duration: 0.8 }}
               src="/pd-title-page-wordmark.svg"
               alt="Product Dept. - Where great ideas become exceptional products."
-              className="w-[88vw] max-w-[415px] lg:max-w-none lg:w-[clamp(420px,49vw,880px)] h-auto object-contain select-none pointer-events-none mt-0"
+              className="w-[88vw] max-w-[415px] lg:max-w-none lg:w-[clamp(400px,43vw,780px)] h-auto object-contain select-none pointer-events-none mt-0"
             />
           </div>
 
-          {/* RIGHT SIDE: Paragraph (Scales with monitor, flush right with equal buffer) + Center-Justified CTA 3 spaces below */}
-          <div className="w-full lg:w-auto shrink-0 flex flex-col justify-start items-center lg:items-end">
+          {/* RIGHT SIDE: Paragraph (Equal buffer from right screen edge) + Center-Justified CTA 3 spaces below */}
+          <div className="w-full lg:w-auto flex flex-col justify-start items-center lg:items-end">
             <motion.div
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.15 }}
-              className="flex flex-col justify-start w-full max-w-[340px] sm:max-w-[380px] lg:max-w-none lg:w-[clamp(280px,25vw,410px)]"
+              className="flex flex-col justify-start w-full max-w-[340px] sm:max-w-[380px] lg:max-w-none lg:w-[clamp(270px,23.5vw,395px)]"
             >
               {/* Paragraphs: Justified left and right, with last line left justified */}
               <div

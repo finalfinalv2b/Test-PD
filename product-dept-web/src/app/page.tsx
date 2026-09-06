@@ -511,8 +511,8 @@ export default function Home() {
       {/* SECTION 1: Title Page with Cropped Background Logo & Two-Column Layout */}
       <section className="relative w-full h-[calc(100dvh-clamp(56px,6vh,72px))] min-h-[540px] flex flex-col items-center justify-between border-b border-white/10 bg-black text-white overflow-hidden px-4 sm:px-8">
         
-        {/* Background Logo: Scaled down 8% */}
-        <div className={`absolute left-1/2 -translate-x-1/2 -translate-y-1/2 z-0 aspect-[564.03/288.69] pointer-events-none select-none ${isMobile ? "top-[44%] w-[176vw] min-w-[550px]" : "top-[48%] w-[101vw] min-w-[990px]"}`}>
+        {/* Background Logo: 8% larger, shifted 8% left and 4% up */}
+        <div className={`absolute left-[42%] -translate-x-1/2 -translate-y-1/2 z-0 aspect-[564.03/288.69] pointer-events-none select-none ${isMobile ? "top-[40%] w-[190vw] min-w-[595px]" : "top-[44%] w-[109vw] min-w-[1070px]"}`}>
           <svg
             viewBox="0 0 564.03 288.69"
             fill="none"
@@ -533,10 +533,10 @@ export default function Home() {
           </svg>
         </div>
 
-        {/* Content Container: Wordmark on Left, Justified Paragraph on Right with Equal Buffer from Monitor Edges */}
+        {/* Content Container: Wordmark on Left, Justified Paragraph on Right with 7.5% More Buffer from Monitor Edges (15% closer) */}
         <div
           style={!isMobile ? { transform: `translateY(-${wordmarkHalfHeight !== null ? `${wordmarkHalfHeight}px` : '4.5vw'})` } : undefined}
-          className={`relative z-10 w-full max-w-[1550px] mx-auto px-[clamp(20px,5vw,72px)] flex flex-col lg:flex-row items-center lg:items-start justify-between gap-6 lg:gap-10 xl:gap-14 ${isMobile ? "my-auto pb-24 pt-2" : "absolute top-1/2 left-0 right-0"}`}
+          className={`relative z-10 w-full max-w-[1400px] mx-auto px-4 sm:px-8 lg:px-[12.5vw] flex flex-col lg:flex-row items-center lg:items-start justify-between gap-6 lg:gap-10 xl:gap-14 ${isMobile ? "my-auto pb-24 pt-2" : "absolute top-1/2 left-0 right-0"}`}
         >
           
           {/* LEFT SIDE: PD Title Page Wordmark SVG (Scales with monitor width) */}

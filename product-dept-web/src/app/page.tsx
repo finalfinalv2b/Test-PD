@@ -45,7 +45,7 @@ const bentoData = [
     num: "04",
     title: "SOURCING",
     label: "VENDOR SELECTION",
-    bgImage: "/photo-flicker/sourcing.jpeg",
+    bgImage: "/photo-flicker/sourcing.png",
     longDesc: "Finding the right manufacturing partners is key to your product's success. We negotiate directly with trusted factories, manage supplier relationships, and optimize production costs. We set up reliable supply chains to ensure you get high-quality components delivered on time.",
     longFeatures: [
       { name: "Trusted Partners", desc: "Selecting vetted manufacturers capable of meeting high quality standards." },

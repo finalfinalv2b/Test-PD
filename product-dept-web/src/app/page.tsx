@@ -930,91 +930,40 @@ export default function Home() {
                     ref={(el) => { tabRefs.current[index] = el; }}
                     key={step.num}
                     onClick={() => handleItemClick(index)}
-                    className={`relative py-1.5 px-2.5 sm:px-3.5 text-left transition-all duration-200 rounded-t-lg flex items-center gap-1.5 sm:gap-2 group cursor-pointer border-none outline-none ${
+                    style={isActive ? { backgroundColor: brandColor || "#f41c06" } : undefined}
+                    className={`relative py-1.5 px-2.5 sm:px-3.5 text-left transition-all duration-200 rounded flex items-center gap-1.5 sm:gap-2 group cursor-pointer border-none outline-none ${
                       isActive 
-                        ? "bg-white/[0.14] text-white shadow-sm border-t border-x border-white/20" 
+                        ? "text-white shadow-sm" 
                         : "bg-transparent text-white/40 hover:text-white/80"
                     }`}
                   >
-                    <span className={`font-mono tracking-wider transition-all duration-200 ${isActive ? "text-[11.5px] opacity-90 text-[var(--brand)] font-bold" : "text-[9.5px] opacity-60"}`}>[{step.num}]</span>
-                    <span className={`font-header font-black tracking-wider uppercase whitespace-nowrap transition-all duration-200 ${isActive ? "text-[13px] sm:text-[15px]" : "text-[11px] sm:text-[12.5px]"}`}>
+                    <span className={`font-mono tracking-wider transition-all duration-200 ${isActive ? "text-[11.5px] text-black font-black" : "text-[9.5px] text-white/60"}`}>[{step.num}]</span>
+                    <span className={`font-header font-black tracking-wider uppercase whitespace-nowrap transition-all duration-200 ${isActive ? "text-[13px] sm:text-[15px] text-white" : "text-[11px] sm:text-[12.5px] text-white/40 group-hover:text-white/80"}`}>
                       {step.title}
                     </span>
-                    {isActive && (
-                      <motion.div
-                        layoutId="activeServiceTabIndicator"
-                        className="absolute bottom-[-9px] left-0 right-0 h-[2px] bg-[var(--brand)] z-30"
-                        transition={{ type: "spring", stiffness: 400, damping: 32 }}
-                      />
-                    )}
                   </button>
                 );
               })}
             </div>
           </div>
 
-          {/* Top-Anchored Scale Container */}
+          {/* Centered Service Box Container: Centered vertically between the bottom of the services bar and the bottom of the screen */}
           <motion.div 
             style={isMobile ? {} : { scale: contentScale }}
-            className="w-full flex flex-col items-center justify-start origin-top z-10 pt-[clamp(4px,0.8vh,10px)]"
+            className={`w-full z-10 ${
+              isMobile 
+                ? "flex flex-col items-center justify-start pt-4" 
+                : "flex-1 flex flex-col items-center justify-center my-auto"
+            }`}
           >
-            {/* INDIVIDUAL ACTIVE SERVICE PRESENTATION WITH FROSTED VECTOR CONNECTOR & OPAQUE WHITE RECTANGLE */}
+            {/* INDIVIDUAL ACTIVE SERVICE PRESENTATION WITH OPAQUE WHITE RECTANGLE */}
             {(() => {
               const currentStep = bentoData[activeIndex ?? 0] || bentoData[0];
-              const bridgeH = 34;
-              const x1 = activeTabMetrics.left;
-              const x2 = activeTabMetrics.left + activeTabMetrics.width;
-              const W = activeTabMetrics.containerWidth || 1152;
-              const delta = 48;
-              const xb1 = Math.max(0, x1 - delta);
-              const xb2 = Math.min(W, x2 + delta);
 
               return (
-                <div className="w-full max-w-6xl mx-auto px-4 md:px-6 flex flex-col items-center">
-                  {/* FROSTED VECTOR CONNECTOR: Blends from the selected service tab and transitions into the opaque white rectangle */}
-                  <div className="w-full relative h-[34px] overflow-visible pointer-events-none -mb-px z-10">
-                    <svg
-                      className="w-full h-[34px] overflow-visible"
-                      viewBox={`0 0 ${W} ${bridgeH}`}
-                      preserveAspectRatio="none"
-                    >
-                      <defs>
-                        <linearGradient id="frostedVectorGrad" x1="0" y1="0" x2="0" y2="1">
-                          <stop offset="0%" stopColor="#FFFFFF" stopOpacity="0.45" />
-                          <stop offset="55%" stopColor="#FFFFFF" stopOpacity="0.85" />
-                          <stop offset="100%" stopColor="#FFFFFF" stopOpacity="1" />
-                        </linearGradient>
-                        <filter id="frostedShadow" x="-10%" y="-10%" width="120%" height="120%">
-                          <feDropShadow dx="0" dy="2" stdDeviation="3" floodColor="rgba(0,0,0,0.08)" />
-                        </filter>
-                      </defs>
-
-                      {/* Smooth Organic Frosted Vector Connector Bridge - Fill */}
-                      <motion.path
-                        animate={{
-                          d: `M ${x1} 0 L ${x2} 0 C ${x2 + 10} ${bridgeH * 0.45}, ${xb2} ${bridgeH * 0.55}, ${xb2} ${bridgeH} L ${xb1} ${bridgeH} C ${xb1} ${bridgeH * 0.55}, ${x1 - 10} ${bridgeH * 0.45}, ${x1} 0 Z`
-                        }}
-                        transition={{ type: "spring", stiffness: 340, damping: 30 }}
-                        fill="url(#frostedVectorGrad)"
-                        stroke="none"
-                        filter="url(#frostedShadow)"
-                      />
-
-                      {/* Frosted Glass Edge Highlight (Left, Top, Right - Leaving bottom open to merge into card) */}
-                      <motion.path
-                        animate={{
-                          d: `M ${xb1} ${bridgeH} C ${xb1} ${bridgeH * 0.55}, ${x1 - 10} ${bridgeH * 0.45}, ${x1} 0 L ${x2} 0 C ${x2 + 10} ${bridgeH * 0.45}, ${xb2} ${bridgeH * 0.55}, ${xb2} ${bridgeH}`
-                        }}
-                        transition={{ type: "spring", stiffness: 340, damping: 30 }}
-                        fill="none"
-                        stroke="rgba(255, 255, 255, 0.75)"
-                        strokeWidth="1"
-                      />
-                    </svg>
-                  </div>
-
-                  {/* OPAQUE WHITE RECTANGLE: Seamlessly connected to frosted bridge, containing all active service content */}
-                  <div className="w-full bg-white text-black shadow-[0_24px_64px_rgba(0,0,0,0.18)] rounded-2xl md:rounded-3xl overflow-hidden border border-black/5">
+                <div className="w-full max-w-6xl mx-auto px-4 md:px-6">
+                  {/* OPAQUE WHITE RECTANGLE: Centered vertically with 70% sharper beveled corners */}
+                  <div className="w-full bg-white text-black shadow-[0_24px_64px_rgba(0,0,0,0.18)] rounded-[6px] overflow-hidden border border-black/5">
                     <AnimatePresence mode="wait">
                       <motion.div
                         key={currentStep.num}

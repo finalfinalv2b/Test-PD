@@ -99,7 +99,7 @@ const partners = [
   { 
     name: "DirectMeds", 
     logo: "/client-logos/directmeds.svg", 
-    className: "h-[16px] sm:h-[18px] md:h-[20px] w-auto object-contain" 
+    className: "h-[17.5px] sm:h-[20px] md:h-[22px] w-auto object-contain" 
   },
   { 
     name: "C.O. Bigelow", 
@@ -119,7 +119,7 @@ const partners = [
   { 
     name: "MDDN", 
     logo: "/client-logos/mddn.svg", 
-    className: "h-[15px] sm:h-[17px] md:h-[19px] w-auto object-contain" 
+    className: "h-[16.5px] sm:h-[19px] md:h-[21px] w-auto object-contain" 
   },
   { 
     name: "NewBio Rx", 

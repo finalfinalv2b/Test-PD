@@ -136,11 +136,11 @@ export function Navigation() {
                   if (isContactLink) {
                     if (pathname === "/" || pathname === "/site5") {
                       e.preventDefault();
-                      const element = document.getElementById("contact-section");
-                      if (element) element.scrollIntoView({ behavior: "smooth" });
+                      window.dispatchEvent(new CustomEvent("open-contact"));
                     }
                   } else if (isSite3 && link.name === "PROCESS") {
                     e.preventDefault();
+                    window.dispatchEvent(new CustomEvent("close-contact"));
                     const element = document.getElementById("process-section");
                     if (element) element.scrollIntoView({ behavior: "smooth" });
                   } else if (isProcessLink && isSecret) {
@@ -191,11 +191,11 @@ export function Navigation() {
                     if (isContactLink) {
                       if (pathname === "/" || pathname === "/site5") {
                         e.preventDefault();
-                        const element = document.getElementById("contact-section");
-                        if (element) element.scrollIntoView({ behavior: "smooth" });
+                        window.dispatchEvent(new CustomEvent("open-contact"));
                       }
                     } else if (isSite3 && link.name === "PROCESS") {
                       e.preventDefault();
+                      window.dispatchEvent(new CustomEvent("close-contact"));
                       const element = document.getElementById("process-section");
                       if (element) element.scrollIntoView({ behavior: "smooth" });
                     } else if (isProcessLink && isSecret) {

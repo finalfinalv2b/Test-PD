@@ -130,6 +130,9 @@ const partners = [
 
 export default function Home() {
   const [activeIndex, setActiveIndex] = useState<number | null>(0);
+  const [isContactOpen, setIsContactOpen] = useState(false);
+  const isContactOpenRef = useRef(false);
+  isContactOpenRef.current = isContactOpen;
   const [isMobile, setIsMobile] = useState(false);
   const [contentScale, setContentScale] = useState(1);
   const [windowWidth, setWindowWidth] = useState(1440);
@@ -192,7 +195,7 @@ export default function Home() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // Synchronize active accordion index with natural/touchpad scroll progress on desktop
+  // Synchronize active accordion index with natural/touchpad scroll progress on desktop (8 stages: 0-6 tabs, 7 contact)
   useEffect(() => {
     if (isMobile) return;
 
@@ -216,10 +219,23 @@ export default function Home() {
       const progress = (scrollTop - sectionStart) / scrollableHeight;
 
       if (progress >= 0 && progress <= 1) {
-        const targetIndex = Math.min(6, Math.max(0, Math.floor(progress * 7)));
+        const targetStage = Math.min(7, Math.max(0, Math.floor(progress * 8)));
 
-        if (targetIndex !== activeIndexRef.current) {
-          setActiveIndex(targetIndex);
+        if (targetStage === 7) {
+          if (!isContactOpenRef.current) {
+            setIsContactOpen(true);
+          }
+        } else {
+          if (isContactOpenRef.current) {
+            setIsContactOpen(false);
+          }
+          if (targetStage !== activeIndexRef.current) {
+            setActiveIndex(targetStage);
+          }
+        }
+      } else if (progress < 0) {
+        if (isContactOpenRef.current) {
+          setIsContactOpen(false);
         }
       }
     };
@@ -228,31 +244,46 @@ export default function Home() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [isMobile]);
 
-  // Smooth scroll to Get In Touch section
+  // Snaps in the Get In Touch section from the right
   const scrollToContact = () => {
-    const contactSec = document.getElementById("contact-section");
-    if (!contactSec) return;
+    setIsContactOpen(true);
+
+    if (isMobile) {
+      const contactSec = document.getElementById("contact-section");
+      if (contactSec) {
+        contactSec.scrollIntoView({ behavior: "smooth" });
+      }
+      return;
+    }
 
     isClickScrollingRef.current = true;
-    const navbarHeight = Math.min(72, Math.max(56, window.innerHeight * 0.06));
-    const rect = contactSec.getBoundingClientRect();
-    const targetY = window.scrollY + rect.top - navbarHeight;
 
-    const handleScrollEnd = () => {
-      isClickScrollingRef.current = false;
-      window.removeEventListener("scrollend", handleScrollEnd);
-    };
-    window.addEventListener("scrollend", handleScrollEnd);
+    if (processSectionRef.current) {
+      const rect = processSectionRef.current.getBoundingClientRect();
+      const scrollTop = window.scrollY || document.documentElement.scrollTop;
+      const sectionStart = rect.top + scrollTop;
+      const sectionHeight = processSectionRef.current.offsetHeight;
+      const viewportHeight = window.innerHeight;
+      const scrollableHeight = sectionHeight - viewportHeight;
 
-    setTimeout(() => {
-      isClickScrollingRef.current = false;
-      window.removeEventListener("scrollend", handleScrollEnd);
-    }, 1000);
+      const targetScrollY = sectionStart + scrollableHeight;
 
-    window.scrollTo({
-      top: targetY,
-      behavior: "smooth"
-    });
+      const handleScrollEnd = () => {
+        isClickScrollingRef.current = false;
+        window.removeEventListener("scrollend", handleScrollEnd);
+      };
+      window.addEventListener("scrollend", handleScrollEnd);
+
+      setTimeout(() => {
+        isClickScrollingRef.current = false;
+        window.removeEventListener("scrollend", handleScrollEnd);
+      }, 700);
+
+      window.scrollTo({
+        top: targetScrollY,
+        behavior: "smooth"
+      });
+    }
   };
 
   const scrollToContactRef = useRef(scrollToContact);
@@ -261,6 +292,10 @@ export default function Home() {
   // Update active index based on scroll on desktop
   // Click handler that toggles on mobile, and scrolls to target position on desktop
   const handleItemClick = (index: number) => {
+    if (isContactOpenRef.current) {
+      setIsContactOpen(false);
+    }
+
     if (isMobile) {
       const nextIndex = index === activeIndex ? null : index;
       setActiveIndex(nextIndex);
@@ -287,8 +322,8 @@ export default function Home() {
 
       const scrollableHeight = sectionHeight - viewportHeight;
       
-      // Calculate target progress coordinate at middle of the index range
-      const targetProgress = (index + 0.5) / 7;
+      // Calculate target progress coordinate at middle of the index range across 8 stages
+      const targetProgress = (index + 0.5) / 8;
       const targetScrollY = sectionStart + (targetProgress * scrollableHeight);
 
       // Disable scroll index changes while click scrolling
@@ -319,6 +354,25 @@ export default function Home() {
   const handleItemClickRef = useRef(handleItemClick);
   handleItemClickRef.current = handleItemClick;
 
+  // Listen to open-contact and close-contact events from Navigation and hash navigation
+  useEffect(() => {
+    const onOpenContact = () => scrollToContactRef.current();
+    const onCloseContact = () => handleItemClickRef.current(0);
+    window.addEventListener("open-contact", onOpenContact);
+    window.addEventListener("close-contact", onCloseContact);
+
+    if (window.location.hash === "#contact-section") {
+      setTimeout(() => {
+        scrollToContactRef.current();
+      }, 200);
+    }
+
+    return () => {
+      window.removeEventListener("open-contact", onOpenContact);
+      window.removeEventListener("close-contact", onCloseContact);
+    };
+  }, []);
+
   useEffect(() => {
     if (isMobile) return;
 
@@ -342,8 +396,23 @@ export default function Home() {
       }
 
       // If the user is on a touchpad, DO NOT intercept or preventDefault!
-      // This completely eliminates touchpad rubberbanding, delay, and momentum fights.
       if (isTrackpadActive) {
+        return;
+      }
+
+      // If Contact section is open:
+      if (isContactOpenRef.current) {
+        if (e.deltaY < 0) {
+          // Scrolling UP: snap back to Venture Infrastructure (Tab 6)
+          e.preventDefault();
+          const now = Date.now();
+          if (now - lastSnapTimeRef.current > 250) {
+            lastSnapTimeRef.current = now;
+            handleItemClickRef.current(6);
+          }
+        } else if (e.deltaY > 0) {
+          e.preventDefault();
+        }
         return;
       }
 
@@ -355,7 +424,7 @@ export default function Home() {
       const sectionTop = section.offsetTop;
       const sectionHeight = section.offsetHeight;
       
-      const isInside = scrollY >= sectionTop - 100 && scrollY < sectionTop + sectionHeight - window.innerHeight - 50;
+      const isInside = scrollY >= sectionTop - 100 && scrollY <= sectionTop + sectionHeight - window.innerHeight + 100;
 
       if (!isInside) {
         // At the top (scrollY < 10) with mouse wheel scrolling down, snap to services
@@ -365,14 +434,6 @@ export default function Home() {
           if (now - lastSnapTimeRef.current > 300) {
             lastSnapTimeRef.current = now;
             handleItemClickRef.current(0);
-          }
-        } else if (scrollY >= sectionTop + sectionHeight - window.innerHeight - 100 && e.deltaY < 0) {
-          // In the contact section scrolling up, snap back to Venture Infrastructure
-          e.preventDefault();
-          const now = Date.now();
-          if (now - lastSnapTimeRef.current > 300) {
-            lastSnapTimeRef.current = now;
-            handleItemClickRef.current(6);
           }
         }
         return;
@@ -421,7 +482,7 @@ export default function Home() {
       const scrollY = window.scrollY;
       const sectionTop = section.offsetTop;
       const sectionHeight = section.offsetHeight;
-      const isInside = scrollY >= sectionTop - 100 && scrollY < sectionTop + sectionHeight - window.innerHeight - 50;
+      const isInside = scrollY >= sectionTop - 100 && scrollY <= sectionTop + sectionHeight - window.innerHeight + 100;
 
       if (!isInside) return;
 
@@ -430,6 +491,8 @@ export default function Home() {
         const now = Date.now();
         if (now - lastSnapTimeRef.current < 400) return;
         
+        if (isContactOpenRef.current) return;
+
         const currentIdx = activeIndexRef.current;
         if (currentIdx !== null && currentIdx < 6) {
           lastSnapTimeRef.current = now;
@@ -443,6 +506,12 @@ export default function Home() {
         const now = Date.now();
         if (now - lastSnapTimeRef.current < 400) return;
         
+        if (isContactOpenRef.current) {
+          lastSnapTimeRef.current = now;
+          handleItemClickRef.current(6);
+          return;
+        }
+
         const currentIdx = activeIndexRef.current;
         if (currentIdx !== null && currentIdx > 0) {
           lastSnapTimeRef.current = now;
@@ -661,7 +730,7 @@ export default function Home() {
       <section 
         ref={processSectionRef} 
         id="process-section" 
-        className={`relative bg-[#FFFFFF] border-b border-black w-full scroll-mt-[clamp(56px,6vh,72px)] ${isMobile ? "py-24" : "h-[450vh]"}`}
+        className={`relative bg-[#FFFFFF] border-b border-black w-full scroll-mt-[clamp(56px,6vh,72px)] ${isMobile ? "py-24" : "h-[500vh]"}`}
       >
         {/* Pinned Wrapper for Desktop */}
         <div className={isMobile ? "w-full" : "sticky top-[clamp(56px,6vh,72px)] left-0 w-full h-[calc(100vh-clamp(56px,6vh,72px))] overflow-hidden flex flex-col items-center justify-start bg-transparent"}>
@@ -860,66 +929,102 @@ export default function Home() {
               })}
             </div>
           </motion.div>
-        </div>
-      </section>
 
-      {/* SECTION 5: Contact Us */}
-      <section id="contact-section" className="w-full border-t border-black/20 scroll-mt-[clamp(56px,6vh,72px)] bg-[var(--brand)] lg:h-[calc(100vh-clamp(56px,6vh,72px))] min-h-screen lg:min-h-0">
-        <div className="grid grid-cols-1 lg:grid-cols-2 lg:h-full h-auto">
-          
-          {/* LEFT SIDE COPY BLOCK */}
-          <div className="p-8 md:p-16 flex flex-col justify-start bg-transparent lg:h-full">
-            <h1 className="text-5xl sm:text-6xl md:text-8xl font-black tracking-tighter text-white uppercase leading-none mb-12">
-              GET IN <br /> TOUCH.
-            </h1>
-          </div>
-
-          {/* RIGHT SIDE FORM GRID */}
-          <div className="p-8 md:p-16 bg-white text-black flex flex-col justify-center lg:h-full">
-            {!isSuccess ? (
-              <form onSubmit={handleSubmit} className="space-y-8 max-w-2xl w-full mx-auto">
-                <input type="hidden" name="_subject" value="New Inquiry from Product Dept." />
-                <input type="hidden" name="_captcha" value="false" />
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                  <div className="flex flex-col gap-3">
-                    <label htmlFor="name" className="text-xs font-black tracking-widest uppercase text-black">NAME</label>
-                    <input type="text" id="name" name="name" className="border border-black/10 bg-white text-black py-4 px-4 outline-none focus:border-black transition-colors font-mono text-sm" placeholder="Jane Doe" required />
-                  </div>
-                  <div className="flex flex-col gap-3">
-                    <label htmlFor="email" className="text-xs font-black tracking-widest uppercase text-black">EMAIL</label>
-                    <input type="email" id="email" name="email" className="border border-black/10 bg-white text-black py-4 px-4 outline-none focus:border-black transition-colors font-mono text-sm" placeholder="jane@company.com" required />
-                  </div>
+          {/* SECTION 5: Contact Us - Snaps in horizontally from the right */}
+          <motion.div
+            id="contact-section"
+            initial={false}
+            animate={{
+              x: isMobile ? 0 : (isContactOpen ? "0%" : "100%"),
+            }}
+            transition={{
+              duration: 0.55,
+              ease: [0.16, 1, 0.3, 1]
+            }}
+            className={
+              isMobile 
+                ? "w-full border-t border-black/20 bg-[var(--brand)] text-white py-12" 
+                : "absolute inset-0 w-full h-full z-40 bg-[var(--brand)] overflow-hidden shadow-[-24px_0_60px_rgba(0,0,0,0.35)]"
+            }
+          >
+            <div className="grid grid-cols-1 lg:grid-cols-2 w-full h-full">
+              
+              {/* LEFT SIDE COPY BLOCK */}
+              <div className="p-8 md:p-14 lg:p-16 flex flex-col justify-between bg-transparent h-full">
+                <div>
+                  <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black tracking-tighter text-white uppercase leading-none mb-6">
+                    GET IN <br /> TOUCH.
+                  </h1>
+                  <p className="font-sans font-light text-white/80 text-sm md:text-base max-w-md leading-relaxed">
+                    Ready to scale your physical product lines? Reach out to explore how Product Dept. can build and optimize your supply chain.
+                  </p>
                 </div>
 
-                <div className="flex flex-col gap-3">
-                  <label htmlFor="company" className="text-xs font-black tracking-widest uppercase text-black">ORGANIZATION</label>
-                  <input type="text" id="company" name="company" className="border border-black/10 bg-white text-black py-4 px-4 outline-none focus:border-black transition-colors font-mono text-sm" placeholder="Organization name" />
+                {/* Back to Services Button */}
+                <div className="pt-8">
+                  <button
+                    type="button"
+                    onClick={() => handleItemClick(6)}
+                    className="group flex items-center gap-3 text-white/70 hover:text-white transition-colors cursor-pointer border-none bg-transparent p-0 text-xs font-bold tracking-widest uppercase select-none"
+                  >
+                    <div className="w-8 h-8 rounded-full border border-white/20 flex items-center justify-center group-hover:border-white transition-colors bg-white/10">
+                      <svg width="14" height="14" viewBox="0 0 14 14" fill="none" className="rotate-180">
+                        <path d="M5 2L10 7L5 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                      </svg>
+                    </div>
+                    <span>Back to Services</span>
+                  </button>
                 </div>
-
-                <div className="flex flex-col gap-3">
-                  <label htmlFor="description" className="text-xs font-black tracking-widest uppercase text-black">MESSAGE</label>
-                  <textarea id="description" name="description" rows={5} className="border border-black/10 bg-white text-black py-4 px-4 outline-none focus:border-black transition-colors resize-none font-mono text-sm" placeholder="How can we help?" required></textarea>
-                </div>
-
-                <div className="pt-8 flex justify-center">
-                   <button
-                     type="submit"
-                     disabled={isSubmitting}
-                     className="w-full max-w-[200px] bg-black text-white hover:bg-white hover:text-black hover:border-black border border-transparent transition-colors py-3.5 font-bold text-sm tracking-widest uppercase cursor-pointer"
-                   >
-                     {isSubmitting ? "TRANSMITTING..." : "Send"}
-                   </button>
-                </div>
-              </form>
-            ) : (
-              <div className="flex flex-col items-start justify-center h-full max-w-2xl mx-auto py-12">
-                <p className="text-xl md:text-2xl font-mono text-black leading-relaxed">
-                  Someone from the Product Dept. will get back to you shortly. Thank you.
-                </p>
               </div>
-            )}
-          </div>
+
+              {/* RIGHT SIDE FORM GRID */}
+              <div className="p-8 md:p-12 lg:p-16 bg-white text-black flex flex-col justify-center h-full overflow-y-auto">
+                {!isSuccess ? (
+                  <form onSubmit={handleSubmit} className="space-y-8 max-w-2xl w-full mx-auto">
+                    <input type="hidden" name="_subject" value="New Inquiry from Product Dept." />
+                    <input type="hidden" name="_captcha" value="false" />
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                      <div className="flex flex-col gap-3">
+                        <label htmlFor="name" className="text-xs font-black tracking-widest uppercase text-black">NAME</label>
+                        <input type="text" id="name" name="name" className="border border-black/10 bg-white text-black py-4 px-4 outline-none focus:border-black transition-colors font-mono text-sm" placeholder="Jane Doe" required />
+                      </div>
+                      <div className="flex flex-col gap-3">
+                        <label htmlFor="email" className="text-xs font-black tracking-widest uppercase text-black">EMAIL</label>
+                        <input type="email" id="email" name="email" className="border border-black/10 bg-white text-black py-4 px-4 outline-none focus:border-black transition-colors font-mono text-sm" placeholder="jane@company.com" required />
+                      </div>
+                    </div>
+
+                    <div className="flex flex-col gap-3">
+                      <label htmlFor="company" className="text-xs font-black tracking-widest uppercase text-black">ORGANIZATION</label>
+                      <input type="text" id="company" name="company" className="border border-black/10 bg-white text-black py-4 px-4 outline-none focus:border-black transition-colors font-mono text-sm" placeholder="Organization name" />
+                    </div>
+
+                    <div className="flex flex-col gap-3">
+                      <label htmlFor="description" className="text-xs font-black tracking-widest uppercase text-black">MESSAGE</label>
+                      <textarea id="description" name="description" rows={5} className="border border-black/10 bg-white text-black py-4 px-4 outline-none focus:border-black transition-colors resize-none font-mono text-sm" placeholder="How can we help?" required></textarea>
+                    </div>
+
+                    <div className="pt-8 flex justify-center">
+                       <button
+                         type="submit"
+                         disabled={isSubmitting}
+                         className="w-full max-w-[200px] bg-black text-white hover:bg-white hover:text-black hover:border-black border border-transparent transition-colors py-3.5 font-bold text-sm tracking-widest uppercase cursor-pointer"
+                       >
+                         {isSubmitting ? "TRANSMITTING..." : "Send"}
+                       </button>
+                    </div>
+                  </form>
+                ) : (
+                  <div className="flex flex-col items-start justify-center h-full max-w-2xl mx-auto py-12">
+                    <p className="text-xl md:text-2xl font-mono text-black leading-relaxed">
+                      Someone from the Product Dept. will get back to you shortly. Thank you.
+                    </p>
+                  </div>
+                )}
+              </div>
+            </div>
+          </motion.div>
         </div>
       </section>
     </main>

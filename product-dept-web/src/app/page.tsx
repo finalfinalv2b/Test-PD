@@ -82,6 +82,7 @@ const bentoData = [
     title: "VENTURE INFRASTRUCTURE",
     label: "OPERATIONAL BACKBONE",
     bgImage: "/photo-flicker/venture_anim.mp4",
+    isColor: true,
     longDesc: "Founders should focus on what they do best: taking their innovations to market. Product Dept. is a plug-and-play venture platform providing operational backbone for a fraction of the cost and learning curve of building a full team in-house.",
     longFeatures: [
       { name: "Operational Systems Build", desc: "Structuring your standard operating systems and tools." },
@@ -128,7 +129,7 @@ const partners = [
   }
 ];
 
-function ServiceBackgroundVideo({ src, isOpen }: { src: string; isOpen: boolean }) {
+function ServiceBackgroundVideo({ src, isOpen, isColor = false }: { src: string; isOpen: boolean; isColor?: boolean }) {
   const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
@@ -184,8 +185,8 @@ function ServiceBackgroundVideo({ src, isOpen }: { src: string; isOpen: boolean 
       playsInline
       preload="auto"
       onLoadedMetadata={handleLoadedMetadata}
-      className="w-full h-full object-cover grayscale"
-      style={{ filter: "grayscale(100%)" }}
+      className={`w-full h-full object-cover ${isColor ? "" : "grayscale"}`}
+      style={isColor ? undefined : { filter: "grayscale(100%)" }}
     />
   );
 }
@@ -206,10 +207,6 @@ export default function Home() {
   const [brandColor, setBrandColor] = useState("#f41c06");
 
   const processSectionRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: processSectionRef,
-    offset: ["start start", "end end"],
-  });
 
   const windowWidthRef = useRef(1920);
   const windowHeightRef = useRef(1080);
@@ -639,10 +636,7 @@ export default function Home() {
   }, [isMobile]);
 
 
-  // Color transform for brand red elements: switches instantly to black when red background shapes overlap
-  const activeColor = useTransform(scrollYProgress, (latest) => {
-    return latest >= 0.28 ? "#000000" : brandColor;
-  });
+
 
   // Live Time Clock
   useEffect(() => {
@@ -881,13 +875,14 @@ export default function Home() {
                     <ServiceBackgroundVideo
                       src={step.bgImage}
                       isOpen={isOpen}
+                      isColor={Boolean((step as any).isColor || step.title === "VENTURE INFRASTRUCTURE")}
                     />
                   ) : (
                     <img
                       src={step.bgImage}
                       alt=""
-                      className="w-full h-full object-cover grayscale"
-                      style={{ filter: "grayscale(100%)" }}
+                      className={`w-full h-full object-cover ${(step as any).isColor || step.title === "VENTURE INFRASTRUCTURE" ? "" : "grayscale"}`}
+                      style={(step as any).isColor || step.title === "VENTURE INFRASTRUCTURE" ? undefined : { filter: "grayscale(100%)" }}
                     />
                   )}
                 </motion.div>
@@ -984,12 +979,11 @@ export default function Home() {
                             </h3>
                           </div>
                           <div className="flex items-center gap-4 self-start md:self-auto">
-                            <motion.span 
-                              style={{ color: activeColor }} 
-                              className="font-header font-black uppercase tracking-wider text-xs sm:text-sm"
+                            <span 
+                              className="font-header font-black uppercase tracking-wider text-xs sm:text-sm text-black"
                             >
                               {currentStep.label}
-                            </motion.span>
+                            </span>
                             <div className="w-8 h-8 rounded-full border border-black/15 flex items-center justify-center bg-black/5 text-black/70">
                               <span className="font-mono text-xs font-bold">{currentStep.num}</span>
                             </div>
@@ -1008,8 +1002,7 @@ export default function Home() {
                           {/* Right Column: Detailed Capabilities */}
                           <div className={`flex flex-col justify-start lg:pl-8 lg:border-l border-black/10 ${currentStep.longFeatures.length > 4 ? "lg:col-span-8" : "lg:col-span-7"}`}>
                             <h4 
-                              style={{ color: activeColor }} 
-                              className="font-header font-black tracking-widest uppercase mb-3 text-xs sm:text-sm"
+                              className="font-header font-black tracking-widest uppercase mb-3 text-xs sm:text-sm text-black"
                             >
                               Detailed Capabilities
                             </h4>

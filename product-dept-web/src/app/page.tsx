@@ -735,7 +735,24 @@ export default function Home() {
         {/* Pinned Wrapper for Desktop */}
         <div className={isMobile ? "w-full" : "sticky top-[clamp(56px,6vh,72px)] left-0 w-full h-[calc(100vh-clamp(56px,6vh,72px))] overflow-hidden flex flex-col items-center justify-start bg-transparent"}>
           
-          {/* SERVICE BACKGROUND PHOTOS LAYER WITH PARALLAX DRIFT */}
+          {/* SECTION 3 & 4: Services Viewport Panel - Pushed aside as if connected to Get In Touch */}
+          <motion.div
+            id="services-panel"
+            initial={false}
+            animate={{
+              x: isMobile ? 0 : (isContactOpen ? "-100%" : "0%"),
+            }}
+            transition={{
+              duration: 0.8,
+              ease: [0.22, 1, 0.36, 1]
+            }}
+            className={
+              isMobile
+                ? "w-full flex flex-col items-center justify-start"
+                : "absolute inset-0 w-full h-full flex flex-col items-center justify-start overflow-hidden bg-white"
+            }
+          >
+            {/* SERVICE BACKGROUND PHOTOS LAYER WITH PARALLAX DRIFT */}
           <div className={`absolute inset-0 w-full h-full pointer-events-none z-0 overflow-hidden ${isMobile ? "hidden" : ""}`}>
             {bentoData.map((step, index) => {
               const isOpen = activeIndex === index;
@@ -929,24 +946,25 @@ export default function Home() {
               })}
             </div>
           </motion.div>
+        </motion.div>
 
-          {/* SECTION 5: Contact Us - Snaps in horizontally from the right */}
-          <motion.div
-            id="contact-section"
-            initial={false}
-            animate={{
-              x: isMobile ? 0 : (isContactOpen ? "0%" : "100%"),
-            }}
-            transition={{
-              duration: 0.8,
-              ease: [0.22, 1, 0.36, 1]
-            }}
-            className={
-              isMobile 
-                ? "w-full border-t border-black/20 bg-[var(--brand)] text-white py-12" 
-                : "absolute inset-0 w-full h-full z-40 bg-[var(--brand)] overflow-hidden shadow-[-24px_0_60px_rgba(0,0,0,0.35)]"
-            }
-          >
+        {/* SECTION 5: Contact Us - Pushes services section aside, connected at the edge */}
+        <motion.div
+          id="contact-section"
+          initial={false}
+          animate={{
+            x: isMobile ? 0 : (isContactOpen ? "0%" : "100%"),
+          }}
+          transition={{
+            duration: 0.8,
+            ease: [0.22, 1, 0.36, 1]
+          }}
+          className={
+            isMobile 
+              ? "w-full border-t border-black/20 bg-[var(--brand)] text-white py-12" 
+              : "absolute inset-0 w-full h-full z-40 bg-[var(--brand)] overflow-hidden"
+          }
+        >
             <div className="grid grid-cols-1 lg:grid-cols-2 w-full h-full">
               
               {/* LEFT SIDE COPY BLOCK */}

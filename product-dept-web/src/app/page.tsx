@@ -128,6 +128,68 @@ const partners = [
   }
 ];
 
+function ServiceBackgroundVideo({ src, isOpen }: { src: string; isOpen: boolean }) {
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    if (isOpen) {
+      try {
+        video.currentTime = 0;
+      } catch {}
+
+      const playPromise = video.play();
+      if (playPromise !== undefined) {
+        playPromise.catch((err) => {
+          if (err.name !== "AbortError") {
+            // Non-critical playback interruption
+          }
+        });
+      }
+    } else {
+      video.pause();
+      try {
+        video.currentTime = 0;
+      } catch {}
+    }
+  }, [isOpen]);
+
+  const handleLoadedMetadata = () => {
+    const video = videoRef.current;
+    if (!video) return;
+    if (isOpen) {
+      try {
+        video.currentTime = 0;
+      } catch {}
+      const playPromise = video.play();
+      if (playPromise !== undefined) {
+        playPromise.catch(() => {});
+      }
+    } else {
+      video.pause();
+      try {
+        video.currentTime = 0;
+      } catch {}
+    }
+  };
+
+  return (
+    <video
+      ref={videoRef}
+      src={src}
+      loop
+      muted
+      playsInline
+      preload="auto"
+      onLoadedMetadata={handleLoadedMetadata}
+      className="w-full h-full object-cover grayscale"
+      style={{ filter: "grayscale(100%)" }}
+    />
+  );
+}
+
 export default function Home() {
   const [activeIndex, setActiveIndex] = useState<number | null>(0);
   const [isContactOpen, setIsContactOpen] = useState(false);
@@ -770,14 +832,9 @@ export default function Home() {
                   className="absolute inset-0 w-full h-full"
                 >
                   {step.bgImage.endsWith(".mp4") ? (
-                    <video
+                    <ServiceBackgroundVideo
                       src={step.bgImage}
-                      autoPlay
-                      loop
-                      muted
-                      playsInline
-                      className="w-full h-full object-cover grayscale"
-                      style={{ filter: "grayscale(100%)" }}
+                      isOpen={isOpen}
                     />
                   ) : (
                     <img
@@ -811,7 +868,10 @@ export default function Home() {
           </div>
 
           {/* HORIZONTAL INTERACTIVE SERVICE TABS TRACK */}
-          <div className="shrink-0 w-full bg-black/90 border-b border-white/10 px-4 md:px-6 py-2 z-20 backdrop-blur-md overflow-x-auto no-scrollbar">
+          <div 
+            className="shrink-0 w-full bg-black/90 border-b border-white/10 px-4 md:px-6 py-2 z-20 backdrop-blur-md overflow-x-auto no-scrollbar [&::-webkit-scrollbar]:hidden"
+            style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+          >
             <div className="max-w-6xl mx-auto flex items-center justify-between gap-1 sm:gap-2">
               {bentoData.map((step, index) => {
                 const isActive = activeIndex === index;

@@ -683,15 +683,15 @@ export default function Home() {
                       loop
                       muted
                       playsInline
-                      className="w-full h-full object-cover saturate-50"
-                      style={{ filter: "saturate(0.5)" }}
+                      className="w-full h-full object-cover grayscale"
+                      style={{ filter: "grayscale(100%)" }}
                     />
                   ) : (
                     <img
                       src={step.bgImage}
                       alt=""
-                      className="w-full h-full object-cover saturate-50"
-                      style={{ filter: "saturate(0.5)" }}
+                      className="w-full h-full object-cover grayscale"
+                      style={{ filter: "grayscale(100%)" }}
                     />
                   )}
                 </motion.div>
@@ -728,8 +728,8 @@ export default function Home() {
                     onClick={() => handleItemClick(index)}
                     className={`relative py-1 px-2 sm:px-3 text-left transition-all duration-200 rounded flex items-center gap-1.5 sm:gap-2 group cursor-pointer border-none outline-none bg-transparent ${isActive ? "text-white" : "text-white/40 hover:text-white/80"}`}
                   >
-                    <span className="font-mono text-[9.5px] tracking-wider opacity-60">[{step.num}]</span>
-                    <span className="font-header font-black text-[11px] sm:text-[12.5px] tracking-wider uppercase whitespace-nowrap">
+                    <span className={`font-mono tracking-wider transition-all duration-200 ${isActive ? "text-[11.5px] opacity-80" : "text-[9.5px] opacity-60"}`}>[{step.num}]</span>
+                    <span className={`font-header font-black tracking-wider uppercase whitespace-nowrap transition-all duration-200 ${isActive ? "text-[13px] sm:text-[15px]" : "text-[11px] sm:text-[12.5px]"}`}>
                       {step.title}
                     </span>
                     {isActive && (
@@ -750,8 +750,8 @@ export default function Home() {
             style={isMobile ? {} : { scale: contentScale }}
             className="w-full flex flex-col items-center justify-start origin-top z-10 pt-[clamp(8px,1.2vh,16px)]"
           >
-            {/* ACCORDION LIST WITH HORIZONTAL ALTERNATING MOTION */}
-            <div className="w-full max-w-6xl mx-auto px-6 flex flex-col pb-4 md:pb-5">
+            {/* ACCORDION LIST WITH HORIZONTAL ALTERNATING MOTION & DYNAMIC VIEWPORT EXPANSION */}
+            <div className="w-full px-3 sm:px-6 md:px-8 lg:px-12 flex flex-col items-center pb-4 md:pb-5">
               {bentoData.map((step, index) => {
                 const isOpen = activeIndex === index;
                 const isEven = index % 2 === 0;
@@ -761,20 +761,25 @@ export default function Home() {
                     id={`process-step-site5-${index}`}
                     initial={false}
                     animate={{
+                      width: isOpen ? "100%" : "min(1152px, 88%)",
                       x: isOpen ? 0 : (isEven ? -8 : 8),
                       opacity: isOpen ? 1 : 0.72,
                     }}
-                    transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-                    className={`border-b border-black/10 last:border-b-0 w-full transition-[background-color,backdrop-filter,box-shadow] duration-300 rounded-lg ${isOpen ? "bg-white backdrop-blur-none shadow-[0_12px_36px_rgba(0,0,0,0.06)]" : "bg-white/56 backdrop-blur-[9.6px] shadow-none hover:bg-white/80"}`}
+                    transition={{ 
+                      width: { duration: 0.45, ease: [0.16, 1, 0.3, 1] },
+                      duration: 0.4, 
+                      ease: [0.16, 1, 0.3, 1] 
+                    }}
+                    className={`border-b border-black/10 last:border-b-0 transition-[background-color,backdrop-filter,box-shadow,border-radius,padding] duration-300 ${isOpen ? "bg-white backdrop-blur-none shadow-[0_16px_48px_rgba(0,0,0,0.08)] rounded-xl sm:rounded-2xl" : "bg-white/56 backdrop-blur-[9.6px] shadow-none hover:bg-white/80 rounded-lg"}`}
                   >
                     <button
                       onClick={() => handleItemClick(index)}
-                      className="w-full text-left flex flex-col md:flex-row md:items-center justify-between gap-3 md:gap-4 cursor-pointer hover:bg-black/[0.01] transition-colors duration-200 px-4 py-2 md:py-2.5 rounded-lg group select-none border-none outline-none bg-transparent"
+                      className={`w-full text-left flex flex-col md:flex-row md:items-center justify-between gap-3 md:gap-4 cursor-pointer hover:bg-black/[0.01] transition-all duration-300 rounded-lg group select-none border-none outline-none bg-transparent ${isOpen ? "px-6 md:px-8 py-3.5 md:py-4" : "px-4 py-2 md:py-2.5"}`}
                     >
                       <div className="flex items-baseline gap-4 md:gap-6">
-                        <span className="font-sans font-light text-sm text-black/40">[{step.num}]</span>
+                        <span className={`font-sans font-light transition-all duration-300 text-black/40 ${isOpen ? "text-[17px]" : "text-sm"}`}>[{step.num}]</span>
                         <span 
-                          className={`font-header font-black text-2xl md:text-3xl tracking-tight transition-colors duration-200 uppercase ${isOpen ? 'text-[var(--brand)]' : 'text-black group-hover:text-[var(--brand)]'}`}
+                          className={`font-header font-black tracking-tight transition-all duration-300 uppercase ${isOpen ? 'text-[29px] md:text-[36px] text-[var(--brand)]' : 'text-2xl md:text-3xl text-black group-hover:text-[var(--brand)]'}`}
                         >
                           {step.title}
                         </span>
@@ -782,15 +787,15 @@ export default function Home() {
                       <div className="flex items-center gap-6 self-end md:self-auto">
                         <motion.span 
                           style={{ color: isOpen ? activeColor : brandColor }}
-                          className="font-header font-black text-xs uppercase tracking-wider hidden sm:inline"
+                          className={`font-header font-black uppercase tracking-wider hidden sm:inline transition-all duration-300 ${isOpen ? "text-[14.5px]" : "text-xs"}`}
                         >
                           {step.label}
                         </motion.span>
                         <div
-                          className={`w-8 h-8 rounded-full border border-black/15 flex items-center justify-center bg-white shadow-sm text-black transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] ${isOpen ? 'rotate-[135deg]' : 'rotate-0'}`}
+                          className={`rounded-full border border-black/15 flex items-center justify-center bg-white shadow-sm text-black transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] ${isOpen ? 'w-[38.5px] h-[38.5px] rotate-[135deg]' : 'w-8 h-8 rotate-0'}`}
                         >
-                          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M7 1v12M1 7h12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+                          <svg width={isOpen ? 17 : 14} height={isOpen ? 17 : 14} viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M7 1v12M1 7h12" stroke="currentColor" strokeWidth={isOpen ? "2.4" : "2"} strokeLinecap="round" />
                           </svg>
                         </div>
                       </div>
@@ -802,7 +807,7 @@ export default function Home() {
                       className="grid transition-[grid-template-rows] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]"
                     >
                       <div className="overflow-hidden">
-                        <div className={`px-4 pb-4 pt-1.5 grid grid-cols-1 lg:grid-cols-12 gap-5 lg:gap-8 border-t border-black/5 mt-1 transition-opacity duration-250 ${isOpen ? "opacity-100 delay-50" : "opacity-0 pointer-events-none"}`}>
+                        <div className={`pb-5 pt-1.5 grid grid-cols-1 lg:grid-cols-12 gap-5 lg:gap-8 border-t border-black/5 mt-1 transition-all duration-300 ${isOpen ? "px-6 md:px-8 opacity-100 delay-50" : "px-4 opacity-0 pointer-events-none"}`}>
                           {/* Left Column: Description (Enters from Left) */}
                           <motion.div 
                             initial={false}
@@ -814,7 +819,7 @@ export default function Home() {
                             className="lg:col-span-4 flex flex-col justify-start pt-1"
                           >
                             <div>
-                              <p className="font-sans font-light text-xs md:text-sm text-black/75 leading-relaxed max-w-xl">
+                              <p className={`font-sans font-light text-black/75 leading-relaxed max-w-2xl transition-all duration-300 ${isOpen ? "text-[14.5px] md:text-[17px]" : "text-xs md:text-sm"}`}>
                                 {step.longDesc}
                               </p>
                             </div>
@@ -830,10 +835,10 @@ export default function Home() {
                             transition={{ duration: 0.45, delay: 0.08, ease: [0.16, 1, 0.3, 1] }}
                             className="lg:col-span-8 flex flex-col justify-center lg:pl-8 lg:border-l border-black/10"
                           >
-                            <motion.h4 style={{ color: activeColor }} className="font-header font-black text-xs md:text-[13.5px] tracking-widest uppercase mb-2">
+                            <motion.h4 style={{ color: activeColor }} className={`font-header font-black tracking-widest uppercase mb-2.5 transition-all duration-300 ${isOpen ? "text-[14.5px] md:text-[16.5px]" : "text-xs md:text-[13.5px]"}`}>
                               Detailed Capabilities
                             </motion.h4>
-                            <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-5 gap-y-1.5">
+                            <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-2">
                               {step.longFeatures.map((feat, featIdx) => (
                                 <motion.li
                                   key={feat.name}
@@ -847,14 +852,14 @@ export default function Home() {
                                     delay: isOpen ? 0.08 + (featIdx * 0.03) : 0,
                                     ease: [0.16, 1, 0.3, 1]
                                   }}
-                                  className="flex items-start gap-2"
+                                  className="flex items-start gap-2.5"
                                 >
-                                  <motion.span style={{ color: brandColor }} className="text-[16px] font-bold leading-none mt-0.5">+</motion.span>
+                                  <motion.span style={{ color: brandColor }} className={`font-bold leading-none mt-0.5 transition-all duration-300 ${isOpen ? "text-[19.5px]" : "text-[16px]"}`}>+</motion.span>
                                   <div>
-                                    <span className="font-header font-black text-[13px] md:text-[13.5px] text-black uppercase tracking-wider block">
+                                    <span className={`font-header font-black text-black uppercase tracking-wider block transition-all duration-300 ${isOpen ? "text-[15.5px] md:text-[16.5px]" : "text-[13px] md:text-[13.5px]"}`}>
                                       {feat.name}
                                     </span>
-                                    <span className="font-sans font-light text-[11.5px] md:text-[12px] text-black/60 leading-snug block">
+                                    <span className={`font-sans font-light leading-snug block transition-all duration-300 ${isOpen ? "text-[14px] md:text-[14.5px] text-black/70" : "text-[11.5px] md:text-[12px] text-black/60"}`}>
                                       {feat.desc}
                                     </span>
                                   </div>

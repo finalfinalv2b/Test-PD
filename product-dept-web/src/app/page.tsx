@@ -761,7 +761,7 @@ export default function Home() {
             <motion.div
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.15 }}
+              transition={{ duration: 0.8 }}
               className="flex flex-col justify-start w-full max-w-[340px] sm:max-w-[420px] lg:max-w-none lg:w-[clamp(330px,26vw,420px)] min-[1800px]:w-[clamp(430px,25.5vw,530px)]"
             >
               {/* Paragraphs: Justified left and right, with last line left justified */}

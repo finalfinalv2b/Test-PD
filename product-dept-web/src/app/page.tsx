@@ -957,19 +957,22 @@ export default function Home() {
 
               return (
                 <div className="w-full max-w-6xl mx-auto px-4 md:px-6">
-                  {/* OPAQUE WHITE RECTANGLE: Centered vertically with 70% sharper beveled corners */}
-                  <div className="w-full bg-white text-black shadow-[0_24px_64px_rgba(0,0,0,0.18)] rounded-[6px] overflow-hidden border border-black/5">
-                    <AnimatePresence mode="wait">
-                      <motion.div
-                        key={currentStep.num}
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -10 }}
-                        transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-                        className="w-full p-6 sm:p-8 md:p-9"
-                      >
-                        {/* Top Header Row of the Card */}
-                        <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 pb-4 md:pb-5 border-b border-black/10">
+                  {/* SERVICE BOX: Centered vertically with frosted glass top header and solid white body */}
+                  <div className="w-full shadow-[0_24px_64px_rgba(0,0,0,0.18)] rounded-[6px] overflow-hidden border border-black/10">
+                    {/* Top Part: Frosted Glass Header */}
+                    <div 
+                      style={{ WebkitBackdropFilter: "blur(16px)", backdropFilter: "blur(16px)" }}
+                      className="w-full bg-white/70 backdrop-blur-md border-b border-black/10 px-6 sm:px-8 md:px-9 py-5 md:py-6"
+                    >
+                      <AnimatePresence mode="wait">
+                        <motion.div
+                          key={currentStep.num}
+                          initial={{ opacity: 0, y: 6 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0, y: -6 }}
+                          transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
+                          className="flex flex-col md:flex-row md:items-center justify-between gap-3"
+                        >
                           <div className="flex items-baseline gap-4 md:gap-6">
                             <span className="font-sans font-light text-black/40 text-base md:text-lg">
                               [{currentStep.num}]
@@ -988,10 +991,21 @@ export default function Home() {
                               <span className="font-mono text-xs font-bold">{currentStep.num}</span>
                             </div>
                           </div>
-                        </div>
+                        </motion.div>
+                      </AnimatePresence>
+                    </div>
 
-                        {/* Content Grid: Description on Left, Detailed Capabilities on Right */}
-                        <div className="pt-5 md:pt-6 grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-10">
+                    {/* Bottom Part: Solid Opaque White Body */}
+                    <div className="w-full bg-white text-black px-6 sm:px-8 md:px-9 py-6 sm:py-8 md:py-9">
+                      <AnimatePresence mode="wait">
+                        <motion.div
+                          key={currentStep.num}
+                          initial={{ opacity: 0, y: 8 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0, y: -8 }}
+                          transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
+                          className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-10"
+                        >
                           {/* Left Column: Description */}
                           <div className={`flex flex-col justify-start ${currentStep.longFeatures.length > 4 ? "lg:col-span-4" : "lg:col-span-5"}`}>
                             <p className="font-sans font-light text-black/80 leading-relaxed text-[15px] sm:text-[16px] md:text-[17px] m-0">
@@ -1027,9 +1041,9 @@ export default function Home() {
                               ))}
                             </ul>
                           </div>
-                        </div>
-                      </motion.div>
-                    </AnimatePresence>
+                        </motion.div>
+                      </AnimatePresence>
+                    </div>
                   </div>
                 </div>
               );

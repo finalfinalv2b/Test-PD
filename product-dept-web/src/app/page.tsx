@@ -725,14 +725,14 @@ export default function Home() {
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.15 }}
-              className="flex flex-col justify-start w-full max-w-[340px] sm:max-w-[380px] lg:max-w-none lg:w-[clamp(270px,23.5vw,395px)] min-[1800px]:w-[clamp(395px,23.7vw,470px)]"
+              className="flex flex-col justify-start w-full max-w-[340px] sm:max-w-[420px] lg:max-w-none lg:w-[clamp(380px,31vw,500px)] min-[1800px]:w-[clamp(520px,32vw,660px)]"
             >
               {/* Paragraphs: Justified left and right, with last line left justified */}
               <div
                 style={{ textAlign: "justify", textAlignLast: "left" }}
-                className="text-justify [text-align-last:left] text-[clamp(10px,0.76vw,13.5px)] min-[1800px]:text-[clamp(13.5px,0.82vw,15.5px)] font-sans font-light tracking-wide text-white leading-[1.62] space-y-3 sm:space-y-4 min-[1800px]:space-y-5"
+                className="text-justify [text-align-last:left] text-[clamp(13px,0.99vw,17.5px)] min-[1800px]:text-[clamp(16.5px,0.95vw,18.5px)] font-sans font-light tracking-wide text-white leading-[1.56] space-y-2.5 sm:space-y-3 min-[1800px]:space-y-3.5"
               >
-                <p className="m-0 p-0 font-bold mb-5 sm:mb-6 min-[1800px]:mb-7">
+                <p className="m-0 p-0 font-bold mb-3 sm:mb-4 min-[1800px]:mb-5">
                   Product Dept. is an industry agnostic, full-stack product creation company partnering with venture and established companies to scale physical product lines quickly, reliably, and profitably.
                 </p>
                 <p className="m-0 p-0 font-light">
@@ -741,12 +741,12 @@ export default function Home() {
               </div>
 
               {/* Centered CTA 3 spaces below the paragraph */}
-              <div className="w-full text-center mt-5 sm:mt-7 md:mt-9 min-[1800px]:mt-11 pointer-events-auto">
+              <div className="w-full text-center mt-4 sm:mt-5 md:mt-6 min-[1800px]:mt-8 pointer-events-auto">
                 <button
                   onClick={() => {
                     handleItemClick(0);
                   }}
-                  className="text-white font-sans font-bold tracking-widest text-[clamp(9.5px,0.7vw,12px)] min-[1800px]:text-[13px] hover:text-white/75 transition-colors uppercase cursor-pointer bg-transparent border-none outline-none"
+                  className="text-white font-sans font-bold tracking-widest text-[clamp(11px,0.8vw,14px)] min-[1800px]:text-[15px] hover:text-white/75 transition-colors uppercase cursor-pointer bg-transparent border-none outline-none"
                 >
                   EXPLORE OUR SERVICES & CAPABILITIES
                 </button>
@@ -861,7 +861,7 @@ export default function Home() {
               <span className="text-[clamp(1.05rem,1.5vw,2rem)] font-sans font-light tracking-tighter uppercase leading-none text-white block">
                 Services & Capabilities
               </span>
-              <p className="font-sans font-light text-xs md:text-[clamp(10px,0.58vw,11.5px)] tracking-widest max-w-xs md:max-w-md border-t border-white/20 text-white/80 pt-1">
+              <p className="font-sans font-light text-[13.5px] md:text-[clamp(13px,0.75vw,15px)] tracking-widest max-w-sm md:max-w-lg border-t border-white/20 text-white/80 pt-1">
                 We absorb operational friction and execution risk allowing businesses to focus on their core business goals, product vision, and growth.
               </p>
             </div>
@@ -1033,7 +1033,7 @@ export default function Home() {
                   <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black tracking-tighter text-white uppercase leading-none mb-6">
                     GET IN <br /> TOUCH.
                   </h1>
-                  <p className="font-sans font-light text-white/80 text-sm md:text-base max-w-md leading-relaxed">
+                  <p className="font-sans font-light text-white/80 text-[18px] md:text-[21px] max-w-lg leading-relaxed">
                     Ready to scale your physical product lines? Reach out to explore how Product Dept. can build and optimize your supply chain.
                   </p>
                 </div>

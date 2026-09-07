@@ -560,10 +560,10 @@ export default function Home() {
         {/* Content Container: Wordmark on Left, Justified Paragraph on Right with Equal Buffer from Monitor Edges */}
         <div
           style={!isMobile ? { transform: `translateY(-${wordmarkHalfHeight !== null ? `${wordmarkHalfHeight}px` : '4.5vw'})` } : undefined}
-          className={`relative z-10 w-full max-w-[1560px] mx-auto px-6 sm:px-10 lg:px-[10.5vw] 2xl:px-[13.2vw] flex flex-col lg:flex-row items-center lg:items-start justify-between gap-6 lg:gap-8 ${isMobile ? "my-auto pb-24 pt-2" : "absolute top-1/2 left-0 right-0"}`}
+          className={`relative z-10 w-full px-6 sm:px-10 lg:px-[10.5vw] flex flex-col lg:flex-row items-center lg:items-start justify-between gap-6 lg:gap-8 ${isMobile ? "my-auto pb-24 pt-2" : "absolute top-1/2 left-0 right-0"}`}
         >
           
-          {/* LEFT SIDE: PD Title Page Wordmark SVG (Equal buffer from left screen edge, scales 15% larger on large monitors) */}
+          {/* LEFT SIDE: PD Title Page Wordmark SVG (Shifted left with equal outer margin to paragraph, enlarged 10-20% on large monitors) */}
           <div className="w-full lg:w-auto flex flex-col justify-start items-center lg:items-start">
             <motion.img
               ref={wordmarkRef}
@@ -577,24 +577,24 @@ export default function Home() {
               transition={{ duration: 0.8 }}
               src="/pd-title-page-wordmark.svg"
               alt="Product Dept. - Where great ideas become exceptional products."
-              className="w-[88vw] max-w-[415px] lg:max-w-none lg:w-[clamp(400px,43vw,660px)] 2xl:w-[clamp(660px,46.8vw,900px)] h-auto object-contain select-none pointer-events-none mt-0"
+              className="w-[88vw] max-w-[415px] lg:max-w-none lg:w-[clamp(400px,43vw,750px)] min-[1800px]:w-[clamp(750px,46.8vw,960px)] h-auto object-contain select-none pointer-events-none mt-0"
             />
           </div>
 
-          {/* RIGHT SIDE: Paragraph (Equal buffer from right screen edge) + Center-Justified CTA 3 spaces below */}
+          {/* RIGHT SIDE: Paragraph (Shifted right with equal outer margin to wordmark, enlarged 10-20% on large monitors) + Center-Justified CTA */}
           <div className="w-full lg:w-auto flex flex-col justify-start items-center lg:items-end">
             <motion.div
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.15 }}
-              className="flex flex-col justify-start w-full max-w-[340px] sm:max-w-[380px] lg:max-w-none lg:w-[clamp(270px,23.5vw,400px)]"
+              className="flex flex-col justify-start w-full max-w-[340px] sm:max-w-[380px] lg:max-w-none lg:w-[clamp(270px,23.5vw,395px)] min-[1800px]:w-[clamp(395px,23.7vw,470px)]"
             >
               {/* Paragraphs: Justified left and right, with last line left justified */}
               <div
                 style={{ textAlign: "justify", textAlignLast: "left" }}
-                className="text-justify [text-align-last:left] text-[clamp(10px,0.76vw,13.5px)] font-sans font-light tracking-wide text-white leading-[1.62] space-y-3 sm:space-y-4"
+                className="text-justify [text-align-last:left] text-[clamp(10px,0.76vw,13.5px)] min-[1800px]:text-[clamp(13.5px,0.82vw,15.5px)] font-sans font-light tracking-wide text-white leading-[1.62] space-y-3 sm:space-y-4 min-[1800px]:space-y-5"
               >
-                <p className="m-0 p-0 font-bold mb-5 sm:mb-6">
+                <p className="m-0 p-0 font-bold mb-5 sm:mb-6 min-[1800px]:mb-7">
                   Product Dept. is an industry agnostic, full-stack product creation company partnering with venture and established companies to scale physical product lines quickly, reliably, and profitably.
                 </p>
                 <p className="m-0 p-0 font-light">
@@ -603,12 +603,12 @@ export default function Home() {
               </div>
 
               {/* Centered CTA 3 spaces below the paragraph */}
-              <div className="w-full text-center mt-5 sm:mt-7 md:mt-9 pointer-events-auto">
+              <div className="w-full text-center mt-5 sm:mt-7 md:mt-9 min-[1800px]:mt-11 pointer-events-auto">
                 <button
                   onClick={() => {
                     handleItemClick(0);
                   }}
-                  className="text-white font-sans font-bold tracking-widest text-[clamp(9.5px,0.7vw,12px)] hover:text-white/75 transition-colors uppercase cursor-pointer bg-transparent border-none outline-none"
+                  className="text-white font-sans font-bold tracking-widest text-[clamp(9.5px,0.7vw,12px)] min-[1800px]:text-[13px] hover:text-white/75 transition-colors uppercase cursor-pointer bg-transparent border-none outline-none"
                 >
                   EXPLORE OUR SERVICES & CAPABILITIES
                 </button>

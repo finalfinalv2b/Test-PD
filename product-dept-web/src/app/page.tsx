@@ -664,7 +664,6 @@ export default function Home() {
             {bentoData.map((step, index) => {
               const isOpen = activeIndex === index;
               const isEven = index % 2 === 0;
-              const isVenture = step.bgImage.includes("venture");
               return (
                 <motion.div
                   key={step.num}
@@ -684,13 +683,13 @@ export default function Home() {
                       loop
                       muted
                       playsInline
-                      className={`w-full h-full object-cover ${isVenture ? "" : "grayscale"}`}
+                      className="w-full h-full object-cover"
                     />
                   ) : (
                     <img
                       src={step.bgImage}
                       alt=""
-                      className={`w-full h-full object-cover ${isVenture ? "" : "grayscale"}`}
+                      className="w-full h-full object-cover"
                     />
                   )}
                 </motion.div>

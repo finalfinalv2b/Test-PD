@@ -217,6 +217,8 @@ export default function Home() {
   const lastScrollYRef = useRef(0);
   const wordmarkRef = useRef<HTMLImageElement>(null);
   const [wordmarkHalfHeight, setWordmarkHalfHeight] = useState<number | null>(null);
+  const partnersBannerRef = useRef<HTMLDivElement>(null);
+  const [bannerHeight, setBannerHeight] = useState<number>(64);
 
   useEffect(() => {
     const handleResize = () => {
@@ -229,6 +231,9 @@ export default function Home() {
 
       if (wordmarkRef.current) {
         setWordmarkHalfHeight(wordmarkRef.current.offsetHeight / 2);
+      }
+      if (partnersBannerRef.current) {
+        setBannerHeight(partnersBannerRef.current.offsetHeight);
       }
 
       if (mobile) {
@@ -695,14 +700,16 @@ export default function Home() {
           </svg>
         </div>
 
-        {/* Content Container: Wordmark on Left, Justified Paragraph on Right with Equal Buffer from Monitor Edges */}
+        {/* Content Container: Wordmark on Left, Paragraph Centered Vertically Between Header & Partners Banner on Right */}
         <div
-          style={!isMobile ? { transform: `translateY(-${wordmarkHalfHeight !== null ? `${wordmarkHalfHeight}px` : '4.5vw'})` } : undefined}
-          className={`relative z-10 w-full px-6 sm:px-10 lg:px-[10.5vw] flex flex-col lg:flex-row items-center lg:items-start justify-between gap-6 lg:gap-8 ${isMobile ? "my-auto pb-24 pt-2" : "absolute top-1/2 left-0 right-0"}`}
+          style={!isMobile ? { height: `calc(100% - ${bannerHeight}px)` } : undefined}
+          className={`z-10 w-full px-6 sm:px-10 lg:px-[10.5vw] flex flex-col lg:flex-row items-center justify-between gap-6 lg:gap-8 ${
+            isMobile ? "relative my-auto pb-24 pt-2" : "absolute top-0 left-0 right-0"
+          }`}
         >
           
-          {/* LEFT SIDE: PD Title Page Wordmark SVG (Shifted left with equal outer margin to paragraph, enlarged 10-20% on large monitors) */}
-          <div className="w-full lg:w-auto flex flex-col justify-start items-center lg:items-start">
+          {/* LEFT SIDE: PD Title Page Wordmark SVG */}
+          <div className="w-full lg:w-auto flex flex-col justify-center items-center lg:items-start">
             <motion.img
               ref={wordmarkRef}
               onLoad={() => {
@@ -719,13 +726,13 @@ export default function Home() {
             />
           </div>
 
-          {/* RIGHT SIDE: Paragraph (Shifted right with equal outer margin to wordmark, enlarged 10-20% on large monitors) + Center-Justified CTA */}
-          <div className="w-full lg:w-auto flex flex-col justify-start items-center lg:items-end">
+          {/* RIGHT SIDE: Paragraph (Slightly narrower & taller, centered vertically between header and partners banner) */}
+          <div className="w-full lg:w-auto flex flex-col justify-center items-center lg:items-end">
             <motion.div
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.15 }}
-              className="flex flex-col justify-start w-full max-w-[340px] sm:max-w-[420px] lg:max-w-none lg:w-[clamp(380px,31vw,500px)] min-[1800px]:w-[clamp(520px,32vw,660px)]"
+              className="flex flex-col justify-start w-full max-w-[340px] sm:max-w-[420px] lg:max-w-none lg:w-[clamp(330px,26vw,420px)] min-[1800px]:w-[clamp(430px,25.5vw,530px)]"
             >
               {/* Paragraphs: Justified left and right, with last line left justified */}
               <div
@@ -740,8 +747,8 @@ export default function Home() {
                 </p>
               </div>
 
-              {/* Centered CTA 3 spaces below the paragraph */}
-              <div className="w-full text-center mt-4 sm:mt-5 md:mt-6 min-[1800px]:mt-8 pointer-events-auto">
+              {/* Centered CTA below the paragraph */}
+              <div className="w-full text-center mt-4 sm:mt-5 md:mt-6 min-[1800px]:mt-7 pointer-events-auto">
                 <button
                   onClick={() => {
                     handleItemClick(0);
@@ -757,7 +764,10 @@ export default function Home() {
         </div>
 
         {/* Client Name Scrolling Animation (ALWAYS at the bottom of the homescreen - including on mobile) */}
-        <div className="absolute bottom-0 left-0 w-full flex flex-col gap-1.5 overflow-hidden select-none z-20 bg-black/85 backdrop-blur-[2px]">
+        <div
+          ref={partnersBannerRef}
+          className="absolute bottom-0 left-0 w-full flex flex-col gap-1.5 overflow-hidden select-none z-20 bg-black/85 backdrop-blur-[2px]"
+        >
           <div className="px-6 md:px-12 text-left pt-2">
             <span className="font-sans text-[8px] md:text-[10px] font-black tracking-[0.2em] uppercase text-white/50">
               Select Partners

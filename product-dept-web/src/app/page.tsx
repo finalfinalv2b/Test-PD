@@ -132,6 +132,7 @@ export default function Home() {
   const [activeIndex, setActiveIndex] = useState<number | null>(0);
   const [isMobile, setIsMobile] = useState(false);
   const [contentScale, setContentScale] = useState(1);
+  const [windowWidth, setWindowWidth] = useState(1440);
 
   // Contact States
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -159,6 +160,7 @@ export default function Home() {
 
       windowWidthRef.current = window.innerWidth;
       windowHeightRef.current = window.innerHeight;
+      setWindowWidth(window.innerWidth);
 
       if (wordmarkRef.current) {
         setWordmarkHalfHeight(wordmarkRef.current.offsetHeight / 2);
@@ -169,15 +171,20 @@ export default function Home() {
         return;
       }
 
-      // Height logic: viewport height minus fixed navbar (clamp 56px to 72px) and bottom padding
+      // Height logic: viewport height minus fixed navbar (clamp 56px to 72px)
       const navbarHeight = Math.min(72, Math.max(56, window.innerHeight * 0.06));
-      const availableHeight = window.innerHeight - navbarHeight - 35;
-      // Natural height budget for pinned header + tab bar + accordion with tallest item (Venture) open
-      const naturalHeight = 835;
+      // Space taken by pinned elements above and below accordion:
+      // Header block (~52px) + tab track (~45px) + scale-container padding (~12px) + bottom safety margin (~20px)
+      const fixedHeaderOverhead = 129;
+      const availableForAccordion = window.innerHeight - navbarHeight - fixedHeaderOverhead;
 
-      let scaleFactor = availableHeight / naturalHeight;
-      // Cap at 1 on large desktop screens, scale down smoothly on laptops/MacBooks so Venture tab is never cut off
-      scaleFactor = Math.min(1, Math.max(0.55, scaleFactor));
+      // Natural unscaled height of accordion with tallest item (Venture Infrastructure) open:
+      // 6 closed items (each ~54px) + Venture open (~360px) + list padding (16px) = ~700px
+      const naturalAccordionHeight = 710;
+
+      let scaleFactor = availableForAccordion / naturalAccordionHeight;
+      // Cap at 1 on large desktop screens, scale down smoothly on laptops/MacBooks so Venture tab always fits completely
+      scaleFactor = Math.min(1, Math.max(0.48, scaleFactor));
       setContentScale(scaleFactor);
     };
     handleResize();
@@ -755,31 +762,37 @@ export default function Home() {
               {bentoData.map((step, index) => {
                 const isOpen = activeIndex === index;
                 const isEven = index % 2 === 0;
+
+                // Numeric pixel widths guarantee smooth, monotonic expansion without any shrinking artifact
+                const closedCardWidth = isMobile ? "100%" : Math.min(1152, Math.round((windowWidth * 0.88) / contentScale));
+                const openCardWidth = isMobile ? "100%" : Math.ceil(windowWidth / contentScale);
+                const cardWidth = isOpen ? openCardWidth : closedCardWidth;
+
                 return (
                   <motion.div
                     key={step.num}
                     id={`process-step-site5-${index}`}
                     initial={false}
                     animate={{
-                      width: isOpen ? (contentScale < 1 ? `calc(100vw / ${contentScale})` : "100vw") : "min(1152px, 88vw)",
+                      width: cardWidth,
                       borderRadius: isOpen ? 0 : 8,
                       opacity: isOpen ? 1 : 0.72,
                     }}
                     transition={{ 
-                      duration: 0.45, 
-                      ease: [0.16, 1, 0.3, 1] 
+                      duration: 0.48, 
+                      ease: [0.22, 1, 0.36, 1] 
                     }}
                     className={`border-b border-black/10 last:border-b-0 transition-colors duration-300 overflow-hidden ${isOpen ? "bg-white shadow-[0_16px_48px_rgba(0,0,0,0.08)]" : "bg-white/56 backdrop-blur-[9.6px] shadow-none hover:bg-white/80"}`}
                   >
                     <button
                       onClick={() => handleItemClick(index)}
-                      className="w-full text-left cursor-pointer hover:bg-black/[0.01] py-2.5 md:py-3.5 group select-none border-none outline-none bg-transparent"
+                      className={`w-full text-left cursor-pointer hover:bg-black/[0.01] group select-none border-none outline-none bg-transparent transition-all duration-300 ${isOpen ? "py-2.5 md:py-3.5" : "py-2 md:py-2.5"}`}
                     >
                       <div className="w-full max-w-6xl mx-auto px-6 flex flex-col md:flex-row md:items-center justify-between gap-3 md:gap-4">
                         <div className="flex items-baseline gap-4 md:gap-6">
-                          <span className={`font-sans font-light transition-all duration-[450ms] ease-[cubic-bezier(0.16,1,0.3,1)] text-black/40 ${isOpen ? "text-[17px]" : "text-sm"}`}>[{step.num}]</span>
+                          <span className={`font-sans font-light transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] text-black/40 ${isOpen ? "text-[17px]" : "text-sm"}`}>[{step.num}]</span>
                           <span 
-                            className={`font-header font-black tracking-tight transition-all duration-[450ms] ease-[cubic-bezier(0.16,1,0.3,1)] uppercase ${isOpen ? 'text-[29px] md:text-[36px] text-[var(--brand)]' : 'text-2xl md:text-3xl text-black group-hover:text-[var(--brand)]'}`}
+                            className={`font-header font-black tracking-tight transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] uppercase ${isOpen ? 'text-[29px] md:text-[36px] text-[var(--brand)]' : 'text-2xl md:text-3xl text-black group-hover:text-[var(--brand)]'}`}
                           >
                             {step.title}
                           </span>
@@ -787,14 +800,14 @@ export default function Home() {
                         <div className="flex items-center gap-6 self-end md:self-auto">
                           <motion.span 
                             style={{ color: isOpen ? activeColor : brandColor }}
-                            className={`font-header font-black uppercase tracking-wider hidden sm:inline transition-all duration-[450ms] ease-[cubic-bezier(0.16,1,0.3,1)] ${isOpen ? "text-[14.5px]" : "text-xs"}`}
+                            className={`font-header font-black uppercase tracking-wider hidden sm:inline transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${isOpen ? "text-[14.5px]" : "text-xs"}`}
                           >
                             {step.label}
                           </motion.span>
                           <div
-                            className={`rounded-full border border-black/15 flex items-center justify-center bg-white shadow-sm text-black transition-all duration-[450ms] ease-[cubic-bezier(0.16,1,0.3,1)] ${isOpen ? 'w-[38.5px] h-[38.5px] rotate-[135deg]' : 'w-8 h-8 rotate-0'}`}
+                            className={`rounded-full border border-black/15 flex items-center justify-center bg-white shadow-sm text-black transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${isOpen ? 'w-[38.5px] h-[38.5px] rotate-[135deg]' : 'w-8 h-8 rotate-0'}`}
                           >
-                            <svg width={isOpen ? 17 : 14} height={isOpen ? 17 : 14} viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" className="transition-all duration-[450ms]">
+                            <svg width={isOpen ? 17 : 14} height={isOpen ? 17 : 14} viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" className="transition-all duration-500">
                               <path d="M7 1v12M1 7h12" stroke="currentColor" strokeWidth={isOpen ? "2.4" : "2"} strokeLinecap="round" />
                             </svg>
                           </div>
@@ -807,31 +820,31 @@ export default function Home() {
                       <motion.div
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
-                        transition={{ duration: 0.25, ease: "easeOut" }}
+                        transition={{ duration: 0.28, ease: "easeOut" }}
                         className="w-full border-t border-black/5 mt-1 overflow-hidden"
                       >
-                        <div className="w-full max-w-6xl mx-auto px-6 pb-6 pt-2 grid grid-cols-1 lg:grid-cols-12 gap-5 lg:gap-8">
+                        <div className="w-full max-w-6xl mx-auto px-6 pb-5 pt-1.5 grid grid-cols-1 lg:grid-cols-12 gap-5 lg:gap-8">
                           {/* Left Column: Description */}
-                          <div className="lg:col-span-4 flex flex-col justify-start pt-1">
+                          <div className={`flex flex-col justify-start pt-1 ${step.longFeatures.length > 4 ? "lg:col-span-3" : "lg:col-span-4"}`}>
                             <p className="font-sans font-light text-black/75 leading-relaxed max-w-2xl text-[14.5px] md:text-[17px]">
                               {step.longDesc}
                             </p>
                           </div>
 
                           {/* Right Column: Capabilities */}
-                          <div className="lg:col-span-8 flex flex-col justify-center lg:pl-8 lg:border-l border-black/10">
-                            <h4 style={{ color: activeColor }} className="font-header font-black tracking-widest uppercase mb-2.5 text-[14.5px] md:text-[16.5px]">
+                          <div className={`flex flex-col justify-center lg:pl-8 lg:border-l border-black/10 ${step.longFeatures.length > 4 ? "lg:col-span-9" : "lg:col-span-8"}`}>
+                            <h4 style={{ color: activeColor }} className="font-header font-black tracking-widest uppercase mb-2 text-[14.5px] md:text-[16.5px]">
                               Detailed Capabilities
                             </h4>
-                            <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-2">
+                            <ul className={`grid grid-cols-1 sm:grid-cols-2 ${step.longFeatures.length > 4 ? "lg:grid-cols-4 gap-x-4 gap-y-1.5" : "lg:grid-cols-3 gap-x-6 gap-y-2"}`}>
                               {step.longFeatures.map((feat) => (
-                                <li key={feat.name} className="flex items-start gap-2.5">
+                                <li key={feat.name} className="flex items-start gap-2">
                                   <span style={{ color: brandColor }} className="font-bold leading-none mt-0.5 text-[19.5px]">+</span>
                                   <div>
-                                    <span className="font-header font-black text-black uppercase tracking-wider block text-[15.5px] md:text-[16.5px]">
+                                    <span className="font-header font-black text-black uppercase tracking-wider block text-[15px] md:text-[16px]">
                                       {feat.name}
                                     </span>
-                                    <span className="font-sans font-light leading-snug block text-[14px] md:text-[14.5px] text-black/70">
+                                    <span className="font-sans font-light leading-snug block text-[13.5px] md:text-[14px] text-black/70">
                                       {feat.desc}
                                     </span>
                                   </div>

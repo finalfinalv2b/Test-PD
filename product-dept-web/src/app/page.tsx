@@ -21,7 +21,7 @@ const bentoData = [
     num: "02",
     title: "DESIGN",
     label: "FORM DEFINED",
-    bgImage: "/photo-flicker/Screenshot 2026-05-15 e.png",
+    bgImage: "/photo-flicker/design_anim.mp4",
     longDesc: "We believe a great product should look spectacular and feel natural to use. Our design team focuses on aesthetics, ease of use, and materials to create a product that stands out in the market. We refine the visual details, shapes, and colors to deliver an exceptional user experience.",
     longFeatures: [
       { name: "Concept Generation", desc: "Developing eye-catching design options and visual directions." },
@@ -33,7 +33,7 @@ const bentoData = [
     num: "03",
     title: "ENGINEERING",
     label: "CAD ARCHITECTURE",
-    bgImage: "/photo-flicker/engineering_anim.mp4",
+    bgImage: "/photo-flicker/engineering_anim2.mp4",
     longDesc: "Our engineering team brings the design to life. We build detailed 3D models, design internal mechanics, and optimize the hardware layout. We focus on durability, safety, and reliability to ensure the product performs flawlessly in the real world.",
     longFeatures: [
       { name: "3D Blueprint Modeling", desc: "Creating precise digital blueprints of the product and its internal parts." },
@@ -57,7 +57,7 @@ const bentoData = [
     num: "05",
     title: "MANUFACTURING",
     label: "MASS PRODUCTION",
-    bgImage: "/photo-flicker/manufacturing_anim.mp4",
+    bgImage: "/photo-flicker/manufacturing_anim2.mp4",
     longDesc: "We manage the entire transition to mass production. Our quality control teams work directly on-site to inspect machinery, validate assembly setups, and perform thorough inspections on the finished products. This ensures that every single unit matches the approved prototype.",
     longFeatures: [
       { name: "On-Site Inspection", desc: "Performing strict quality checks at key points along the production line." },
@@ -683,18 +683,26 @@ export default function Home() {
                       loop
                       muted
                       playsInline
-                      className="w-full h-full object-cover"
+                      className="w-full h-full object-cover saturate-50"
+                      style={{ filter: "saturate(0.5)" }}
                     />
                   ) : (
                     <img
                       src={step.bgImage}
                       alt=""
-                      className="w-full h-full object-cover"
+                      className="w-full h-full object-cover saturate-50"
+                      style={{ filter: "saturate(0.5)" }}
                     />
                   )}
                 </motion.div>
               );
             })}
+
+            {/* NOSTALGIC FILM GRAIN OVERLAY */}
+            <div 
+              className="absolute inset-0 w-full h-full pointer-events-none z-10 mix-blend-overlay opacity-35 bg-repeat"
+              style={{ backgroundImage: "url('/grain.png')" }}
+            />
           </div>
 
           {/* HEADER BLOCK */}

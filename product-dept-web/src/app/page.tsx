@@ -802,20 +802,14 @@ export default function Home() {
                       </div>
                     </button>
 
-                    {/* Expandable Content in Synchronized Single Motion */}
-                    <motion.div
-                      initial={false}
-                      animate={{
-                        height: isOpen ? "auto" : 0,
-                        opacity: isOpen ? 1 : 0
-                      }}
-                      transition={{
-                        height: { duration: 0.45, ease: [0.16, 1, 0.3, 1] },
-                        opacity: { duration: 0.35, ease: [0.16, 1, 0.3, 1] }
-                      }}
-                      className="overflow-hidden w-full"
-                    >
-                      <div className="w-full border-t border-black/5 mt-1">
+                    {/* Expandable Content: Correct vertical height from start, expanding horizontally */}
+                    {isOpen && (
+                      <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ duration: 0.25, ease: "easeOut" }}
+                        className="w-full border-t border-black/5 mt-1 overflow-hidden"
+                      >
                         <div className="w-full max-w-6xl mx-auto px-6 pb-6 pt-2 grid grid-cols-1 lg:grid-cols-12 gap-5 lg:gap-8">
                           {/* Left Column: Description */}
                           <div className="lg:col-span-4 flex flex-col justify-start pt-1">
@@ -846,8 +840,8 @@ export default function Home() {
                             </ul>
                           </div>
                         </div>
-                      </div>
-                    </motion.div>
+                      </motion.div>
+                    )}
                   </motion.div>
                 );
               })}

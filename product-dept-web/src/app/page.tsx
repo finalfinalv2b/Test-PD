@@ -277,7 +277,7 @@ export default function Home() {
       setTimeout(() => {
         isClickScrollingRef.current = false;
         window.removeEventListener("scrollend", handleScrollEnd);
-      }, 700);
+      }, 900);
 
       window.scrollTo({
         top: targetScrollY,
@@ -406,7 +406,7 @@ export default function Home() {
           // Scrolling UP: snap back to Venture Infrastructure (Tab 6)
           e.preventDefault();
           const now = Date.now();
-          if (now - lastSnapTimeRef.current > 250) {
+          if (now - lastSnapTimeRef.current > 350) {
             lastSnapTimeRef.current = now;
             handleItemClickRef.current(6);
           }
@@ -938,8 +938,8 @@ export default function Home() {
               x: isMobile ? 0 : (isContactOpen ? "0%" : "100%"),
             }}
             transition={{
-              duration: 0.55,
-              ease: [0.16, 1, 0.3, 1]
+              duration: 0.8,
+              ease: [0.22, 1, 0.36, 1]
             }}
             className={
               isMobile 

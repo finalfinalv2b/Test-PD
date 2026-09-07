@@ -220,6 +220,42 @@ export default function Home() {
   const partnersBannerRef = useRef<HTMLDivElement>(null);
   const [bannerHeight, setBannerHeight] = useState<number>(64);
 
+  const tabsTrackRef = useRef<HTMLDivElement>(null);
+  const tabsInnerRef = useRef<HTMLDivElement>(null);
+  const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
+  const [activeTabMetrics, setActiveTabMetrics] = useState<{
+    left: number;
+    width: number;
+    center: number;
+    containerWidth: number;
+  }>({
+    left: 0,
+    width: 140,
+    center: 70,
+    containerWidth: 1152
+  });
+
+  useEffect(() => {
+    const updateMetrics = () => {
+      const idx = activeIndex ?? 0;
+      const btn = tabRefs.current[idx];
+      const inner = tabsInnerRef.current;
+      if (btn && inner) {
+        const btnRect = btn.getBoundingClientRect();
+        const innerRect = inner.getBoundingClientRect();
+        setActiveTabMetrics({
+          left: Math.round(btnRect.left - innerRect.left),
+          width: Math.round(btnRect.width),
+          center: Math.round(btnRect.left - innerRect.left + btnRect.width / 2),
+          containerWidth: Math.round(innerRect.width)
+        });
+      }
+    };
+    updateMetrics();
+    window.addEventListener("resize", updateMetrics);
+    return () => window.removeEventListener("resize", updateMetrics);
+  }, [activeIndex, windowWidth]);
+
   useEffect(() => {
     const handleResize = () => {
       const mobile = window.innerWidth < 768;
@@ -243,18 +279,18 @@ export default function Home() {
 
       // Height logic: viewport height minus fixed navbar (clamp 56px to 72px)
       const navbarHeight = Math.min(72, Math.max(56, window.innerHeight * 0.06));
-      // Space taken by pinned elements above and below accordion:
+      // Space taken by pinned elements above and below card:
       // Header block (~52px) + tab track (~45px) + scale-container padding (~12px) + bottom safety margin (~20px)
       const fixedHeaderOverhead = 129;
-      const availableForAccordion = window.innerHeight - navbarHeight - fixedHeaderOverhead;
+      const availableForContent = window.innerHeight - navbarHeight - fixedHeaderOverhead;
 
-      // Natural unscaled height of accordion with tallest item (Venture Infrastructure) open:
-      // 6 closed items (each ~54px) + Venture open (~360px) + list padding (16px) = ~700px
-      const naturalAccordionHeight = 710;
+      // Natural unscaled height of single service card with frosted connector:
+      // Connector (~34px) + card with detailed capabilities (~420px) = ~454px
+      const naturalCardHeight = 454;
 
-      let scaleFactor = availableForAccordion / naturalAccordionHeight;
-      // Cap at 1 on large desktop screens, scale down smoothly on laptops/MacBooks so Venture tab always fits completely
-      scaleFactor = Math.min(1, Math.max(0.48, scaleFactor));
+      let scaleFactor = availableForContent / naturalCardHeight;
+      // Cap at 1 on standard/large displays, smoothly scale if screen height is unusually small
+      scaleFactor = Math.min(1, Math.max(0.65, scaleFactor));
       setContentScale(scaleFactor);
     };
     handleResize();
@@ -879,19 +915,28 @@ export default function Home() {
 
           {/* HORIZONTAL INTERACTIVE SERVICE TABS TRACK */}
           <div 
+            ref={tabsTrackRef}
             className="shrink-0 w-full bg-black/90 border-b border-white/10 px-4 md:px-6 py-2 z-20 backdrop-blur-md overflow-x-auto no-scrollbar [&::-webkit-scrollbar]:hidden"
             style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
           >
-            <div className="max-w-6xl mx-auto flex items-center justify-between gap-1 sm:gap-2">
+            <div 
+              ref={tabsInnerRef}
+              className="max-w-6xl mx-auto flex items-center justify-between gap-1 sm:gap-2 relative"
+            >
               {bentoData.map((step, index) => {
                 const isActive = activeIndex === index;
                 return (
                   <button
+                    ref={(el) => { tabRefs.current[index] = el; }}
                     key={step.num}
                     onClick={() => handleItemClick(index)}
-                    className={`relative py-1 px-2 sm:px-3 text-left transition-all duration-200 rounded flex items-center gap-1.5 sm:gap-2 group cursor-pointer border-none outline-none bg-transparent ${isActive ? "text-white" : "text-white/40 hover:text-white/80"}`}
+                    className={`relative py-1.5 px-2.5 sm:px-3.5 text-left transition-all duration-200 rounded-t-lg flex items-center gap-1.5 sm:gap-2 group cursor-pointer border-none outline-none ${
+                      isActive 
+                        ? "bg-white/[0.14] text-white shadow-sm border-t border-x border-white/20" 
+                        : "bg-transparent text-white/40 hover:text-white/80"
+                    }`}
                   >
-                    <span className={`font-mono tracking-wider transition-all duration-200 ${isActive ? "text-[11.5px] opacity-80" : "text-[9.5px] opacity-60"}`}>[{step.num}]</span>
+                    <span className={`font-mono tracking-wider transition-all duration-200 ${isActive ? "text-[11.5px] opacity-90 text-[var(--brand)] font-bold" : "text-[9.5px] opacity-60"}`}>[{step.num}]</span>
                     <span className={`font-header font-black tracking-wider uppercase whitespace-nowrap transition-all duration-200 ${isActive ? "text-[13px] sm:text-[15px]" : "text-[11px] sm:text-[12.5px]"}`}>
                       {step.title}
                     </span>
@@ -911,96 +956,128 @@ export default function Home() {
           {/* Top-Anchored Scale Container */}
           <motion.div 
             style={isMobile ? {} : { scale: contentScale }}
-            className="w-full flex flex-col items-center justify-start origin-top z-10 pt-[clamp(8px,1.2vh,16px)]"
+            className="w-full flex flex-col items-center justify-start origin-top z-10 pt-[clamp(4px,0.8vh,10px)]"
           >
-            {/* ACCORDION LIST WITH HORIZONTAL ALTERNATING MOTION & DYNAMIC VIEWPORT EXPANSION */}
-            <div className="w-full flex flex-col items-center pb-4 md:pb-5">
-              {bentoData.map((step, index) => {
-                const isOpen = activeIndex === index;
-                const isEven = index % 2 === 0;
+            {/* INDIVIDUAL ACTIVE SERVICE PRESENTATION WITH FROSTED VECTOR CONNECTOR & OPAQUE WHITE RECTANGLE */}
+            {(() => {
+              const currentStep = bentoData[activeIndex ?? 0] || bentoData[0];
+              const bridgeH = 34;
+              const x1 = activeTabMetrics.left;
+              const x2 = activeTabMetrics.left + activeTabMetrics.width;
+              const W = activeTabMetrics.containerWidth || 1152;
+              const delta = 48;
+              const xb1 = Math.max(0, x1 - delta);
+              const xb2 = Math.min(W, x2 + delta);
 
-                // Numeric pixel widths guarantee smooth, monotonic expansion without any shrinking artifact
-                const closedCardWidth = isMobile ? "100%" : Math.min(1152, Math.round((windowWidth * 0.88) / contentScale));
-                const openCardWidth = isMobile ? "100%" : Math.ceil(windowWidth / contentScale);
-                const cardWidth = isOpen ? openCardWidth : closedCardWidth;
-
-                return (
-                  <motion.div
-                    key={step.num}
-                    id={`process-step-site5-${index}`}
-                    initial={false}
-                    animate={{
-                      width: cardWidth,
-                      borderRadius: isOpen ? 0 : 8,
-                      opacity: isOpen ? 1 : 0.72,
-                    }}
-                    transition={{ 
-                      duration: 0.48, 
-                      ease: [0.22, 1, 0.36, 1] 
-                    }}
-                    className={`border-b border-black/10 last:border-b-0 transition-colors duration-300 overflow-hidden ${isOpen ? "bg-white shadow-[0_16px_48px_rgba(0,0,0,0.08)]" : "bg-white/56 backdrop-blur-[9.6px] shadow-none hover:bg-white/80"}`}
-                  >
-                    <button
-                      onClick={() => handleItemClick(index)}
-                      className={`w-full text-left cursor-pointer hover:bg-black/[0.01] group select-none border-none outline-none bg-transparent transition-all duration-300 ${isOpen ? "py-2.5 md:py-3.5" : "py-2 md:py-2.5"}`}
+              return (
+                <div className="w-full max-w-6xl mx-auto px-4 md:px-6 flex flex-col items-center">
+                  {/* FROSTED VECTOR CONNECTOR: Blends from the selected service tab and transitions into the opaque white rectangle */}
+                  <div className="w-full relative h-[34px] overflow-visible pointer-events-none -mb-px z-10">
+                    <svg
+                      className="w-full h-[34px] overflow-visible"
+                      viewBox={`0 0 ${W} ${bridgeH}`}
+                      preserveAspectRatio="none"
                     >
-                      <div className="w-full max-w-6xl mx-auto px-6 flex flex-col md:flex-row md:items-center justify-between gap-3 md:gap-4">
-                        <div className="flex items-baseline gap-4 md:gap-6">
-                          <span className={`font-sans font-light transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] text-black/40 ${isOpen ? "text-[17px]" : "text-sm"}`}>[{step.num}]</span>
-                          <span 
-                            className={`font-header font-black tracking-tight transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] uppercase ${isOpen ? 'text-[29px] md:text-[36px] text-[var(--brand)]' : 'text-2xl md:text-3xl text-black group-hover:text-[var(--brand)]'}`}
-                          >
-                            {step.title}
-                          </span>
-                        </div>
-                        <div className="flex items-center gap-6 self-end md:self-auto">
-                          <motion.span 
-                            style={{ color: isOpen ? activeColor : brandColor }}
-                            className={`font-header font-black uppercase tracking-wider hidden sm:inline transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${isOpen ? "text-[14.5px]" : "text-xs"}`}
-                          >
-                            {step.label}
-                          </motion.span>
-                          <div
-                            className={`rounded-full border border-black/15 flex items-center justify-center bg-white shadow-sm text-black transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${isOpen ? 'w-[38.5px] h-[38.5px] rotate-[135deg]' : 'w-8 h-8 rotate-0'}`}
-                          >
-                            <svg width={isOpen ? 17 : 14} height={isOpen ? 17 : 14} viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" className="transition-all duration-500">
-                              <path d="M7 1v12M1 7h12" stroke="currentColor" strokeWidth={isOpen ? "2.4" : "2"} strokeLinecap="round" />
-                            </svg>
+                      <defs>
+                        <linearGradient id="frostedVectorGrad" x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="0%" stopColor="#FFFFFF" stopOpacity="0.45" />
+                          <stop offset="55%" stopColor="#FFFFFF" stopOpacity="0.85" />
+                          <stop offset="100%" stopColor="#FFFFFF" stopOpacity="1" />
+                        </linearGradient>
+                        <filter id="frostedShadow" x="-10%" y="-10%" width="120%" height="120%">
+                          <feDropShadow dx="0" dy="2" stdDeviation="3" floodColor="rgba(0,0,0,0.08)" />
+                        </filter>
+                      </defs>
+
+                      {/* Smooth Organic Frosted Vector Connector Bridge - Fill */}
+                      <motion.path
+                        animate={{
+                          d: `M ${x1} 0 L ${x2} 0 C ${x2 + 10} ${bridgeH * 0.45}, ${xb2} ${bridgeH * 0.55}, ${xb2} ${bridgeH} L ${xb1} ${bridgeH} C ${xb1} ${bridgeH * 0.55}, ${x1 - 10} ${bridgeH * 0.45}, ${x1} 0 Z`
+                        }}
+                        transition={{ type: "spring", stiffness: 340, damping: 30 }}
+                        fill="url(#frostedVectorGrad)"
+                        stroke="none"
+                        filter="url(#frostedShadow)"
+                      />
+
+                      {/* Frosted Glass Edge Highlight (Left, Top, Right - Leaving bottom open to merge into card) */}
+                      <motion.path
+                        animate={{
+                          d: `M ${xb1} ${bridgeH} C ${xb1} ${bridgeH * 0.55}, ${x1 - 10} ${bridgeH * 0.45}, ${x1} 0 L ${x2} 0 C ${x2 + 10} ${bridgeH * 0.45}, ${xb2} ${bridgeH * 0.55}, ${xb2} ${bridgeH}`
+                        }}
+                        transition={{ type: "spring", stiffness: 340, damping: 30 }}
+                        fill="none"
+                        stroke="rgba(255, 255, 255, 0.75)"
+                        strokeWidth="1"
+                      />
+                    </svg>
+                  </div>
+
+                  {/* OPAQUE WHITE RECTANGLE: Seamlessly connected to frosted bridge, containing all active service content */}
+                  <div className="w-full bg-white text-black shadow-[0_24px_64px_rgba(0,0,0,0.18)] rounded-2xl md:rounded-3xl overflow-hidden border border-black/5">
+                    <AnimatePresence mode="wait">
+                      <motion.div
+                        key={currentStep.num}
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -10 }}
+                        transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+                        className="w-full p-6 sm:p-8 md:p-9"
+                      >
+                        {/* Top Header Row of the Card */}
+                        <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 pb-4 md:pb-5 border-b border-black/10">
+                          <div className="flex items-baseline gap-4 md:gap-6">
+                            <span className="font-sans font-light text-black/40 text-base md:text-lg">
+                              [{currentStep.num}]
+                            </span>
+                            <h3 className="font-header font-black tracking-tight uppercase text-2xl sm:text-3xl md:text-4xl text-[var(--brand)] m-0 leading-none">
+                              {currentStep.title}
+                            </h3>
+                          </div>
+                          <div className="flex items-center gap-4 self-start md:self-auto">
+                            <motion.span 
+                              style={{ color: activeColor }} 
+                              className="font-header font-black uppercase tracking-wider text-xs sm:text-sm"
+                            >
+                              {currentStep.label}
+                            </motion.span>
+                            <div className="w-8 h-8 rounded-full border border-black/15 flex items-center justify-center bg-black/5 text-black/70">
+                              <span className="font-mono text-xs font-bold">{currentStep.num}</span>
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    </button>
 
-                    {/* Expandable Content: Correct vertical height from start, expanding horizontally */}
-                    {isOpen && (
-                      <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ duration: 0.28, ease: "easeOut" }}
-                        className="w-full border-t border-black/5 mt-1 overflow-hidden"
-                      >
-                        <div className="w-full max-w-6xl mx-auto px-6 pb-5 pt-1.5 grid grid-cols-1 lg:grid-cols-12 gap-5 lg:gap-8">
+                        {/* Content Grid: Description on Left, Detailed Capabilities on Right */}
+                        <div className="pt-5 md:pt-6 grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-10">
                           {/* Left Column: Description */}
-                          <div className={`flex flex-col justify-start pt-1 ${step.longFeatures.length > 4 ? "lg:col-span-3" : "lg:col-span-4"}`}>
-                            <p className="font-sans font-light text-black/75 leading-relaxed max-w-2xl text-[14.5px] md:text-[17px]">
-                              {step.longDesc}
+                          <div className={`flex flex-col justify-start ${currentStep.longFeatures.length > 4 ? "lg:col-span-4" : "lg:col-span-5"}`}>
+                            <p className="font-sans font-light text-black/80 leading-relaxed text-[15px] sm:text-[16px] md:text-[17px] m-0">
+                              {currentStep.longDesc}
                             </p>
                           </div>
 
-                          {/* Right Column: Capabilities */}
-                          <div className={`flex flex-col justify-center lg:pl-8 lg:border-l border-black/10 ${step.longFeatures.length > 4 ? "lg:col-span-9" : "lg:col-span-8"}`}>
-                            <h4 style={{ color: activeColor }} className="font-header font-black tracking-widest uppercase mb-2 text-[14.5px] md:text-[16.5px]">
+                          {/* Right Column: Detailed Capabilities */}
+                          <div className={`flex flex-col justify-start lg:pl-8 lg:border-l border-black/10 ${currentStep.longFeatures.length > 4 ? "lg:col-span-8" : "lg:col-span-7"}`}>
+                            <h4 
+                              style={{ color: activeColor }} 
+                              className="font-header font-black tracking-widest uppercase mb-3 text-xs sm:text-sm"
+                            >
                               Detailed Capabilities
                             </h4>
-                            <ul className={`grid grid-cols-1 sm:grid-cols-2 ${step.longFeatures.length > 4 ? "lg:grid-cols-4 gap-x-4 gap-y-1.5" : "lg:grid-cols-3 gap-x-6 gap-y-2"}`}>
-                              {step.longFeatures.map((feat) => (
-                                <li key={feat.name} className="flex items-start gap-2">
-                                  <span style={{ color: brandColor }} className="font-bold leading-none mt-0.5 text-[19.5px]">+</span>
+                            <ul className={`grid grid-cols-1 sm:grid-cols-2 ${currentStep.longFeatures.length > 4 ? "lg:grid-cols-2 gap-x-6 gap-y-3" : "gap-x-6 gap-y-3.5"} list-none m-0 p-0`}>
+                              {currentStep.longFeatures.map((feat) => (
+                                <li key={feat.name} className="flex items-start gap-2.5">
+                                  <span 
+                                    style={{ color: brandColor }} 
+                                    className="font-bold leading-none mt-0.5 text-lg shrink-0"
+                                  >
+                                    +
+                                  </span>
                                   <div>
-                                    <span className="font-header font-black text-black uppercase tracking-wider block text-[15px] md:text-[16px]">
+                                    <span className="font-header font-black text-black uppercase tracking-wider block text-[14px] sm:text-[15px]">
                                       {feat.name}
                                     </span>
-                                    <span className="font-sans font-light leading-snug block text-[13.5px] md:text-[14px] text-black/70">
+                                    <span className="font-sans font-light leading-snug block text-[13px] sm:text-[13.5px] text-black/70 mt-0.5">
                                       {feat.desc}
                                     </span>
                                   </div>
@@ -1010,11 +1087,11 @@ export default function Home() {
                           </div>
                         </div>
                       </motion.div>
-                    )}
-                  </motion.div>
-                );
-              })}
-            </div>
+                    </AnimatePresence>
+                  </div>
+                </div>
+              );
+            })()}
           </motion.div>
         </motion.div>
 

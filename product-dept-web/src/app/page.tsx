@@ -96,12 +96,36 @@ const bentoData = [
 ];
 
 const partners = [
-  { name: "DirectMeds", shape: "circle" },
-  { name: "CO Bigelow", shape: "square" },
-  { name: "CleanCradle", shape: "triangle" },
-  { name: "Reel Paper", shape: "diamond" },
-  { name: "MDDN", shape: "circle" },
-  { name: "NewBioRx", shape: "square" }
+  { 
+    name: "DirectMeds", 
+    logo: "/client-logos/directmeds.svg", 
+    className: "h-[16px] sm:h-[18px] md:h-[20px] w-auto object-contain" 
+  },
+  { 
+    name: "C.O. Bigelow", 
+    logo: "/client-logos/co-bigelow.svg", 
+    className: "h-[18px] sm:h-[20px] md:h-[22px] w-auto object-contain" 
+  },
+  { 
+    name: "CleanCradle", 
+    logo: "/client-logos/cleancradle.svg", 
+    className: "h-[12px] sm:h-[13.5px] md:h-[15px] w-auto object-contain" 
+  },
+  { 
+    name: "Reel Paper", 
+    logo: "/client-logos/reel-paper.svg", 
+    className: "h-[16px] sm:h-[18px] md:h-[20px] w-auto object-contain" 
+  },
+  { 
+    name: "MDDN", 
+    logo: "/client-logos/mddn.svg", 
+    className: "h-[15px] sm:h-[17px] md:h-[19px] w-auto object-contain" 
+  },
+  { 
+    name: "NewBio Rx", 
+    logo: "/client-logos/newbio-rx.svg", 
+    className: "h-[13px] sm:h-[14.5px] md:h-[16px] w-auto object-contain" 
+  }
 ];
 
 export default function Home() {
@@ -602,27 +626,23 @@ export default function Home() {
             </span>
           </div>
 
-          <div className="w-full overflow-hidden relative py-2.5 md:py-3 border-y border-white/10 flex">
+          <div className="w-full overflow-hidden relative py-3 md:py-3.5 border-y border-white/10 flex items-center">
             <motion.div
-              className="flex gap-16 pr-16 whitespace-nowrap min-w-full shrink-0"
+              className="flex items-center gap-14 sm:gap-16 md:gap-20 pr-14 sm:pr-16 md:pr-20 whitespace-nowrap min-w-full shrink-0"
               animate={{ x: [0, "-50%"] }}
               transition={{
                 ease: "linear",
-                duration: 150,
+                duration: 120,
                 repeat: Infinity
               }}
             >
               {[...partners, ...partners, ...partners, ...partners, ...partners, ...partners, ...partners, ...partners].map((partner, index) => (
-                <div key={index} className="flex items-center gap-3.5 opacity-60 hover:opacity-100 transition-opacity duration-300">
-                  <div className="w-5 h-5 border border-white/35 flex items-center justify-center rounded">
-                    {partner.shape === 'circle' && <div className="w-2.5 h-2.5 rounded-full bg-white" />}
-                    {partner.shape === 'square' && <div className="w-2.5 h-2.5 bg-white" />}
-                    {partner.shape === 'triangle' && (
-                      <div className="w-0 h-0 border-l-[5px] border-l-transparent border-r-[5px] border-r-transparent border-b-[8px] border-b-white" />
-                    )}
-                    {partner.shape === 'diamond' && <div className="w-2 h-2 bg-white rotate-45" />}
-                  </div>
-                  <span className="font-header font-black tracking-widest text-[clamp(9px,0.85vw,11px)] uppercase text-white">{partner.name}</span>
+                <div key={index} className="flex items-center justify-center shrink-0 opacity-75 hover:opacity-100 transition-opacity duration-300">
+                  <img
+                    src={partner.logo}
+                    alt={partner.name}
+                    className={`${partner.className} max-w-none select-none pointer-events-none`}
+                  />
                 </div>
               ))}
             </motion.div>

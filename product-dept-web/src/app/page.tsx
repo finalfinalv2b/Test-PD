@@ -560,10 +560,10 @@ export default function Home() {
         {/* Content Container: Wordmark on Left, Justified Paragraph on Right with Equal Buffer from Monitor Edges */}
         <div
           style={!isMobile ? { transform: `translateY(-${wordmarkHalfHeight !== null ? `${wordmarkHalfHeight}px` : '4.5vw'})` } : undefined}
-          className={`relative z-10 w-full px-6 sm:px-10 lg:px-[10.5vw] flex flex-col lg:flex-row items-center lg:items-start justify-between gap-6 lg:gap-8 ${isMobile ? "my-auto pb-24 pt-2" : "absolute top-1/2 left-0 right-0"}`}
+          className={`relative z-10 w-full max-w-[1560px] mx-auto px-6 sm:px-10 lg:px-[10.5vw] 2xl:px-[13.2vw] flex flex-col lg:flex-row items-center lg:items-start justify-between gap-6 lg:gap-8 ${isMobile ? "my-auto pb-24 pt-2" : "absolute top-1/2 left-0 right-0"}`}
         >
           
-          {/* LEFT SIDE: PD Title Page Wordmark SVG (Equal buffer from left screen edge) */}
+          {/* LEFT SIDE: PD Title Page Wordmark SVG (Equal buffer from left screen edge, scales 15% larger on large monitors) */}
           <div className="w-full lg:w-auto flex flex-col justify-start items-center lg:items-start">
             <motion.img
               ref={wordmarkRef}
@@ -577,7 +577,7 @@ export default function Home() {
               transition={{ duration: 0.8 }}
               src="/pd-title-page-wordmark.svg"
               alt="Product Dept. - Where great ideas become exceptional products."
-              className="w-[88vw] max-w-[415px] lg:max-w-none lg:w-[clamp(400px,43vw,780px)] h-auto object-contain select-none pointer-events-none mt-0"
+              className="w-[88vw] max-w-[415px] lg:max-w-none lg:w-[clamp(400px,43vw,660px)] 2xl:w-[clamp(660px,46.8vw,900px)] h-auto object-contain select-none pointer-events-none mt-0"
             />
           </div>
 
@@ -587,7 +587,7 @@ export default function Home() {
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.15 }}
-              className="flex flex-col justify-start w-full max-w-[340px] sm:max-w-[380px] lg:max-w-none lg:w-[clamp(270px,23.5vw,395px)]"
+              className="flex flex-col justify-start w-full max-w-[340px] sm:max-w-[380px] lg:max-w-none lg:w-[clamp(270px,23.5vw,400px)]"
             >
               {/* Paragraphs: Justified left and right, with last line left justified */}
               <div

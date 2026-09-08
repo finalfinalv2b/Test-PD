@@ -1143,7 +1143,7 @@ export default function Home() {
               transition={{ duration: 0.8 }}
               src="/pd-title-page-wordmark.svg"
               alt="Product Dept. - Where great ideas become exceptional products."
-              className="w-[88vw] max-w-[415px] lg:max-w-none lg:w-[clamp(400px,43vw,750px)] min-[1800px]:w-[clamp(750px,46.8vw,960px)] h-auto object-contain select-none pointer-events-none mt-0"
+              className="w-[96.8vw] max-w-[456px] lg:max-w-none lg:w-[clamp(440px,47.3vw,825px)] min-[1800px]:w-[clamp(825px,51.5vw,1056px)] h-auto object-contain select-none pointer-events-none mt-0"
             />
           </div>
 

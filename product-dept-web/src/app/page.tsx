@@ -8,7 +8,7 @@ const bentoData = [
     num: "01",
     title: "STRATEGY",
     label: "REQUIREMENTS SET",
-    bgImage: "/photo-flicker/strategy_anim.mp4",
+    bgImage: "",
     longDesc: "Every successful product starts with a clear plan. We help you define your target audience, identify your product's key advantages, and lay out a roadmap for development. This ensures we build a product that your customers will love and that fits perfectly with your business goals.",
     longFeatures: [
       { name: "Product Roadmapping", desc: "Creating a clear step-by-step timeline and milestones for development." },
@@ -193,6 +193,9 @@ function ServiceBackgroundVideo({ src, isOpen, isColor = false }: { src: string;
 
 export default function Home() {
   const [activeIndex, setActiveIndex] = useState<number | null>(0);
+  const [isInServices, setIsInServices] = useState(false);
+  const isInServicesRef = useRef(false);
+  isInServicesRef.current = isInServices;
   const [isContactOpen, setIsContactOpen] = useState(false);
   const isContactOpenRef = useRef(false);
   isContactOpenRef.current = isContactOpen;
@@ -297,13 +300,22 @@ export default function Home() {
 
   // Synchronize active accordion index with natural/touchpad scroll progress on desktop (8 stages: 0-6 tabs, 7 contact)
   useEffect(() => {
-    if (isMobile) return;
-
     const handleScroll = () => {
+      const section = processSectionRef.current;
+      if (section) {
+        const rect = section.getBoundingClientRect();
+        const inServices = rect.top <= 200;
+        if (inServices !== isInServicesRef.current) {
+          setIsInServices(inServices);
+          isInServicesRef.current = inServices;
+        }
+      }
+
+      if (isMobile) return;
+
       // If animating via click or mouse wheel notch snap, avoid overriding
       if (isClickScrollingRef.current) return;
 
-      const section = processSectionRef.current;
       if (!section) return;
 
       const rect = section.getBoundingClientRect();
@@ -395,6 +407,9 @@ export default function Home() {
     if (isContactOpenRef.current) {
       setIsContactOpen(false);
     }
+
+    setIsInServices(true);
+    isInServicesRef.current = true;
 
     if (isMobile) {
       const nextIndex = index === activeIndex ? null : index;
@@ -567,6 +582,8 @@ export default function Home() {
           handleItemClickRef.current(currentIdx - 1);
         } else if (currentIdx === 0) {
           lastSnapTimeRef.current = now;
+          setIsInServices(false);
+          isInServicesRef.current = false;
           window.scrollTo({
             top: 0,
             behavior: "smooth"
@@ -618,6 +635,8 @@ export default function Home() {
           handleItemClickRef.current(currentIdx - 1);
         } else if (currentIdx === 0) {
           lastSnapTimeRef.current = now;
+          setIsInServices(false);
+          isInServicesRef.current = false;
           window.scrollTo({
             top: 0,
             behavior: "smooth"
@@ -705,30 +724,51 @@ export default function Home() {
       } as React.CSSProperties}
       className="relative w-full min-h-screen bg-black text-white transition-colors duration-500 font-sans font-light pt-[clamp(56px,6vh,72px)]"
     >
-      {/* SECTION 1: Title Page with Cropped Background Logo & Two-Column Layout */}
-      <section className="relative w-full h-[calc(100dvh-clamp(56px,6vh,72px))] min-h-[540px] flex flex-col items-center justify-between border-b border-white/10 bg-black text-white overflow-hidden">
-        
-        {/* Background Logo: Centered horizontally, 8% larger and 4% up */}
-        <div className={`absolute left-1/2 -translate-x-1/2 -translate-y-1/2 z-0 aspect-[564.03/288.69] pointer-events-none select-none ${isMobile ? "top-[40%] w-[190vw] min-w-[595px]" : "top-[44%] w-[109vw] min-w-[1070px]"}`}>
-          <svg
-            viewBox="0 0 564.03 288.69"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-            className="w-full h-full"
-            preserveAspectRatio="xMidYMid slice"
-          >
-            {/* Circle Shape */}
-            <path
-              d="M136.64,15.41c75.46,0,136.64,61.17,136.64,136.64s-61.17,136.64-136.64,136.64S0,227.51,0,152.05,61.17,15.41,136.64,15.41"
-              fill={brandColor || "#f41c06"}
-            />
-            {/* Square Shape */}
-            <polygon
-              points="553.22 284.38 311.9 284.38 286.31 0 562.31 67.5 553.22 284.38"
-              fill={brandColor || "#f41c06"}
-            />
-          </svg>
-        </div>
+      {/* Background Logo: Transitions between Title Page hero position and behind Strategy card in Services */}
+      <motion.div
+        initial={false}
+        animate={{
+          top: isInServices
+            ? (isMobile 
+                ? "calc(clamp(56px,6vh,72px) + (100dvh - clamp(56px,6vh,72px)) * 0.55)" 
+                : "calc(clamp(56px,6vh,72px) + (100dvh - clamp(56px,6vh,72px)) * 0.585)")
+            : (isMobile 
+                ? "calc(clamp(56px,6vh,72px) + (100dvh - clamp(56px,6vh,72px)) * 0.40)" 
+                : "calc(clamp(56px,6vh,72px) + (100dvh - clamp(56px,6vh,72px)) * 0.44)"),
+          x: isContactOpen ? "-150%" : "-50%",
+          y: "-50%",
+          opacity: (!isInServices || activeIndex === 0 || activeIndex === null) && !isContactOpen ? 1 : 0
+        }}
+        transition={{
+          duration: 0.8,
+          ease: [0.22, 1, 0.36, 1]
+        }}
+        className={`fixed left-1/2 z-0 aspect-[564.03/288.69] pointer-events-none select-none ${
+          isMobile ? "w-[190vw] min-w-[595px]" : "w-[109vw] min-w-[1070px]"
+        }`}
+      >
+        <svg
+          viewBox="0 0 564.03 288.69"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+          className="w-full h-full"
+          preserveAspectRatio="xMidYMid slice"
+        >
+          {/* Circle Shape */}
+          <path
+            d="M136.64,15.41c75.46,0,136.64,61.17,136.64,136.64s-61.17,136.64-136.64,136.64S0,227.51,0,152.05,61.17,15.41,136.64,15.41"
+            fill={brandColor || "#f41c06"}
+          />
+          {/* Square Shape */}
+          <polygon
+            points="553.22 284.38 311.9 284.38 286.31 0 562.31 67.5 553.22 284.38"
+            fill={brandColor || "#f41c06"}
+          />
+        </svg>
+      </motion.div>
+
+      {/* SECTION 1: Title Page with Two-Column Layout */}
+      <section className="relative w-full h-[calc(100dvh-clamp(56px,6vh,72px))] min-h-[540px] flex flex-col items-center justify-between border-b border-white/10 bg-transparent text-white overflow-hidden">
 
         {/* Content Container: Wordmark on Left, Paragraph Centered Vertically Between Header & Partners Banner on Right */}
         <div
@@ -832,7 +872,7 @@ export default function Home() {
       <section 
         ref={processSectionRef} 
         id="process-section" 
-        className={`relative bg-[#FFFFFF] border-b border-black w-full scroll-mt-[clamp(56px,6vh,72px)] ${isMobile ? "py-24" : "h-[500vh]"}`}
+        className={`relative bg-transparent border-b border-black w-full scroll-mt-[clamp(56px,6vh,72px)] ${isMobile ? "py-24" : "h-[500vh]"}`}
       >
         {/* Pinned Wrapper for Desktop */}
         <div className={isMobile ? "w-full" : "sticky top-[clamp(56px,6vh,72px)] left-0 w-full h-[calc(100vh-clamp(56px,6vh,72px))] overflow-hidden flex flex-col items-center justify-start bg-transparent"}>
@@ -851,12 +891,13 @@ export default function Home() {
             className={
               isMobile
                 ? "w-full flex flex-col items-center justify-start"
-                : "absolute inset-0 w-full h-full flex flex-col items-center justify-start overflow-hidden bg-white"
+                : "absolute inset-0 w-full h-full flex flex-col items-center justify-start overflow-hidden bg-transparent"
             }
           >
             {/* SERVICE BACKGROUND PHOTOS LAYER WITH PARALLAX DRIFT */}
           <div className={`absolute inset-0 w-full h-full pointer-events-none z-0 overflow-hidden ${isMobile ? "hidden" : ""}`}>
             {bentoData.map((step, index) => {
+              if (!step.bgImage) return null;
               const isOpen = activeIndex === index;
               const isEven = index % 2 === 0;
               return (
@@ -977,19 +1018,17 @@ export default function Home() {
                             <span className="font-sans font-light text-black/40 text-base md:text-lg">
                               [{currentStep.num}]
                             </span>
-                            <h3 className="font-header font-black tracking-tight uppercase text-2xl sm:text-3xl md:text-4xl text-[var(--brand)] m-0 leading-none">
+                            <h3 className="font-header font-black tracking-tight uppercase text-2xl sm:text-3xl md:text-4xl text-black m-0 leading-none">
                               {currentStep.title}
                             </h3>
                           </div>
                           <div className="flex items-center gap-4 self-start md:self-auto">
                             <span 
-                              className="font-header font-black uppercase tracking-wider text-xs sm:text-sm text-black"
+                              style={{ color: brandColor || "#f41c06" }}
+                              className="font-header font-black uppercase tracking-wider text-xs sm:text-sm"
                             >
                               {currentStep.label}
                             </span>
-                            <div className="w-8 h-8 rounded-full border border-black/15 flex items-center justify-center bg-black/5 text-black/70">
-                              <span className="font-mono text-xs font-bold">{currentStep.num}</span>
-                            </div>
                           </div>
                         </motion.div>
                       </AnimatePresence>

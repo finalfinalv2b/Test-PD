@@ -226,6 +226,8 @@ export default function Home() {
   const tabsTrackRef = useRef<HTMLDivElement>(null);
   const tabsInnerRef = useRef<HTMLDivElement>(null);
   const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
+  const touchStartXRef = useRef<number | null>(null);
+  const touchStartYRef = useRef<number | null>(null);
   const [activeTabMetrics, setActiveTabMetrics] = useState<{
     left: number;
     width: number;
@@ -258,6 +260,20 @@ export default function Home() {
     window.addEventListener("resize", updateMetrics);
     return () => window.removeEventListener("resize", updateMetrics);
   }, [activeIndex, windowWidth]);
+
+  // Keep active tab centered in horizontal track on mobile
+  useEffect(() => {
+    if (!isMobile || activeIndex === null) return;
+    const btn = tabRefs.current[activeIndex];
+    const track = tabsTrackRef.current;
+    if (btn && track) {
+      const btnLeft = btn.offsetLeft;
+      const btnWidth = btn.offsetWidth;
+      const trackWidth = track.clientWidth;
+      const targetScrollLeft = btnLeft - (trackWidth / 2) + (btnWidth / 2);
+      track.scrollTo({ left: targetScrollLeft, behavior: "smooth" });
+    }
+  }, [activeIndex, isMobile]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -483,8 +499,38 @@ export default function Home() {
   const scrollToContactRef = useRef(scrollToContact);
   scrollToContactRef.current = scrollToContact;
 
-  // Update active index based on scroll on desktop
-  // Click handler that toggles on mobile, and scrolls to target position on desktop
+  // Card touch handlers for mobile swipe navigation
+  const handleCardTouchStart = (e: React.TouchEvent) => {
+    if (!isMobile) return;
+    touchStartXRef.current = e.touches[0].clientX;
+    touchStartYRef.current = e.touches[0].clientY;
+  };
+
+  const handleCardTouchEnd = (e: React.TouchEvent) => {
+    if (!isMobile || touchStartXRef.current === null || touchStartYRef.current === null) return;
+    const deltaX = e.changedTouches[0].clientX - touchStartXRef.current;
+    const deltaY = e.changedTouches[0].clientY - touchStartYRef.current;
+    touchStartXRef.current = null;
+    touchStartYRef.current = null;
+
+    // Trigger swipe if horizontal displacement is dominant over vertical scroll
+    if (Math.abs(deltaX) > 40 && Math.abs(deltaX) > Math.abs(deltaY) * 1.5) {
+      const currentIndex = activeIndex ?? 0;
+      if (deltaX < 0) {
+        // Swiped left -> next service
+        if (currentIndex < bentoData.length - 1) {
+          handleItemClick(currentIndex + 1);
+        }
+      } else {
+        // Swiped right -> prev service
+        if (currentIndex > 0) {
+          handleItemClick(currentIndex - 1);
+        }
+      }
+    }
+  };
+
+  // Click handler that switches service on mobile, and scrolls to target position on desktop
   const handleItemClick = (index: number) => {
     if (isContactOpenRef.current) {
       setIsContactOpen(false);
@@ -497,15 +543,13 @@ export default function Home() {
     isInServicesRef.current = true;
 
     if (isMobile) {
-      const nextIndex = index === activeIndex ? null : index;
-      setActiveIndex(nextIndex);
-      if (nextIndex !== null) {
-        setTimeout(() => {
-          const el = document.getElementById(`process-step-site5-${index}`);
-          if (el) {
-            el.scrollIntoView({ behavior: "smooth", block: "center" });
-          }
-        }, 150);
+      setActiveIndex(index);
+      if (processSectionRef.current) {
+        const rect = processSectionRef.current.getBoundingClientRect();
+        // If scrolled past or above process section (e.g. from About or Contact), scroll back to it
+        if (rect.top < -50 || rect.top > window.innerHeight) {
+          processSectionRef.current.scrollIntoView({ behavior: "smooth" });
+        }
       }
       return;
     }
@@ -892,9 +936,8 @@ export default function Home() {
           ease: [0.22, 1, 0.36, 1]
         }}
         style={{
-          width: isMobile ? "240vw" : "max(114vw, calc(114vh * 1.95375))",
-          height: isMobile ? "auto" : "max(calc(114vw / 1.95375), 114vh)",
-          aspectRatio: isMobile ? "564.03 / 288.69" : undefined,
+          width: "max(114vw, calc(114vh * 1.95375))",
+          height: "max(calc(114vw / 1.95375), 114vh)",
         }}
         className="fixed left-1/2 z-0 pointer-events-none select-none flex items-center justify-center overflow-visible"
       >
@@ -1154,7 +1197,11 @@ export default function Home() {
               return (
                 <div className="w-full max-w-6xl mx-auto px-4 md:px-6">
                   {/* SERVICE BOX: Centered vertically with frosted glass top header and solid white body */}
-                  <div className="w-full shadow-[0_24px_64px_rgba(0,0,0,0.18)] rounded-[6px] overflow-hidden border border-black/10">
+                  <div 
+                    onTouchStart={handleCardTouchStart}
+                    onTouchEnd={handleCardTouchEnd}
+                    className="w-full shadow-[0_24px_64px_rgba(0,0,0,0.18)] rounded-[6px] overflow-hidden border border-black/10 touch-pan-y"
+                  >
                     {/* Top Part: Frosted Glass Header */}
                     <div 
                       style={{ WebkitBackdropFilter: "blur(16px)", backdropFilter: "blur(16px)" }}
@@ -1259,7 +1306,7 @@ export default function Home() {
           }}
           className={
             isMobile 
-              ? "w-full border-t border-black/20 bg-white text-black py-12" 
+              ? "w-full border-t border-black/20 bg-white text-black py-12 scroll-mt-[clamp(56px,6vh,72px)]" 
               : "absolute inset-0 w-full h-full z-30 bg-white overflow-hidden text-black"
           }
         >
@@ -1360,7 +1407,7 @@ export default function Home() {
           }}
           className={
             isMobile 
-              ? "w-full border-t border-black/20 bg-[var(--brand)] text-white py-12" 
+              ? "w-full border-t border-black/20 bg-[var(--brand)] text-white py-12 scroll-mt-[clamp(56px,6vh,72px)]" 
               : "absolute inset-0 w-full h-full z-40 bg-[var(--brand)] overflow-hidden"
           }
         >
@@ -1376,22 +1423,22 @@ export default function Home() {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
                       <div className="flex flex-col gap-2.5">
                         <label htmlFor="name" className="text-xs font-black tracking-widest uppercase text-black">NAME</label>
-                        <input type="text" id="name" name="name" className="border border-black/10 bg-white text-black py-3.5 px-4 outline-none focus:border-black transition-colors font-mono text-sm" placeholder="Jane Doe" required />
+                        <input type="text" id="name" name="name" className="border border-black/10 bg-white text-black py-3.5 px-4 outline-none focus:border-black transition-colors font-mono text-base md:text-sm" placeholder="Jane Doe" required />
                       </div>
                       <div className="flex flex-col gap-2.5">
                         <label htmlFor="email" className="text-xs font-black tracking-widest uppercase text-black">EMAIL</label>
-                        <input type="email" id="email" name="email" className="border border-black/10 bg-white text-black py-3.5 px-4 outline-none focus:border-black transition-colors font-mono text-sm" placeholder="jane@company.com" required />
+                        <input type="email" id="email" name="email" className="border border-black/10 bg-white text-black py-3.5 px-4 outline-none focus:border-black transition-colors font-mono text-base md:text-sm" placeholder="jane@company.com" required />
                       </div>
                     </div>
 
                     <div className="flex flex-col gap-2.5">
                       <label htmlFor="company" className="text-xs font-black tracking-widest uppercase text-black">ORGANIZATION</label>
-                      <input type="text" id="company" name="company" className="border border-black/10 bg-white text-black py-3.5 px-4 outline-none focus:border-black transition-colors font-mono text-sm" placeholder="Organization name" />
+                      <input type="text" id="company" name="company" className="border border-black/10 bg-white text-black py-3.5 px-4 outline-none focus:border-black transition-colors font-mono text-base md:text-sm" placeholder="Organization name" />
                     </div>
 
                     <div className="flex flex-col gap-2.5">
                       <label htmlFor="description" className="text-xs font-black tracking-widest uppercase text-black">MESSAGE</label>
-                      <textarea id="description" name="description" rows={5} className="border border-black/10 bg-white text-black py-3.5 px-4 outline-none focus:border-black transition-colors resize-none font-mono text-sm" placeholder="How can we help?" required></textarea>
+                      <textarea id="description" name="description" rows={5} className="border border-black/10 bg-white text-black py-3.5 px-4 outline-none focus:border-black transition-colors resize-none font-mono text-base md:text-sm" placeholder="How can we help?" required></textarea>
                     </div>
 
                     <div className="pt-4 flex justify-start">

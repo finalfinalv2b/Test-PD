@@ -114,7 +114,7 @@ export function Navigation() {
           <img
             src={useWhiteLogo ? "/pd-wordmark-white.svg" : "/pd-wordmark-black.svg"}
             alt="Product Dept."
-            style={{ height: "clamp(8.4px, 1.12vw, 15.4px)" }}
+            style={{ height: "clamp(10.5px, 2.2vw, 15.4px)" }}
             className="w-auto"
           />
         </Link>

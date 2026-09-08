@@ -199,6 +199,9 @@ export default function Home() {
   const [isContactOpen, setIsContactOpen] = useState(false);
   const isContactOpenRef = useRef(false);
   isContactOpenRef.current = isContactOpen;
+  const [isAboutOpen, setIsAboutOpen] = useState(false);
+  const isAboutOpenRef = useRef(false);
+  isAboutOpenRef.current = isAboutOpen;
   const [isMobile, setIsMobile] = useState(false);
   const [contentScale, setContentScale] = useState(1);
   const [windowWidth, setWindowWidth] = useState(1440);
@@ -331,15 +334,28 @@ export default function Home() {
       const progress = (scrollTop - sectionStart) / scrollableHeight;
 
       if (progress >= 0 && progress <= 1) {
-        const targetStage = Math.min(7, Math.max(0, Math.floor(progress * 8)));
+        const targetStage = Math.min(8, Math.max(0, Math.floor(progress * 9)));
 
-        if (targetStage === 7) {
+        if (targetStage === 8) {
           if (!isContactOpenRef.current) {
             setIsContactOpen(true);
+          }
+          if (isAboutOpenRef.current) {
+            setIsAboutOpen(false);
+          }
+        } else if (targetStage === 7) {
+          if (isContactOpenRef.current) {
+            setIsContactOpen(false);
+          }
+          if (!isAboutOpenRef.current) {
+            setIsAboutOpen(true);
           }
         } else {
           if (isContactOpenRef.current) {
             setIsContactOpen(false);
+          }
+          if (isAboutOpenRef.current) {
+            setIsAboutOpen(false);
           }
           if (targetStage !== activeIndexRef.current) {
             setActiveIndex(targetStage);
@@ -349,6 +365,9 @@ export default function Home() {
         if (isContactOpenRef.current) {
           setIsContactOpen(false);
         }
+        if (isAboutOpenRef.current) {
+          setIsAboutOpen(false);
+        }
       }
     };
 
@@ -356,8 +375,56 @@ export default function Home() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [isMobile]);
 
-  // Snaps in the Get In Touch section from the right
+  // Snaps in the About section from the right
+  const scrollToAbout = () => {
+    setIsContactOpen(false);
+    setIsAboutOpen(true);
+
+    if (isMobile) {
+      const aboutSec = document.getElementById("about-section");
+      if (aboutSec) {
+        aboutSec.scrollIntoView({ behavior: "smooth" });
+      }
+      return;
+    }
+
+    isClickScrollingRef.current = true;
+
+    if (processSectionRef.current) {
+      const rect = processSectionRef.current.getBoundingClientRect();
+      const scrollTop = window.scrollY || document.documentElement.scrollTop;
+      const sectionStart = rect.top + scrollTop;
+      const sectionHeight = processSectionRef.current.offsetHeight;
+      const viewportHeight = window.innerHeight;
+      const scrollableHeight = sectionHeight - viewportHeight;
+
+      const targetProgress = (7 + 0.5) / 9;
+      const targetScrollY = sectionStart + (targetProgress * scrollableHeight);
+
+      const handleScrollEnd = () => {
+        isClickScrollingRef.current = false;
+        window.removeEventListener("scrollend", handleScrollEnd);
+      };
+      window.addEventListener("scrollend", handleScrollEnd);
+
+      setTimeout(() => {
+        isClickScrollingRef.current = false;
+        window.removeEventListener("scrollend", handleScrollEnd);
+      }, 900);
+
+      window.scrollTo({
+        top: targetScrollY,
+        behavior: "smooth"
+      });
+    }
+  };
+
+  const scrollToAboutRef = useRef(scrollToAbout);
+  scrollToAboutRef.current = scrollToAbout;
+
+  // Snaps in the Get In Touch section from the left
   const scrollToContact = () => {
+    setIsAboutOpen(false);
     setIsContactOpen(true);
 
     if (isMobile) {
@@ -378,7 +445,8 @@ export default function Home() {
       const viewportHeight = window.innerHeight;
       const scrollableHeight = sectionHeight - viewportHeight;
 
-      const targetScrollY = sectionStart + scrollableHeight;
+      const targetProgress = (8 + 0.5) / 9;
+      const targetScrollY = sectionStart + (targetProgress * scrollableHeight);
 
       const handleScrollEnd = () => {
         isClickScrollingRef.current = false;
@@ -406,6 +474,9 @@ export default function Home() {
   const handleItemClick = (index: number) => {
     if (isContactOpenRef.current) {
       setIsContactOpen(false);
+    }
+    if (isAboutOpenRef.current) {
+      setIsAboutOpen(false);
     }
 
     setIsInServices(true);
@@ -437,8 +508,8 @@ export default function Home() {
 
       const scrollableHeight = sectionHeight - viewportHeight;
       
-      // Calculate target progress coordinate at middle of the index range across 8 stages
-      const targetProgress = (index + 0.5) / 8;
+      // Calculate target progress coordinate at middle of the index range across 9 stages
+      const targetProgress = (index + 0.5) / 9;
       const targetScrollY = sectionStart + (targetProgress * scrollableHeight);
 
       // Disable scroll index changes while click scrolling
@@ -469,22 +540,33 @@ export default function Home() {
   const handleItemClickRef = useRef(handleItemClick);
   handleItemClickRef.current = handleItemClick;
 
-  // Listen to open-contact and close-contact events from Navigation and hash navigation
+  // Listen to open-contact, open-about, and close events from Navigation and hash navigation
   useEffect(() => {
     const onOpenContact = () => scrollToContactRef.current();
     const onCloseContact = () => handleItemClickRef.current(0);
+    const onOpenAbout = () => scrollToAboutRef.current();
+    const onCloseAbout = () => handleItemClickRef.current(0);
+
     window.addEventListener("open-contact", onOpenContact);
     window.addEventListener("close-contact", onCloseContact);
+    window.addEventListener("open-about", onOpenAbout);
+    window.addEventListener("close-about", onCloseAbout);
 
     if (window.location.hash === "#contact-section") {
       setTimeout(() => {
         scrollToContactRef.current();
+      }, 200);
+    } else if (window.location.hash === "#about-section") {
+      setTimeout(() => {
+        scrollToAboutRef.current();
       }, 200);
     }
 
     return () => {
       window.removeEventListener("open-contact", onOpenContact);
       window.removeEventListener("close-contact", onCloseContact);
+      window.removeEventListener("open-about", onOpenAbout);
+      window.removeEventListener("close-about", onCloseAbout);
     };
   }, []);
 
@@ -518,15 +600,37 @@ export default function Home() {
       // If Contact section is open:
       if (isContactOpenRef.current) {
         if (e.deltaY < 0) {
-          // Scrolling UP: snap back to Venture Infrastructure (Tab 6)
+          // Scrolling UP from Contact: snap back to About
+          e.preventDefault();
+          const now = Date.now();
+          if (now - lastSnapTimeRef.current > 350) {
+            lastSnapTimeRef.current = now;
+            scrollToAboutRef.current();
+          }
+        } else if (e.deltaY > 0) {
+          e.preventDefault();
+        }
+        return;
+      }
+
+      // If About section is open:
+      if (isAboutOpenRef.current) {
+        if (e.deltaY > 0) {
+          // Scrolling DOWN from About: snap to Contact
+          e.preventDefault();
+          const now = Date.now();
+          if (now - lastSnapTimeRef.current > 350) {
+            lastSnapTimeRef.current = now;
+            scrollToContactRef.current();
+          }
+        } else if (e.deltaY < 0) {
+          // Scrolling UP from About: snap back to Venture Infrastructure (Tab 6)
           e.preventDefault();
           const now = Date.now();
           if (now - lastSnapTimeRef.current > 350) {
             lastSnapTimeRef.current = now;
             handleItemClickRef.current(6);
           }
-        } else if (e.deltaY > 0) {
-          e.preventDefault();
         }
         return;
       }
@@ -572,7 +676,7 @@ export default function Home() {
           handleItemClickRef.current(currentIdx + 1);
         } else if (currentIdx === 6) {
           lastSnapTimeRef.current = now;
-          scrollToContactRef.current();
+          scrollToAboutRef.current();
         }
       } else if (e.deltaY < 0) {
         // Scroll UP
@@ -610,13 +714,19 @@ export default function Home() {
         
         if (isContactOpenRef.current) return;
 
+        if (isAboutOpenRef.current) {
+          lastSnapTimeRef.current = now;
+          scrollToContactRef.current();
+          return;
+        }
+
         const currentIdx = activeIndexRef.current;
         if (currentIdx !== null && currentIdx < 6) {
           lastSnapTimeRef.current = now;
           handleItemClickRef.current(currentIdx + 1);
         } else if (currentIdx === 6) {
           lastSnapTimeRef.current = now;
-          scrollToContactRef.current();
+          scrollToAboutRef.current();
         }
       } else if (e.key === "ArrowUp" || e.key === "PageUp" || (e.key === " " && e.shiftKey)) {
         e.preventDefault();
@@ -624,6 +734,12 @@ export default function Home() {
         if (now - lastSnapTimeRef.current < 400) return;
         
         if (isContactOpenRef.current) {
+          lastSnapTimeRef.current = now;
+          scrollToAboutRef.current();
+          return;
+        }
+
+        if (isAboutOpenRef.current) {
           lastSnapTimeRef.current = now;
           handleItemClickRef.current(6);
           return;
@@ -735,9 +851,9 @@ export default function Home() {
             : (isMobile 
                 ? "calc(clamp(56px,6vh,72px) + (100dvh - clamp(56px,6vh,72px)) * 0.40)" 
                 : "calc(clamp(56px,6vh,72px) + (100dvh - clamp(56px,6vh,72px)) * 0.44)"),
-          x: isContactOpen ? "-150%" : "-50%",
+          x: (isAboutOpen || isContactOpen) ? "-150%" : "-50%",
           y: "-50%",
-          opacity: (!isInServices || activeIndex === 0 || activeIndex === null) && !isContactOpen ? 1 : 0
+          opacity: (!isInServices || activeIndex === 0 || activeIndex === null) && !isContactOpen && !isAboutOpen ? 1 : 0
         }}
         transition={{
           duration: 0.8,
@@ -872,17 +988,17 @@ export default function Home() {
       <section 
         ref={processSectionRef} 
         id="process-section" 
-        className={`relative bg-transparent border-b border-black w-full scroll-mt-[clamp(56px,6vh,72px)] ${isMobile ? "py-24" : "h-[500vh]"}`}
+        className={`relative bg-transparent border-b border-black w-full scroll-mt-[clamp(56px,6vh,72px)] ${isMobile ? "py-24" : "h-[600vh]"}`}
       >
         {/* Pinned Wrapper for Desktop */}
         <div className={isMobile ? "w-full" : "sticky top-[clamp(56px,6vh,72px)] left-0 w-full h-[calc(100vh-clamp(56px,6vh,72px))] overflow-hidden flex flex-col items-center justify-start bg-transparent"}>
           
-          {/* SECTION 3 & 4: Services Viewport Panel - Pushed aside as if connected to Get In Touch */}
+          {/* SECTION 3 & 4: Services Viewport Panel - Pushed aside as if connected to About & Get In Touch */}
           <motion.div
             id="services-panel"
             initial={false}
             animate={{
-              x: isMobile ? 0 : (isContactOpen ? "-100%" : "0%"),
+              x: isMobile ? 0 : ((isAboutOpen || isContactOpen) ? "-100%" : "0%"),
             }}
             transition={{
               duration: 0.8,
@@ -1095,12 +1211,112 @@ export default function Home() {
           </motion.div>
         </motion.div>
 
-        {/* SECTION 5: Contact Us - Pushes services section aside, connected at the edge */}
+        {/* SECTION 4: About Section - Comes in after Services, pushes Services to left; pushed to right by Contact */}
+        <motion.div
+          id="about-section"
+          initial={false}
+          animate={{
+            x: isMobile ? 0 : (isAboutOpen ? "0%" : "100%"),
+          }}
+          transition={{
+            duration: 0.8,
+            ease: [0.22, 1, 0.36, 1]
+          }}
+          className={
+            isMobile 
+              ? "w-full border-t border-black/20 bg-white text-black py-12" 
+              : "absolute inset-0 w-full h-full z-30 bg-white overflow-hidden text-black"
+          }
+        >
+          <div className="grid grid-cols-1 lg:grid-cols-2 w-full h-full">
+            
+            {/* LEFT SIDE: RED TITLE BLOCK */}
+            <div className="p-8 md:p-14 lg:p-16 flex flex-col justify-between bg-[#f41c06] text-white h-full">
+              <div>
+                <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black tracking-tighter text-white uppercase leading-none mb-6">
+                  ABOUT.
+                </h1>
+                <p className="font-sans font-light text-white/90 text-[17px] md:text-[20px] max-w-md leading-relaxed">
+                  We believe the world is a better place when interesting and compelling ideas come to life.
+                </p>
+              </div>
+
+              {/* Back to Services Button */}
+              <div className="pt-8">
+                <button
+                  type="button"
+                  onClick={() => handleItemClick(6)}
+                  className="group flex items-center gap-3 text-white/70 hover:text-white transition-colors cursor-pointer border-none bg-transparent p-0 text-xs font-bold tracking-widest uppercase select-none"
+                >
+                  <div className="w-8 h-8 rounded-full border border-white/20 flex items-center justify-center group-hover:border-white transition-colors bg-white/10">
+                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" className="rotate-180">
+                      <path d="M5 2L10 7L5 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  </div>
+                  <span>Back to Services</span>
+                </button>
+              </div>
+            </div>
+
+            {/* RIGHT SIDE: DATA CASCADE */}
+            <div className="p-6 md:p-10 lg:p-12 bg-white text-black flex flex-col justify-between h-full overflow-y-auto border-t lg:border-t-0 lg:border-l border-black/10">
+              <div className="space-y-6">
+                {/* WHO WE ARE */}
+                <div className="pb-6 border-b border-black/10">
+                  <span className="text-xs font-black tracking-widest uppercase block mb-3 text-black/50">Who We Are</span>
+                  <div className="font-sans font-light space-y-3 text-xs md:text-[14px] tracking-normal leading-relaxed text-black/80">
+                    <p className="m-0">
+                      PRODUCT DEPT. is a full-stack product and venture infrastructure partner integrating strategy, design, engineering, sourcing, manufacturing, logistics, and supply chain optimization into one seamless experience.
+                    </p>
+                    <p className="m-0">
+                      We are a global team that collaborates deeply with our clients through every step of the process, ensuring that great ideas become exceptional products.
+                    </p>
+                  </div>
+                </div>
+
+                {/* PRINCIPLES */}
+                <div>
+                  <h2 className="text-xs font-black tracking-widest uppercase mb-4 text-black/50">Core Principles</h2>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+                    <div className="border-t border-black/20 pt-3">
+                      <h3 className="font-black text-base md:text-lg mb-1 tracking-tight uppercase text-black">Disciplined Strategy</h3>
+                      <p className="font-sans font-light text-xs md:text-[13px] tracking-normal leading-relaxed text-black/75 m-0">We don&apos;t guess. We map constraints, establish rigid requirements, and deploy with intentionality.</p>
+                    </div>
+
+                    <div className="border-t border-black/20 pt-3">
+                      <h3 className="font-black text-base md:text-lg mb-1 tracking-tight uppercase text-black">Technical Rigor</h3>
+                      <p className="font-sans font-light text-xs md:text-[13px] tracking-normal leading-relaxed text-black/75 m-0">Excellence is binary. Every millimeter, surface finish, and mechanical tolerance is accounted for.</p>
+                    </div>
+
+                    <div className="border-t border-black/20 pt-3 md:col-span-2">
+                      <h3 className="font-black text-base md:text-lg mb-1 tracking-tight uppercase text-black">Calm Execution</h3>
+                      <p className="font-sans font-light text-xs md:text-[13px] tracking-normal leading-relaxed text-black/75 max-w-xl m-0">Hardware is hard. We absorb the chaos of the supply chain so our partners can focus exclusively on growth and deployment.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="border-t border-black/15 pt-6 flex justify-start">
+                <button
+                  type="button"
+                  onClick={scrollToContact}
+                  className="inline-block bg-[#f41c06] text-white hover:bg-black hover:border-black border border-[#f41c06] transition-colors px-8 py-3 font-black text-xs tracking-widest uppercase cursor-pointer"
+                >
+                  Get in Touch
+                </button>
+              </div>
+
+            </div>
+
+          </div>
+        </motion.div>
+
+        {/* SECTION 5: Contact Us - Comes in from the LEFT, pushing About page off to the right */}
         <motion.div
           id="contact-section"
           initial={false}
           animate={{
-            x: isMobile ? 0 : (isContactOpen ? "0%" : "100%"),
+            x: isMobile ? 0 : (isContactOpen ? "0%" : "-100%"),
           }}
           transition={{
             duration: 0.8,
@@ -1114,67 +1330,39 @@ export default function Home() {
         >
             <div className="grid grid-cols-1 lg:grid-cols-2 w-full h-full">
               
-              {/* LEFT SIDE COPY BLOCK */}
-              <div className="p-8 md:p-14 lg:p-16 flex flex-col justify-between bg-transparent h-full">
-                <div>
-                  <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black tracking-tighter text-white uppercase leading-none mb-6">
-                    GET IN <br /> TOUCH.
-                  </h1>
-                  <p className="font-sans font-light text-white/80 text-[18px] md:text-[21px] max-w-lg leading-relaxed">
-                    Ready to scale your physical product lines? Reach out to explore how Product Dept. can build and optimize your supply chain.
-                  </p>
-                </div>
-
-                {/* Back to Services Button */}
-                <div className="pt-8">
-                  <button
-                    type="button"
-                    onClick={() => handleItemClick(6)}
-                    className="group flex items-center gap-3 text-white/70 hover:text-white transition-colors cursor-pointer border-none bg-transparent p-0 text-xs font-bold tracking-widest uppercase select-none"
-                  >
-                    <div className="w-8 h-8 rounded-full border border-white/20 flex items-center justify-center group-hover:border-white transition-colors bg-white/10">
-                      <svg width="14" height="14" viewBox="0 0 14 14" fill="none" className="rotate-180">
-                        <path d="M5 2L10 7L5 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                      </svg>
-                    </div>
-                    <span>Back to Services</span>
-                  </button>
-                </div>
-              </div>
-
-              {/* RIGHT SIDE FORM GRID */}
-              <div className="p-8 md:p-12 lg:p-16 bg-white text-black flex flex-col justify-center h-full overflow-y-auto">
+              {/* LEFT SIDE: FORM SECTION (ON THE LEFT) */}
+              <div className="order-2 lg:order-1 p-8 md:p-12 lg:p-16 bg-white text-black flex flex-col justify-center h-full overflow-y-auto border-r border-black/10">
                 {!isSuccess ? (
-                  <form onSubmit={handleSubmit} className="space-y-8 max-w-2xl w-full mx-auto">
+                  <form onSubmit={handleSubmit} className="space-y-6 sm:space-y-8 max-w-2xl w-full mx-auto">
                     <input type="hidden" name="_subject" value="New Inquiry from Product Dept." />
                     <input type="hidden" name="_captcha" value="false" />
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                      <div className="flex flex-col gap-3">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
+                      <div className="flex flex-col gap-2.5">
                         <label htmlFor="name" className="text-xs font-black tracking-widest uppercase text-black">NAME</label>
-                        <input type="text" id="name" name="name" className="border border-black/10 bg-white text-black py-4 px-4 outline-none focus:border-black transition-colors font-mono text-sm" placeholder="Jane Doe" required />
+                        <input type="text" id="name" name="name" className="border border-black/10 bg-white text-black py-3.5 px-4 outline-none focus:border-black transition-colors font-mono text-sm" placeholder="Jane Doe" required />
                       </div>
-                      <div className="flex flex-col gap-3">
+                      <div className="flex flex-col gap-2.5">
                         <label htmlFor="email" className="text-xs font-black tracking-widest uppercase text-black">EMAIL</label>
-                        <input type="email" id="email" name="email" className="border border-black/10 bg-white text-black py-4 px-4 outline-none focus:border-black transition-colors font-mono text-sm" placeholder="jane@company.com" required />
+                        <input type="email" id="email" name="email" className="border border-black/10 bg-white text-black py-3.5 px-4 outline-none focus:border-black transition-colors font-mono text-sm" placeholder="jane@company.com" required />
                       </div>
                     </div>
 
-                    <div className="flex flex-col gap-3">
+                    <div className="flex flex-col gap-2.5">
                       <label htmlFor="company" className="text-xs font-black tracking-widest uppercase text-black">ORGANIZATION</label>
-                      <input type="text" id="company" name="company" className="border border-black/10 bg-white text-black py-4 px-4 outline-none focus:border-black transition-colors font-mono text-sm" placeholder="Organization name" />
+                      <input type="text" id="company" name="company" className="border border-black/10 bg-white text-black py-3.5 px-4 outline-none focus:border-black transition-colors font-mono text-sm" placeholder="Organization name" />
                     </div>
 
-                    <div className="flex flex-col gap-3">
+                    <div className="flex flex-col gap-2.5">
                       <label htmlFor="description" className="text-xs font-black tracking-widest uppercase text-black">MESSAGE</label>
-                      <textarea id="description" name="description" rows={5} className="border border-black/10 bg-white text-black py-4 px-4 outline-none focus:border-black transition-colors resize-none font-mono text-sm" placeholder="How can we help?" required></textarea>
+                      <textarea id="description" name="description" rows={5} className="border border-black/10 bg-white text-black py-3.5 px-4 outline-none focus:border-black transition-colors resize-none font-mono text-sm" placeholder="How can we help?" required></textarea>
                     </div>
 
-                    <div className="pt-8 flex justify-center">
+                    <div className="pt-4 flex justify-start">
                        <button
                          type="submit"
                          disabled={isSubmitting}
-                         className="w-full max-w-[200px] bg-black text-white hover:bg-white hover:text-black hover:border-black border border-transparent transition-colors py-3.5 font-bold text-sm tracking-widest uppercase cursor-pointer"
+                         className="w-full max-w-[200px] bg-black text-white hover:bg-[#f41c06] hover:text-white border border-transparent transition-colors py-3.5 font-bold text-sm tracking-widest uppercase cursor-pointer"
                        >
                          {isSubmitting ? "TRANSMITTING..." : "Send"}
                        </button>
@@ -1188,6 +1376,35 @@ export default function Home() {
                   </div>
                 )}
               </div>
+
+              {/* RIGHT SIDE: RED BRAND SECTION (ON THE RIGHT) */}
+              <div className="order-1 lg:order-2 p-8 md:p-14 lg:p-16 flex flex-col justify-between bg-transparent h-full">
+                <div>
+                  <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black tracking-tighter text-white uppercase leading-none mb-6">
+                    GET IN <br /> TOUCH.
+                  </h1>
+                  <p className="font-sans font-light text-white/80 text-[18px] md:text-[21px] max-w-lg leading-relaxed">
+                    Ready to scale your physical product lines? Reach out to explore how Product Dept. can build and optimize your supply chain.
+                  </p>
+                </div>
+
+                {/* Back to About Button */}
+                <div className="pt-8">
+                  <button
+                    type="button"
+                    onClick={scrollToAbout}
+                    className="group flex items-center gap-3 text-white/70 hover:text-white transition-colors cursor-pointer border-none bg-transparent p-0 text-xs font-bold tracking-widest uppercase select-none"
+                  >
+                    <div className="w-8 h-8 rounded-full border border-white/20 flex items-center justify-center group-hover:border-white transition-colors bg-white/10">
+                      <svg width="14" height="14" viewBox="0 0 14 14" fill="none" className="rotate-180">
+                        <path d="M5 2L10 7L5 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                      </svg>
+                    </div>
+                    <span>Back to About</span>
+                  </button>
+                </div>
+              </div>
+
             </div>
           </motion.div>
         </div>

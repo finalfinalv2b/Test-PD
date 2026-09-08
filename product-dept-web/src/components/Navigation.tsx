@@ -123,6 +123,7 @@ export function Navigation() {
         <div className="hidden md:flex items-center h-full">
           {links.map((link) => {
             const isProcessLink = link.name === "PROCESS";
+            const isAboutLink = link.name === "ABOUT";
             const isContactLink = link.name === "CONTACT US" || link.name === "GET IN TOUCH";
             return (
               <Link
@@ -130,7 +131,9 @@ export function Navigation() {
                 href={
                   isContactLink
                     ? (pathname === "/" || pathname === "/site5" ? "#contact-section" : "/#contact-section")
-                    : (isSite3 && link.name === "PROCESS" ? "#process-section" : link.href)
+                    : (isAboutLink
+                        ? (pathname === "/" || pathname === "/site5" ? "#about-section" : "/about")
+                        : (isSite3 && link.name === "PROCESS" ? "#process-section" : link.href))
                 }
                 onClick={(e) => {
                   if (isContactLink) {
@@ -138,9 +141,15 @@ export function Navigation() {
                       e.preventDefault();
                       window.dispatchEvent(new CustomEvent("open-contact"));
                     }
+                  } else if (isAboutLink) {
+                    if (pathname === "/" || pathname === "/site5") {
+                      e.preventDefault();
+                      window.dispatchEvent(new CustomEvent("open-about"));
+                    }
                   } else if (isSite3 && link.name === "PROCESS") {
                     e.preventDefault();
                     window.dispatchEvent(new CustomEvent("close-contact"));
+                    window.dispatchEvent(new CustomEvent("close-about"));
                     const element = document.getElementById("process-section");
                     if (element) element.scrollIntoView({ behavior: "smooth" });
                   } else if (isProcessLink && isSecret) {
@@ -177,6 +186,7 @@ export function Navigation() {
           >
             {links.map((link) => {
               const isProcessLink = link.name === "PROCESS";
+              const isAboutLink = link.name === "ABOUT";
               const isContactLink = link.name === "CONTACT US" || link.name === "GET IN TOUCH";
               return (
                 <Link
@@ -184,7 +194,9 @@ export function Navigation() {
                   href={
                     isContactLink
                       ? (pathname === "/" || pathname === "/site5" ? "#contact-section" : "/#contact-section")
-                      : (isSite3 && link.name === "PROCESS" ? "#process-section" : link.href)
+                      : (isAboutLink
+                          ? (pathname === "/" || pathname === "/site5" ? "#about-section" : "/about")
+                          : (isSite3 && link.name === "PROCESS" ? "#process-section" : link.href))
                   }
                   onClick={(e) => {
                     setIsOpen(false);
@@ -193,9 +205,15 @@ export function Navigation() {
                         e.preventDefault();
                         window.dispatchEvent(new CustomEvent("open-contact"));
                       }
+                    } else if (isAboutLink) {
+                      if (pathname === "/" || pathname === "/site5") {
+                        e.preventDefault();
+                        window.dispatchEvent(new CustomEvent("open-about"));
+                      }
                     } else if (isSite3 && link.name === "PROCESS") {
                       e.preventDefault();
                       window.dispatchEvent(new CustomEvent("close-contact"));
+                      window.dispatchEvent(new CustomEvent("close-about"));
                       const element = document.getElementById("process-section");
                       if (element) element.scrollIntoView({ behavior: "smooth" });
                     } else if (isProcessLink && isSecret) {

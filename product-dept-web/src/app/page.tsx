@@ -930,9 +930,14 @@ export default function Home() {
               );
             })}
 
-            {/* NOSTALGIC FILM GRAIN OVERLAY */}
-            <div 
-              className="absolute inset-0 w-full h-full pointer-events-none z-10 mix-blend-overlay opacity-35 bg-repeat"
+            {/* NOSTALGIC FILM GRAIN OVERLAY (disabled on Strategy) */}
+            <motion.div 
+              initial={false}
+              animate={{
+                opacity: (!activeIndex || activeIndex === 0) ? 0 : 0.35
+              }}
+              transition={{ duration: 0.5, ease: "easeInOut" }}
+              className="absolute inset-0 w-full h-full pointer-events-none z-10 mix-blend-overlay bg-repeat"
               style={{ backgroundImage: "url('/grain.png')" }}
             />
           </div>

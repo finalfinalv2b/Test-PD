@@ -883,8 +883,8 @@ export default function Home() {
             : (isMobile 
                 ? "calc(clamp(56px,6vh,72px) + (100dvh - clamp(56px,6vh,72px)) * 0.48)" 
                 : "calc(clamp(56px,6vh,72px) + (100dvh - clamp(56px,6vh,72px)) * 0.48)"),
-          x: (isAboutOpen || isContactOpen) ? "-150%" : "-50%",
-          y: "-50%",
+          x: "-50%",
+          y: (isAboutOpen || isContactOpen) ? "-150%" : "-50%",
           opacity: (!isInServices || activeIndex === 0 || activeIndex === null) && !isContactOpen && !isAboutOpen ? 1 : 0
         }}
         transition={{
@@ -1026,12 +1026,13 @@ export default function Home() {
         {/* Pinned Wrapper for Desktop */}
         <div className={isMobile ? "w-full" : "sticky top-[clamp(56px,6vh,72px)] left-0 w-full h-[calc(100vh-clamp(56px,6vh,72px))] overflow-hidden flex flex-col items-center justify-start bg-transparent"}>
           
-          {/* SECTION 3 & 4: Services Viewport Panel - Pushed aside as if connected to About & Get In Touch */}
+          {/* SECTION 3 & 4: Services Viewport Panel - Pushed UP and off screen by About */}
           <motion.div
             id="services-panel"
             initial={false}
             animate={{
-              x: isMobile ? 0 : ((isAboutOpen || isContactOpen) ? "-100%" : "0%"),
+              y: isMobile ? 0 : ((isAboutOpen || isContactOpen) ? "-100%" : "0%"),
+              x: 0,
             }}
             transition={{
               duration: 0.8,
@@ -1244,12 +1245,13 @@ export default function Home() {
           </motion.div>
         </motion.div>
 
-        {/* SECTION 4: About Section - Comes in after Services, pushes Services to left; pushed to right by Contact */}
+        {/* SECTION 4: About Section - Comes from bottom, pushes Services up; pushed to right by Contact */}
         <motion.div
           id="about-section"
           initial={false}
           animate={{
-            x: isMobile ? 0 : (isAboutOpen ? "0%" : "100%"),
+            x: isMobile ? 0 : (isContactOpen ? "100%" : "0%"),
+            y: isMobile ? 0 : ((!isAboutOpen && !isContactOpen) ? "100%" : "0%"),
           }}
           transition={{
             duration: 0.8,

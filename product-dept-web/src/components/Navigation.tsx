@@ -92,7 +92,15 @@ export function Navigation() {
       <div className="w-full pl-6 pr-0 md:pr-6 h-[clamp(56px,6vh,72px)] flex items-center justify-between relative">
 
         {/* LOGO BLOCK (LEFT) */}
-        <Link href="/" className={`flex items-center h-full py-[clamp(10px,1.2vh,16px)] border-r border-transparent md:${borderColor} md:pr-8 hover:opacity-70 transition-opacity z-10`}>
+        <Link 
+          href="/" 
+          onClick={() => {
+            if (pathname === "/") {
+              window.dispatchEvent(new CustomEvent("open-hero"));
+            }
+          }}
+          className={`flex items-center h-full py-[clamp(10px,1.2vh,16px)] border-r border-transparent md:${borderColor} md:pr-8 hover:opacity-70 transition-opacity z-10`}
+        >
           <img
             src={useWhiteLogo ? "/PD Logo - White no Words.svg" : "/PD Logo - Black no Words.svg"}
             alt="PD Logo"
@@ -107,6 +115,7 @@ export function Navigation() {
           onClick={() => {
             if (pathname === "/") {
               window.scrollTo({ top: 0, behavior: "smooth" });
+              window.dispatchEvent(new CustomEvent("open-hero"));
             }
           }}
           className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10 pointer-events-auto hover:opacity-70 transition-opacity flex items-center justify-center py-2"
@@ -150,6 +159,7 @@ export function Navigation() {
                     e.preventDefault();
                     window.dispatchEvent(new CustomEvent("close-contact"));
                     window.dispatchEvent(new CustomEvent("close-about"));
+                    window.dispatchEvent(new CustomEvent("open-process"));
                     const element = document.getElementById("process-section");
                     if (element) element.scrollIntoView({ behavior: "smooth" });
                   } else if (isProcessLink && isSecret) {
@@ -214,6 +224,7 @@ export function Navigation() {
                       e.preventDefault();
                       window.dispatchEvent(new CustomEvent("close-contact"));
                       window.dispatchEvent(new CustomEvent("close-about"));
+                      window.dispatchEvent(new CustomEvent("open-process"));
                       const element = document.getElementById("process-section");
                       if (element) element.scrollIntoView({ behavior: "smooth" });
                     } else if (isProcessLink && isSecret) {

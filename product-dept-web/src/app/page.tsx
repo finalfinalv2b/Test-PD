@@ -878,11 +878,11 @@ export default function Home() {
         animate={{
           top: isInServices
             ? (isMobile 
-                ? "calc(clamp(56px,6vh,72px) + (100dvh - clamp(56px,6vh,72px)) * 0.55)" 
-                : "calc(clamp(56px,6vh,72px) + (100dvh - clamp(56px,6vh,72px)) * 0.585)")
+                ? "calc(clamp(56px,6vh,72px) + (100dvh - clamp(56px,6vh,72px)) * 0.54)" 
+                : "calc(clamp(56px,6vh,72px) + (100dvh - clamp(56px,6vh,72px)) * 0.54)")
             : (isMobile 
-                ? "calc(clamp(56px,6vh,72px) + (100dvh - clamp(56px,6vh,72px)) * 0.40)" 
-                : "calc(clamp(56px,6vh,72px) + (100dvh - clamp(56px,6vh,72px)) * 0.44)"),
+                ? "calc(clamp(56px,6vh,72px) + (100dvh - clamp(56px,6vh,72px)) * 0.48)" 
+                : "calc(clamp(56px,6vh,72px) + (100dvh - clamp(56px,6vh,72px)) * 0.48)"),
           x: (isAboutOpen || isContactOpen) ? "-150%" : "-50%",
           y: "-50%",
           opacity: (!isInServices || activeIndex === 0 || activeIndex === null) && !isContactOpen && !isAboutOpen ? 1 : 0
@@ -891,25 +891,26 @@ export default function Home() {
           duration: 0.8,
           ease: [0.22, 1, 0.36, 1]
         }}
-        className={`fixed left-1/2 z-0 aspect-[564.03/288.69] pointer-events-none select-none ${
-          isMobile ? "w-[190vw] min-w-[595px]" : "w-[109vw] min-w-[1070px]"
-        }`}
+        style={{
+          width: isMobile ? "240vw" : "max(114vw, calc(114vh * 1.95375))",
+          height: isMobile ? "auto" : "max(calc(114vw / 1.95375), 114vh)",
+          aspectRatio: isMobile ? "564.03 / 288.69" : undefined,
+        }}
+        className="fixed left-1/2 z-0 pointer-events-none select-none flex items-center justify-center overflow-visible"
       >
         <svg
-          viewBox="0 0 564.03 288.69"
-          fill="none"
+          id="Layer_1"
+          data-name="Layer 1"
           xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 564.03 288.69"
           className="w-full h-full"
-          preserveAspectRatio="xMidYMid slice"
         >
-          {/* Circle Shape */}
-          <path
-            d="M136.64,15.41c75.46,0,136.64,61.17,136.64,136.64s-61.17,136.64-136.64,136.64S0,227.51,0,152.05,61.17,15.41,136.64,15.41"
-            fill={brandColor || "#f41c06"}
-          />
-          {/* Square Shape */}
           <polygon
             points="553.22 284.38 311.9 284.38 286.31 0 562.31 67.5 553.22 284.38"
+            fill={brandColor || "#f41c06"}
+          />
+          <path
+            d="M136.64,15.41c75.46,0,136.64,61.17,136.64,136.64s-61.17,136.64-136.64,136.64S0,227.51,0,152.05,61.17,15.41,136.64,15.41"
             fill={brandColor || "#f41c06"}
           />
         </svg>
@@ -1291,53 +1292,54 @@ export default function Home() {
             </div>
 
             {/* RIGHT SIDE: DATA CASCADE */}
-            <div className="p-6 md:p-10 lg:p-12 bg-white text-black flex flex-col justify-between h-full overflow-y-auto border-t lg:border-t-0 lg:border-l border-black/10">
-              <div className="space-y-6">
-                {/* WHO WE ARE */}
-                <div className="pb-6 border-b border-black/10">
-                  <span className="text-xs font-black tracking-widest uppercase block mb-3 text-black/50">Who We Are</span>
-                  <div className="font-sans font-light space-y-3 text-xs md:text-[14px] tracking-normal leading-relaxed text-black/80">
-                    <p className="m-0">
-                      PRODUCT DEPT. is a full-stack product and venture infrastructure partner integrating strategy, design, engineering, sourcing, manufacturing, logistics, and supply chain optimization into one seamless experience.
-                    </p>
-                    <p className="m-0">
-                      We are a global team that collaborates deeply with our clients through every step of the process, ensuring that great ideas become exceptional products.
-                    </p>
+            <div className="p-8 md:p-12 lg:p-16 bg-white text-black flex flex-col justify-between h-full overflow-y-auto border-t lg:border-t-0 lg:border-l border-black/10">
+              <div className="max-w-2xl w-full mx-auto flex flex-col justify-between h-full">
+                <div className="space-y-6">
+                  {/* WHO WE ARE */}
+                  <div className="pb-6 border-b border-black/10">
+                    <span className="text-xs font-black tracking-widest uppercase block mb-3 text-black/50">Who We Are</span>
+                    <div className="font-sans font-light space-y-3 text-xs md:text-[14px] tracking-normal leading-relaxed text-black/80">
+                      <p className="m-0">
+                        PRODUCT DEPT. is a full-stack product and venture infrastructure partner integrating strategy, design, engineering, sourcing, manufacturing, logistics, and supply chain optimization into one seamless experience.
+                      </p>
+                      <p className="m-0">
+                        We are a global team that collaborates deeply with our clients through every step of the process, ensuring that great ideas become exceptional products.
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* PRINCIPLES */}
+                  <div>
+                    <h2 className="text-xs font-black tracking-widest uppercase mb-4 text-black/50">Core Principles</h2>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+                      <div className="border-t border-black/20 pt-3">
+                        <h3 className="font-black text-base md:text-lg mb-1 tracking-tight uppercase text-black">Disciplined Strategy</h3>
+                        <p className="font-sans font-light text-xs md:text-[13px] tracking-normal leading-relaxed text-black/75 m-0">We don&apos;t guess. We map constraints, establish rigid requirements, and deploy with intentionality.</p>
+                      </div>
+
+                      <div className="border-t border-black/20 pt-3">
+                        <h3 className="font-black text-base md:text-lg mb-1 tracking-tight uppercase text-black">Technical Rigor</h3>
+                        <p className="font-sans font-light text-xs md:text-[13px] tracking-normal leading-relaxed text-black/75 m-0">Excellence is binary. Every millimeter, surface finish, and mechanical tolerance is accounted for.</p>
+                      </div>
+
+                      <div className="border-t border-black/20 pt-3 md:col-span-2">
+                        <h3 className="font-black text-base md:text-lg mb-1 tracking-tight uppercase text-black">Calm Execution</h3>
+                        <p className="font-sans font-light text-xs md:text-[13px] tracking-normal leading-relaxed text-black/75 max-w-xl m-0">Hardware is hard. We absorb the chaos of the supply chain so our partners can focus exclusively on growth and deployment.</p>
+                      </div>
+                    </div>
                   </div>
                 </div>
 
-                {/* PRINCIPLES */}
-                <div>
-                  <h2 className="text-xs font-black tracking-widest uppercase mb-4 text-black/50">Core Principles</h2>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
-                    <div className="border-t border-black/20 pt-3">
-                      <h3 className="font-black text-base md:text-lg mb-1 tracking-tight uppercase text-black">Disciplined Strategy</h3>
-                      <p className="font-sans font-light text-xs md:text-[13px] tracking-normal leading-relaxed text-black/75 m-0">We don&apos;t guess. We map constraints, establish rigid requirements, and deploy with intentionality.</p>
-                    </div>
-
-                    <div className="border-t border-black/20 pt-3">
-                      <h3 className="font-black text-base md:text-lg mb-1 tracking-tight uppercase text-black">Technical Rigor</h3>
-                      <p className="font-sans font-light text-xs md:text-[13px] tracking-normal leading-relaxed text-black/75 m-0">Excellence is binary. Every millimeter, surface finish, and mechanical tolerance is accounted for.</p>
-                    </div>
-
-                    <div className="border-t border-black/20 pt-3 md:col-span-2">
-                      <h3 className="font-black text-base md:text-lg mb-1 tracking-tight uppercase text-black">Calm Execution</h3>
-                      <p className="font-sans font-light text-xs md:text-[13px] tracking-normal leading-relaxed text-black/75 max-w-xl m-0">Hardware is hard. We absorb the chaos of the supply chain so our partners can focus exclusively on growth and deployment.</p>
-                    </div>
-                  </div>
+                <div className="pt-6 sm:pt-8 flex justify-start">
+                  <button
+                    type="button"
+                    onClick={scrollToContact}
+                    className="w-full max-w-[200px] bg-black text-white hover:bg-[#f41c06] hover:text-white border border-transparent transition-colors py-3.5 font-bold text-sm tracking-widest uppercase cursor-pointer flex items-center justify-center"
+                  >
+                    Get in Touch
+                  </button>
                 </div>
               </div>
-
-              <div className="border-t border-black/15 pt-6 flex justify-start">
-                <button
-                  type="button"
-                  onClick={scrollToContact}
-                  className="inline-block bg-[#f41c06] text-white hover:bg-black hover:border-black border border-[#f41c06] transition-colors px-8 py-3 font-black text-xs tracking-widest uppercase cursor-pointer"
-                >
-                  Get in Touch
-                </button>
-              </div>
-
             </div>
 
           </div>

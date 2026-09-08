@@ -334,7 +334,21 @@ export default function Home() {
       const progress = (scrollTop - sectionStart) / scrollableHeight;
 
       if (progress >= 0 && progress <= 1) {
-        const targetStage = Math.min(8, Math.max(0, Math.floor(progress * 9)));
+        const exactStage = progress * 9;
+        const baseStage = Math.floor(exactStage);
+        const stageFraction = exactStage - baseStage;
+
+        // Apply hysteresis deadband to prevent flickering around stage boundaries
+        let targetStage = baseStage;
+        const currentStage = isContactOpenRef.current ? 8 : (isAboutOpenRef.current ? 7 : (activeIndexRef.current ?? 0));
+        if (Math.abs(baseStage - currentStage) <= 1) {
+          if (baseStage > currentStage && stageFraction < 0.15) {
+            targetStage = currentStage;
+          } else if (baseStage < currentStage && stageFraction > 0.85) {
+            targetStage = currentStage;
+          }
+        }
+        targetStage = Math.min(8, Math.max(0, targetStage));
 
         if (targetStage === 8) {
           if (!isContactOpenRef.current) {
@@ -525,7 +539,7 @@ export default function Home() {
       setTimeout(() => {
         isClickScrollingRef.current = false;
         window.removeEventListener("scrollend", handleScrollEnd);
-      }, 500);
+      }, 850);
 
       window.scrollTo({
         top: targetScrollY,
@@ -573,121 +587,131 @@ export default function Home() {
   useEffect(() => {
     if (isMobile) return;
 
-    const lastSnapTimeRef = { current: 0 };
-    let isTrackpadActive = false;
-    let trackpadTimer: NodeJS.Timeout | null = null;
+    // Gesture and momentum tracking refs
+    const deltaAccumulatorRef = { current: 0 };
+    const isLockedRef = { current: false };
+    const lastWheelTimeRef = { current: 0 };
+    const lockTimerRef = { current: null as NodeJS.Timeout | null };
+
+    // Helper to allow nested elements (like the About text cascade or Contact form) to scroll natively when hovered
+    const canElementScroll = (target: HTMLElement | null, deltaY: number): boolean => {
+      let el = target;
+      while (el && el !== document.body && el !== document.documentElement) {
+        if (el.id === "process-section" || el.id === "services-panel") {
+          break;
+        }
+        const style = window.getComputedStyle(el);
+        const overflowY = style.overflowY;
+        if ((overflowY === "auto" || overflowY === "scroll") && el.scrollHeight > el.clientHeight + 1) {
+          if (deltaY > 0 && el.scrollTop < el.scrollHeight - el.clientHeight - 2) {
+            return true;
+          }
+          if (deltaY < 0 && el.scrollTop > 2) {
+            return true;
+          }
+        }
+        el = el.parentElement;
+      }
+      return false;
+    };
 
     const handleWheel = (e: WheelEvent) => {
-      // Touchpad detection:
-      // Touchpads produce non-integer deltas, horizontal drift (deltaX), or continuous small micro-deltas.
-      const hasDeltaX = Math.abs(e.deltaX) > 0;
-      const isFloatDelta = !Number.isInteger(e.deltaY);
-      const isSmallDelta = Math.abs(e.deltaY) > 0 && Math.abs(e.deltaY) < 40 && e.deltaMode === 0;
-
-      if (hasDeltaX || isFloatDelta || isSmallDelta) {
-        isTrackpadActive = true;
-        if (trackpadTimer) clearTimeout(trackpadTimer);
-        trackpadTimer = setTimeout(() => {
-          isTrackpadActive = false;
-        }, 500);
-      }
-
-      // If the user is on a touchpad, DO NOT intercept or preventDefault!
-      if (isTrackpadActive) {
+      // 1. Allow internal scrolling inside active scrollable containers if not at scroll boundaries
+      const target = e.target as HTMLElement | null;
+      if (canElementScroll(target, e.deltaY)) {
         return;
       }
 
-      // If Contact section is open:
-      if (isContactOpenRef.current) {
-        if (e.deltaY < 0) {
-          // Scrolling UP from Contact: snap back to About
-          e.preventDefault();
-          const now = Date.now();
-          if (now - lastSnapTimeRef.current > 350) {
-            lastSnapTimeRef.current = now;
-            scrollToAboutRef.current();
-          }
-        } else if (e.deltaY > 0) {
-          e.preventDefault();
-        }
-        return;
-      }
-
-      // If About section is open:
-      if (isAboutOpenRef.current) {
-        if (e.deltaY > 0) {
-          // Scrolling DOWN from About: snap to Contact
-          e.preventDefault();
-          const now = Date.now();
-          if (now - lastSnapTimeRef.current > 350) {
-            lastSnapTimeRef.current = now;
-            scrollToContactRef.current();
-          }
-        } else if (e.deltaY < 0) {
-          // Scrolling UP from About: snap back to Venture Infrastructure (Tab 6)
-          e.preventDefault();
-          const now = Date.now();
-          if (now - lastSnapTimeRef.current > 350) {
-            lastSnapTimeRef.current = now;
-            handleItemClickRef.current(6);
-          }
-        }
-        return;
-      }
-
-      // For discrete mouse wheel notches, preserve step-by-step navigation
-      const section = processSectionRef.current;
-      if (!section) return;
-
-      const scrollY = window.scrollY;
-      const sectionTop = section.offsetTop;
-      const sectionHeight = section.offsetHeight;
-      
-      const isInside = scrollY >= sectionTop - 100 && scrollY <= sectionTop + sectionHeight - window.innerHeight + 100;
-
-      if (!isInside) {
-        // At the top (scrollY < 10) with mouse wheel scrolling down, snap to services
-        if (scrollY < 10 && e.deltaY > 0) {
-          e.preventDefault();
-          const now = Date.now();
-          if (now - lastSnapTimeRef.current > 300) {
-            lastSnapTimeRef.current = now;
-            handleItemClickRef.current(0);
-          }
-        }
-        return;
-      }
-
-      // Inside services section with mouse wheel: step through items
+      // 2. Prevent default browser wheel/touchpad scroll to eliminate rubberbanding and chaotic momentum jumps
       e.preventDefault();
 
       const now = Date.now();
-      const timeSinceLastSnap = now - lastSnapTimeRef.current;
-      
-      if (timeSinceLastSnap < 250) {
+      const timeDelta = now - lastWheelTimeRef.current;
+      lastWheelTimeRef.current = now;
+
+      // When the user lifts fingers or pauses for > 140ms, clear inertia and unlock
+      if (timeDelta > 140) {
+        isLockedRef.current = false;
+        deltaAccumulatorRef.current = 0;
+      }
+
+      // If locked during an active transition, absorb residual trackpad inertia without advancing stages
+      if (isLockedRef.current) {
         return;
       }
 
-      if (e.deltaY > 0) {
-        // Scroll DOWN
-        const currentIdx = activeIndexRef.current;
-        if (currentIdx !== null && currentIdx < 6) {
-          lastSnapTimeRef.current = now;
-          handleItemClickRef.current(currentIdx + 1);
-        } else if (currentIdx === 6) {
-          lastSnapTimeRef.current = now;
+      // Accumulate deltaY across micro-events
+      deltaAccumulatorRef.current += e.deltaY;
+
+      // 35px threshold ensures immediate responsiveness to intentional swipes/mouse clicks while discarding noise
+      const THRESHOLD = 35;
+      if (Math.abs(deltaAccumulatorRef.current) < THRESHOLD) {
+        return;
+      }
+
+      const direction = deltaAccumulatorRef.current > 0 ? 1 : -1;
+      deltaAccumulatorRef.current = 0;
+
+      // Lock for transition duration
+      isLockedRef.current = true;
+      if (lockTimerRef.current) clearTimeout(lockTimerRef.current);
+      lockTimerRef.current = setTimeout(() => {
+        isLockedRef.current = false;
+      }, 650);
+
+      // Contact Section (Stage 8)
+      if (isContactOpenRef.current) {
+        if (direction < 0) {
           scrollToAboutRef.current();
         }
-      } else if (e.deltaY < 0) {
-        // Scroll UP
-        const currentIdx = activeIndexRef.current;
+        // Clamped when scrolling down: no overscroll, no rubberband
+        return;
+      }
+
+      // About Section (Stage 7)
+      if (isAboutOpenRef.current) {
+        if (direction > 0) {
+          scrollToContactRef.current();
+        } else if (direction < 0) {
+          handleItemClickRef.current(6);
+        }
+        return;
+      }
+
+      // Services (Stages 0-6) and Title Page
+      const currentIdx = activeIndexRef.current;
+      const scrollY = window.scrollY || document.documentElement.scrollTop;
+      const isAtHero = !isInServicesRef.current || scrollY < 100;
+
+      if (isAtHero) {
+        if (direction > 0) {
+          handleItemClickRef.current(0);
+        }
+        // Clamped when scrolling up at top of page: zero rubberband
+        return;
+      }
+
+      if (direction > 0) {
+        // Scrolling DOWN
+        if (currentIdx === null) {
+          handleItemClickRef.current(0);
+        } else if (currentIdx < 6) {
+          handleItemClickRef.current(currentIdx + 1);
+        } else if (currentIdx === 6) {
+          scrollToAboutRef.current();
+        }
+      } else if (direction < 0) {
+        // Scrolling UP
         if (currentIdx !== null && currentIdx > 0) {
-          lastSnapTimeRef.current = now;
           handleItemClickRef.current(currentIdx - 1);
-        } else if (currentIdx === 0) {
-          lastSnapTimeRef.current = now;
+        } else if (currentIdx === 0 || currentIdx === null) {
           setIsInServices(false);
           isInServicesRef.current = false;
+          setActiveIndex(null);
+          isClickScrollingRef.current = true;
+          setTimeout(() => {
+            isClickScrollingRef.current = false;
+          }, 850);
           window.scrollTo({
             top: 0,
             behavior: "smooth"
@@ -697,62 +721,70 @@ export default function Home() {
     };
 
     const handleKeyDown = (e: KeyboardEvent) => {
-      const section = processSectionRef.current;
-      if (!section) return;
+      if (isLockedRef.current) return;
 
-      const scrollY = window.scrollY;
-      const sectionTop = section.offsetTop;
-      const sectionHeight = section.offsetHeight;
-      const isInside = scrollY >= sectionTop - 100 && scrollY <= sectionTop + sectionHeight - window.innerHeight + 100;
-
-      if (!isInside) return;
+      const scrollY = window.scrollY || document.documentElement.scrollTop;
+      const isAtHero = !isInServicesRef.current || scrollY < 100;
 
       if (e.key === "ArrowDown" || e.key === "PageDown" || (e.key === " " && !e.shiftKey)) {
         e.preventDefault();
-        const now = Date.now();
-        if (now - lastSnapTimeRef.current < 400) return;
-        
+        isLockedRef.current = true;
+        if (lockTimerRef.current) clearTimeout(lockTimerRef.current);
+        lockTimerRef.current = setTimeout(() => {
+          isLockedRef.current = false;
+        }, 500);
+
         if (isContactOpenRef.current) return;
 
         if (isAboutOpenRef.current) {
-          lastSnapTimeRef.current = now;
           scrollToContactRef.current();
           return;
         }
 
+        if (isAtHero) {
+          handleItemClickRef.current(0);
+          return;
+        }
+
         const currentIdx = activeIndexRef.current;
-        if (currentIdx !== null && currentIdx < 6) {
-          lastSnapTimeRef.current = now;
+        if (currentIdx === null) {
+          handleItemClickRef.current(0);
+        } else if (currentIdx < 6) {
           handleItemClickRef.current(currentIdx + 1);
         } else if (currentIdx === 6) {
-          lastSnapTimeRef.current = now;
           scrollToAboutRef.current();
         }
       } else if (e.key === "ArrowUp" || e.key === "PageUp" || (e.key === " " && e.shiftKey)) {
         e.preventDefault();
-        const now = Date.now();
-        if (now - lastSnapTimeRef.current < 400) return;
-        
+        isLockedRef.current = true;
+        if (lockTimerRef.current) clearTimeout(lockTimerRef.current);
+        lockTimerRef.current = setTimeout(() => {
+          isLockedRef.current = false;
+        }, 500);
+
         if (isContactOpenRef.current) {
-          lastSnapTimeRef.current = now;
           scrollToAboutRef.current();
           return;
         }
 
         if (isAboutOpenRef.current) {
-          lastSnapTimeRef.current = now;
           handleItemClickRef.current(6);
           return;
         }
 
+        if (isAtHero) return;
+
         const currentIdx = activeIndexRef.current;
         if (currentIdx !== null && currentIdx > 0) {
-          lastSnapTimeRef.current = now;
           handleItemClickRef.current(currentIdx - 1);
-        } else if (currentIdx === 0) {
-          lastSnapTimeRef.current = now;
+        } else if (currentIdx === 0 || currentIdx === null) {
           setIsInServices(false);
           isInServicesRef.current = false;
+          setActiveIndex(null);
+          isClickScrollingRef.current = true;
+          setTimeout(() => {
+            isClickScrollingRef.current = false;
+          }, 850);
           window.scrollTo({
             top: 0,
             behavior: "smooth"
@@ -764,7 +796,7 @@ export default function Home() {
     window.addEventListener("wheel", handleWheel, { passive: false });
     window.addEventListener("keydown", handleKeyDown);
     return () => {
-      if (trackpadTimer) clearTimeout(trackpadTimer);
+      if (lockTimerRef.current) clearTimeout(lockTimerRef.current);
       window.removeEventListener("wheel", handleWheel);
       window.removeEventListener("keydown", handleKeyDown);
     };

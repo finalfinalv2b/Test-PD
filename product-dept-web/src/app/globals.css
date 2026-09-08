@@ -59,10 +59,22 @@ h6 {
   @apply font-sans font-medium tracking-tight;
 }
 
+html,
+body {
+  overscroll-behavior: none;
+  overscroll-behavior-y: none;
+  overscroll-behavior-x: none;
+}
+
 body {
   background: var(--background);
   color: var(--foreground);
-  @apply font-sans font-light;
+  @apply font-sans font-light overscroll-none;
+}
+
+#about-section,
+#contact-section {
+  overscroll-behavior: contain;
 }
 
 /* Hide scrollbar for Chrome, Safari, Opera and WebKit browsers */

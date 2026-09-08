@@ -70,9 +70,9 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${elza.variable} ${neueHaas.variable} ${neueHaasUnica.variable} h-full antialiased`}
+      className={`${elza.variable} ${neueHaas.variable} ${neueHaasUnica.variable} h-full antialiased overscroll-none`}
     >
-      <body className="min-h-full flex flex-col font-sans bg-background text-foreground tracking-tight overflow-x-hidden">
+      <body className="min-h-full flex flex-col font-sans bg-background text-foreground tracking-tight overflow-x-hidden overscroll-none">
         <Navigation />
         <main className="flex-1 flex flex-col w-full">
           {children}

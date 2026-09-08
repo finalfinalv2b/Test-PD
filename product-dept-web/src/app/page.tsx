@@ -814,15 +814,14 @@ export default function Home() {
       const timeDelta = now - lastWheelTimeRef.current;
       lastWheelTimeRef.current = now;
 
-      // When the user lifts fingers or pauses for > 140ms, clear inertia and unlock
-      if (timeDelta > 140) {
-        isLockedRef.current = false;
-        deltaAccumulatorRef.current = 0;
-      }
-
-      // If locked during an active transition, absorb residual trackpad inertia without advancing stages
+      // If locked during an active transition, absorb residual trackpad/wheel inertia without advancing stages
       if (isLockedRef.current) {
         return;
+      }
+
+      // When the user lifts fingers or pauses for > 160ms, clear accumulated inertia
+      if (timeDelta > 160) {
+        deltaAccumulatorRef.current = 0;
       }
 
       // Accumulate deltaY across micro-events
@@ -837,12 +836,13 @@ export default function Home() {
       const direction = deltaAccumulatorRef.current > 0 ? 1 : -1;
       deltaAccumulatorRef.current = 0;
 
-      // Lock for transition duration
+      // Lock for transition duration (550ms for snappy, fluid response on both mouse and trackpad)
       isLockedRef.current = true;
       if (lockTimerRef.current) clearTimeout(lockTimerRef.current);
       lockTimerRef.current = setTimeout(() => {
         isLockedRef.current = false;
-      }, 650);
+        deltaAccumulatorRef.current = 0;
+      }, 550);
 
       // Contact Section (Stage 8)
       if (isContactOpenRef.current) {
@@ -1076,11 +1076,14 @@ export default function Home() {
                 : "calc(clamp(56px,6vh,72px) + (100dvh - clamp(56px,6vh,72px)) * 0.48)"),
           x: "-50%",
           y: (isAboutOpen || isContactOpen) ? "-150%" : "-50%",
-          opacity: !isContactOpen && !isAboutOpen ? 1 : 0
+          opacity: isMobile
+            ? (!isContactOpen && !isAboutOpen ? 1 : 0)
+            : ((!isInServices || activeIndex === 0 || activeIndex === null) && !isContactOpen && !isAboutOpen ? 1 : 0)
         }}
         transition={{
-          duration: 0.8,
-          ease: [0.22, 1, 0.36, 1]
+          top: { duration: 0.8, ease: [0.22, 1, 0.36, 1] },
+          y: { duration: 0.8, ease: [0.22, 1, 0.36, 1] },
+          opacity: { duration: 0.35, ease: "easeInOut" }
         }}
         style={{
           width: "max(114vw, calc(114vh * 1.95375))",
@@ -1109,7 +1112,7 @@ export default function Home() {
       {/* SECTION 1: Title Page with Two-Column Layout */}
       <motion.section
         id="hero-section"
-        animate={isMobile ? { y: mobileStage === 0 ? "0%" : "-100%" } : { y: "0%" }}
+        animate={isMobile ? { y: mobileStage === 0 ? "0%" : "-100%" } : undefined}
         transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
         className={
           isMobile
@@ -1220,7 +1223,7 @@ export default function Home() {
       <motion.section 
         ref={processSectionRef} 
         id="process-section" 
-        animate={isMobile ? { y: mobileStage === 0 ? "100%" : "0%" } : { y: "0%" }}
+        animate={isMobile ? { y: mobileStage === 0 ? "100%" : "0%" } : undefined}
         transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
         className={
           isMobile 

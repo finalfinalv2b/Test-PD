@@ -146,7 +146,7 @@ export function Navigation() {
                       e.preventDefault();
                       window.dispatchEvent(new CustomEvent("open-about"));
                     }
-                  } else if (isSite3 && link.name === "PROCESS") {
+                  } else if ((isSite3 || pathname === "/" || pathname === "/site5") && link.name === "PROCESS") {
                     e.preventDefault();
                     window.dispatchEvent(new CustomEvent("close-contact"));
                     window.dispatchEvent(new CustomEvent("close-about"));
@@ -210,7 +210,7 @@ export function Navigation() {
                         e.preventDefault();
                         window.dispatchEvent(new CustomEvent("open-about"));
                       }
-                    } else if (isSite3 && link.name === "PROCESS") {
+                    } else if ((isSite3 || pathname === "/" || pathname === "/site5") && link.name === "PROCESS") {
                       e.preventDefault();
                       window.dispatchEvent(new CustomEvent("close-contact"));
                       window.dispatchEvent(new CustomEvent("close-about"));

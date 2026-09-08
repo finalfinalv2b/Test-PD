@@ -228,6 +228,46 @@ export default function Home() {
   const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
   const touchStartXRef = useRef<number | null>(null);
   const touchStartYRef = useRef<number | null>(null);
+  const touchGlobalStartYRef = useRef<number | null>(null);
+  const touchGlobalStartXRef = useRef<number | null>(null);
+  const isTouchLockedRef = useRef<boolean>(false);
+
+  // Mobile Header transition: shows "SERVICES & CAPABILITIES" for 1 second, then replaces with the descriptive sentence
+  const [showHeaderSentence, setShowHeaderSentence] = useState(false);
+
+  // Mobile Tabs Track: indicator icon when more services exist offscreen to the right
+  const [canScrollRight, setCanScrollRight] = useState(true);
+
+  const checkTabsOverflow = () => {
+    const track = tabsTrackRef.current;
+    if (track) {
+      const hasMoreRight = track.scrollLeft < track.scrollWidth - track.clientWidth - 8;
+      setCanScrollRight(hasMoreRight);
+    }
+  };
+
+  useEffect(() => {
+    checkTabsOverflow();
+    const track = tabsTrackRef.current;
+    if (track) {
+      track.addEventListener("scroll", checkTabsOverflow, { passive: true });
+      return () => track.removeEventListener("scroll", checkTabsOverflow);
+    }
+  }, [activeIndex, windowWidth, isMobile]);
+
+  useEffect(() => {
+    if (!isMobile) return;
+    if (isInServices && !isAboutOpen && !isContactOpen) {
+      setShowHeaderSentence(false);
+      const timer = setTimeout(() => {
+        setShowHeaderSentence(true);
+      }, 1000);
+      return () => clearTimeout(timer);
+    } else if (!isInServices) {
+      setShowHeaderSentence(false);
+    }
+  }, [isInServices, isAboutOpen, isContactOpen, isMobile]);
+
   const [activeTabMetrics, setActiveTabMetrics] = useState<{
     left: number;
     width: number;
@@ -272,6 +312,7 @@ export default function Home() {
       const trackWidth = track.clientWidth;
       const targetScrollLeft = btnLeft - (trackWidth / 2) + (btnWidth / 2);
       track.scrollTo({ left: targetScrollLeft, behavior: "smooth" });
+      setTimeout(checkTabsOverflow, 150);
     }
   }, [activeIndex, isMobile]);
 
@@ -411,9 +452,8 @@ export default function Home() {
     setIsAboutOpen(true);
 
     if (isMobile) {
-      const aboutSec = document.getElementById("about-section");
-      if (aboutSec) {
-        aboutSec.scrollIntoView({ behavior: "smooth" });
+      if (processSectionRef.current) {
+        processSectionRef.current.scrollIntoView({ behavior: "smooth" });
       }
       return;
     }
@@ -458,9 +498,8 @@ export default function Home() {
     setIsContactOpen(true);
 
     if (isMobile) {
-      const contactSec = document.getElementById("contact-section");
-      if (contactSec) {
-        contactSec.scrollIntoView({ behavior: "smooth" });
+      if (processSectionRef.current) {
+        processSectionRef.current.scrollIntoView({ behavior: "smooth" });
       }
       return;
     }
@@ -498,6 +537,108 @@ export default function Home() {
 
   const scrollToContactRef = useRef(scrollToContact);
   scrollToContactRef.current = scrollToContact;
+
+  // Advance stage for mobile touch flick navigation
+  const advanceMobileStage = (direction: 1 | -1) => {
+    if (isTouchLockedRef.current) return;
+    isTouchLockedRef.current = true;
+    setTimeout(() => {
+      isTouchLockedRef.current = false;
+    }, 500);
+
+    // Contact Open (Stage 8)
+    if (isContactOpenRef.current) {
+      if (direction < 0) {
+        scrollToAbout();
+      }
+      return;
+    }
+
+    // About Open (Stage 7)
+    if (isAboutOpenRef.current) {
+      if (direction > 0) {
+        scrollToContact();
+      } else if (direction < 0) {
+        handleItemClick(6);
+      }
+      return;
+    }
+
+    // In Services (0-6) or Hero (-1)
+    const isAtHero = !isInServicesRef.current;
+    if (isAtHero) {
+      if (direction > 0) {
+        handleItemClick(0);
+      }
+      return;
+    }
+
+    const currentIdx = activeIndexRef.current ?? 0;
+    if (direction > 0) {
+      // Flick up -> NEXT
+      if (currentIdx < 6) {
+        handleItemClick(currentIdx + 1);
+      } else if (currentIdx === 6) {
+        scrollToAbout();
+      }
+    } else {
+      // Flick down -> PREV
+      if (currentIdx > 0) {
+        handleItemClick(currentIdx - 1);
+      } else if (currentIdx === 0) {
+        setIsInServices(false);
+        isInServicesRef.current = false;
+        setActiveIndex(0);
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+    }
+  };
+
+  // Full-screen touch flick listeners for mobile
+  const handleTouchStart = (e: React.TouchEvent) => {
+    if (!isMobile) return;
+    touchGlobalStartYRef.current = e.touches[0].clientY;
+    touchGlobalStartXRef.current = e.touches[0].clientX;
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (!isMobile) return;
+    if (touchGlobalStartYRef.current === null || touchGlobalStartXRef.current === null) return;
+    if (isTouchLockedRef.current) return;
+
+    const deltaY = e.changedTouches[0].clientY - touchGlobalStartYRef.current;
+    const deltaX = e.changedTouches[0].clientX - touchGlobalStartXRef.current;
+    touchGlobalStartYRef.current = null;
+    touchGlobalStartXRef.current = null;
+
+    let target = e.target as HTMLElement | null;
+    while (target && target !== document.body && target !== document.documentElement) {
+      if (target.id === "tabs-track" || target.getAttribute("data-no-flick") === "true") {
+        return;
+      }
+      const style = window.getComputedStyle(target);
+      if ((style.overflowY === "auto" || style.overflowY === "scroll") && target.scrollHeight > target.clientHeight + 4) {
+        if (deltaY < 0 && target.scrollTop < target.scrollHeight - target.clientHeight - 8) {
+          return;
+        }
+        if (deltaY > 0 && target.scrollTop > 8) {
+          return;
+        }
+      }
+      target = target.parentElement;
+    }
+
+    const absY = Math.abs(deltaY);
+    const absX = Math.abs(deltaX);
+
+    if (absY > 35 && absY > absX * 1.1) {
+      const direction = deltaY < 0 ? 1 : -1;
+      advanceMobileStage(direction);
+    } else if (absX > 45 && absX > absY * 1.2 && isInServicesRef.current && !isAboutOpenRef.current && !isContactOpenRef.current) {
+      const direction = deltaX < 0 ? 1 : -1;
+      advanceMobileStage(direction);
+    }
+  };
 
   // Card touch handlers for mobile swipe navigation
   const handleCardTouchStart = (e: React.TouchEvent) => {
@@ -545,11 +686,7 @@ export default function Home() {
     if (isMobile) {
       setActiveIndex(index);
       if (processSectionRef.current) {
-        const rect = processSectionRef.current.getBoundingClientRect();
-        // If scrolled past or above process section (e.g. from About or Contact), scroll back to it
-        if (rect.top < -50 || rect.top > window.innerHeight) {
-          processSectionRef.current.scrollIntoView({ behavior: "smooth" });
-        }
+        processSectionRef.current.scrollIntoView({ behavior: "smooth" });
       }
       return;
     }
@@ -907,6 +1044,8 @@ export default function Home() {
 
   return (
     <main
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
       style={{
         backgroundColor: "#000000",
         color: "#FFFFFF",
@@ -1064,28 +1203,26 @@ export default function Home() {
       <section 
         ref={processSectionRef} 
         id="process-section" 
-        className={`relative bg-transparent border-b border-black w-full scroll-mt-[clamp(56px,6vh,72px)] ${isMobile ? "py-24" : "h-[600vh]"}`}
+        className={`relative bg-transparent border-b border-black w-full scroll-mt-[clamp(56px,6vh,72px)] ${
+          isMobile ? "h-[calc(100dvh-clamp(56px,6vh,72px))] overflow-hidden" : "h-[600vh]"
+        }`}
       >
-        {/* Pinned Wrapper for Desktop */}
-        <div className={isMobile ? "w-full" : "sticky top-[clamp(56px,6vh,72px)] left-0 w-full h-[calc(100vh-clamp(56px,6vh,72px))] overflow-hidden flex flex-col items-center justify-start bg-transparent"}>
+        {/* Pinned Wrapper for Desktop & Viewport for Mobile */}
+        <div className={isMobile ? "relative w-full h-full overflow-hidden flex flex-col items-center justify-start bg-transparent" : "sticky top-[clamp(56px,6vh,72px)] left-0 w-full h-[calc(100vh-clamp(56px,6vh,72px))] overflow-hidden flex flex-col items-center justify-start bg-transparent"}>
           
           {/* SECTION 3 & 4: Services Viewport Panel - Pushed UP and off screen by About */}
           <motion.div
             id="services-panel"
             initial={false}
             animate={{
-              y: isMobile ? 0 : ((isAboutOpen || isContactOpen) ? "-100%" : "0%"),
+              y: (isAboutOpen || isContactOpen) ? "-100%" : "0%",
               x: 0,
             }}
             transition={{
               duration: 0.8,
               ease: [0.22, 1, 0.36, 1]
             }}
-            className={
-              isMobile
-                ? "w-full flex flex-col items-center justify-start"
-                : "absolute inset-0 w-full h-full flex flex-col items-center justify-start overflow-hidden bg-transparent"
-            }
+            className="absolute inset-0 w-full h-full flex flex-col items-center justify-start overflow-hidden bg-transparent"
           >
             {/* SERVICE BACKGROUND PHOTOS LAYER WITH PARALLAX DRIFT */}
           <div className={`absolute inset-0 w-full h-full pointer-events-none z-0 overflow-hidden ${isMobile ? "hidden" : ""}`}>
@@ -1135,58 +1272,123 @@ export default function Home() {
             />
           </div>
 
-          {/* HEADER BLOCK */}
+          {/* HEADER BLOCK (with 1s title to sentence replacement on mobile) */}
           <div className="shrink-0 w-full bg-black border-t border-b border-white/10 pt-[clamp(8px,1.2vh,16px)] pb-[clamp(8px,1.2vh,16px)] px-6 relative z-20">
-            <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-start md:items-end gap-3 md:gap-6 w-full">
-              <span className="text-[clamp(1.05rem,1.5vw,2rem)] font-sans font-light tracking-tighter uppercase leading-none text-white block">
-                Services & Capabilities
-              </span>
-              <p className="font-sans font-light text-[13.5px] md:text-[clamp(13px,0.75vw,15px)] tracking-widest max-w-sm md:max-w-lg border-t border-white/20 text-white/80 pt-1">
-                We absorb operational friction and execution risk allowing businesses to focus on their core business goals, product vision, and growth.
-              </p>
+            <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-start md:items-end gap-3 md:gap-6 w-full min-h-[42px] justify-center">
+              {isMobile ? (
+                <AnimatePresence mode="wait">
+                  {!showHeaderSentence ? (
+                    <motion.span
+                      key="header-title"
+                      initial={{ opacity: 0, y: 3 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -3 }}
+                      transition={{ duration: 0.25 }}
+                      className="text-base sm:text-lg font-sans font-light tracking-tighter uppercase leading-none text-white block py-1"
+                    >
+                      SERVICES & CAPABILITIES
+                    </motion.span>
+                  ) : (
+                    <motion.p
+                      key="header-sentence"
+                      initial={{ opacity: 0, y: 3 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -3 }}
+                      transition={{ duration: 0.3 }}
+                      className="font-sans font-light text-[12px] sm:text-[13px] tracking-wide text-white/90 leading-snug m-0"
+                    >
+                      We absorb operational friction and execution risk allowing businesses to focus on their core business goals, product vision, and growth.
+                    </motion.p>
+                  )}
+                </AnimatePresence>
+              ) : (
+                <>
+                  <span className="text-[clamp(1.05rem,1.5vw,2rem)] font-sans font-light tracking-tighter uppercase leading-none text-white block">
+                    Services & Capabilities
+                  </span>
+                  <p className="font-sans font-light text-[13.5px] md:text-[clamp(13px,0.75vw,15px)] tracking-widest max-w-sm md:max-w-lg border-t border-white/20 text-white/80 pt-1">
+                    We absorb operational friction and execution risk allowing businesses to focus on their core business goals, product vision, and growth.
+                  </p>
+                </>
+              )}
             </div>
           </div>
 
           {/* HORIZONTAL INTERACTIVE SERVICE TABS TRACK */}
-          <div 
-            ref={tabsTrackRef}
-            className="shrink-0 w-full bg-black/90 border-b border-white/10 px-4 md:px-6 py-2 z-20 backdrop-blur-md overflow-x-auto no-scrollbar [&::-webkit-scrollbar]:hidden"
-            style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
-          >
+          <div className="relative w-full z-20 shrink-0">
             <div 
-              ref={tabsInnerRef}
-              className="max-w-6xl mx-auto flex items-center justify-between gap-1 sm:gap-2 relative"
+              ref={tabsTrackRef}
+              id="tabs-track"
+              data-no-flick="true"
+              className="w-full bg-black/90 border-b border-white/10 px-4 md:px-6 py-2 backdrop-blur-md overflow-x-auto no-scrollbar [&::-webkit-scrollbar]:hidden"
+              style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
             >
-              {bentoData.map((step, index) => {
-                const isActive = activeIndex === index;
-                return (
-                  <button
-                    ref={(el) => { tabRefs.current[index] = el; }}
-                    key={step.num}
-                    onClick={() => handleItemClick(index)}
-                    style={isActive ? { backgroundColor: brandColor || "#f41c06" } : undefined}
-                    className={`relative py-1.5 px-2.5 sm:px-3.5 text-left transition-all duration-200 rounded flex items-center gap-1.5 sm:gap-2 group cursor-pointer border-none outline-none ${
-                      isActive 
-                        ? "text-white shadow-sm" 
-                        : "bg-transparent text-white/40 hover:text-white/80"
-                    }`}
-                  >
-                    <span className={`font-mono tracking-wider transition-all duration-200 ${isActive ? "text-[11.5px] text-black font-black" : "text-[9.5px] text-white/60"}`}>[{step.num}]</span>
-                    <span className={`font-header font-black tracking-wider uppercase whitespace-nowrap transition-all duration-200 ${isActive ? "text-[13px] sm:text-[15px] text-white" : "text-[11px] sm:text-[12.5px] text-white/40 group-hover:text-white/80"}`}>
-                      {step.title}
-                    </span>
-                  </button>
-                );
-              })}
+              <div 
+                ref={tabsInnerRef}
+                className="max-w-6xl mx-auto flex items-center justify-between gap-1 sm:gap-2 relative pr-8 md:pr-0"
+              >
+                {bentoData.map((step, index) => {
+                  const isActive = activeIndex === index;
+                  return (
+                    <button
+                      ref={(el) => { tabRefs.current[index] = el; }}
+                      key={step.num}
+                      onClick={() => handleItemClick(index)}
+                      style={isActive ? { backgroundColor: brandColor || "#f41c06" } : undefined}
+                      className={`relative py-1.5 px-2.5 sm:px-3.5 text-left transition-all duration-200 rounded flex items-center gap-1.5 sm:gap-2 group cursor-pointer border-none outline-none shrink-0 ${
+                        isActive 
+                          ? "text-white shadow-sm" 
+                          : "bg-transparent text-white/40 hover:text-white/80"
+                      }`}
+                    >
+                      <span className={`font-mono tracking-wider transition-all duration-200 ${isActive ? "text-[11.5px] text-black font-black" : "text-[9.5px] text-white/60"}`}>[{step.num}]</span>
+                      <span className={`font-header font-black tracking-wider uppercase whitespace-nowrap transition-all duration-200 ${isActive ? "text-[13px] sm:text-[15px] text-white" : "text-[11px] sm:text-[12.5px] text-white/40 group-hover:text-white/80"}`}>
+                        {step.title}
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
             </div>
+
+            {/* Red Triangle Indicator for More Services on Mobile */}
+            {isMobile && (
+              <AnimatePresence>
+                {canScrollRight && (
+                  <motion.div
+                    initial={{ opacity: 0, x: 4 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: 4 }}
+                    transition={{ duration: 0.2 }}
+                    onClick={() => {
+                      const track = tabsTrackRef.current;
+                      if (track) {
+                        track.scrollBy({ left: 140, behavior: "smooth" });
+                      }
+                    }}
+                    className="absolute right-0 top-0 bottom-0 pr-3 pl-6 flex items-center justify-end bg-gradient-to-l from-black via-black/90 to-transparent pointer-events-auto cursor-pointer"
+                    aria-label="More services available"
+                  >
+                    <svg
+                      width="9"
+                      height="12"
+                      viewBox="0 0 9 12"
+                      className="animate-pulse"
+                    >
+                      <polygon points="1,1 8,6 1,11" fill={brandColor || "#f41c06"} />
+                    </svg>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            )}
           </div>
 
-          {/* Centered Service Box Container: Centered vertically between the bottom of the services bar and the bottom of the screen */}
+          {/* Centered Service Box Container: Fills remaining height on mobile */}
           <motion.div 
             style={isMobile ? {} : { scale: contentScale }}
             className={`w-full z-10 ${
               isMobile 
-                ? "flex flex-col items-center justify-start pt-4" 
+                ? "flex-1 flex flex-col items-center justify-start p-3 min-h-0" 
                 : "flex-1 flex flex-col items-center justify-center my-auto"
             }`}
           >
@@ -1195,17 +1397,21 @@ export default function Home() {
               const currentStep = bentoData[activeIndex ?? 0] || bentoData[0];
 
               return (
-                <div className="w-full max-w-6xl mx-auto px-4 md:px-6">
-                  {/* SERVICE BOX: Centered vertically with frosted glass top header and solid white body */}
+                <div className={`w-full max-w-6xl mx-auto ${isMobile ? "h-full flex flex-col min-h-0" : "px-4 md:px-6"}`}>
+                  {/* SERVICE BOX: Fills the screen vertically on mobile */}
                   <div 
                     onTouchStart={handleCardTouchStart}
                     onTouchEnd={handleCardTouchEnd}
-                    className="w-full shadow-[0_24px_64px_rgba(0,0,0,0.18)] rounded-[6px] overflow-hidden border border-black/10 touch-pan-y"
+                    className={`w-full shadow-[0_24px_64px_rgba(0,0,0,0.18)] rounded-[6px] overflow-hidden border border-black/10 touch-pan-y ${
+                      isMobile ? "flex-1 flex flex-col min-h-0" : ""
+                    }`}
                   >
                     {/* Top Part: Frosted Glass Header */}
                     <div 
                       style={{ WebkitBackdropFilter: "blur(16px)", backdropFilter: "blur(16px)" }}
-                      className="w-full bg-white/70 backdrop-blur-md border-b border-black/10 px-6 sm:px-8 md:px-9 py-5 md:py-6"
+                      className={`w-full bg-white/70 backdrop-blur-md border-b border-black/10 ${
+                        isMobile ? "px-4 py-3 shrink-0" : "px-6 sm:px-8 md:px-9 py-5 md:py-6"
+                      }`}
                     >
                       <AnimatePresence mode="wait">
                         <motion.div
@@ -1214,20 +1420,22 @@ export default function Home() {
                           animate={{ opacity: 1, y: 0 }}
                           exit={{ opacity: 0, y: -6 }}
                           transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
-                          className="flex flex-col md:flex-row md:items-center justify-between gap-3"
+                          className="flex flex-row items-center justify-between gap-3"
                         >
-                          <div className="flex items-baseline gap-4 md:gap-6">
-                            <span className="font-sans font-light text-black/40 text-base md:text-lg">
+                          <div className="flex items-baseline gap-3 md:gap-6">
+                            <span className="font-sans font-light text-black/40 text-sm md:text-lg">
                               [{currentStep.num}]
                             </span>
-                            <h3 className="font-header font-black tracking-tight uppercase text-2xl sm:text-3xl md:text-4xl text-black m-0 leading-none">
+                            <h3 className="font-header font-black tracking-tight uppercase text-xl sm:text-3xl md:text-4xl text-black m-0 leading-none">
                               {currentStep.title}
                             </h3>
                           </div>
-                          <div className="flex items-center gap-4 self-start md:self-auto">
+                          <div className="flex items-center gap-4 self-auto">
                             <span 
-                              style={{ color: brandColor || "#f41c06" }}
-                              className="font-header font-black uppercase tracking-wider text-xs sm:text-sm"
+                              style={isMobile ? undefined : { color: brandColor || "#f41c06" }}
+                              className={`font-header font-black uppercase tracking-wider text-[11px] sm:text-sm ${
+                                isMobile ? "text-white bg-[#f41c06] px-2.5 py-1 rounded shadow-sm" : ""
+                              }`}
                             >
                               {currentStep.label}
                             </span>
@@ -1237,7 +1445,11 @@ export default function Home() {
                     </div>
 
                     {/* Bottom Part: Solid Opaque White Body */}
-                    <div className="w-full bg-white text-black px-6 sm:px-8 md:px-9 py-6 sm:py-8 md:py-9">
+                    <div className={`w-full bg-white text-black ${
+                      isMobile 
+                        ? "flex-1 px-4 py-3.5 flex flex-col justify-between overflow-y-auto min-h-0" 
+                        : "px-6 sm:px-8 md:px-9 py-6 sm:py-8 md:py-9"
+                    }`}>
                       <AnimatePresence mode="wait">
                         <motion.div
                           key={currentStep.num}
@@ -1245,36 +1457,36 @@ export default function Home() {
                           animate={{ opacity: 1, y: 0 }}
                           exit={{ opacity: 0, y: -8 }}
                           transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
-                          className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-10"
+                          className={`grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-10 ${isMobile ? "flex-1 flex flex-col justify-between" : ""}`}
                         >
                           {/* Left Column: Description */}
                           <div className={`flex flex-col justify-start ${currentStep.longFeatures.length > 4 ? "lg:col-span-4" : "lg:col-span-5"}`}>
-                            <p className="font-sans font-light text-black/80 leading-relaxed text-[15px] sm:text-[16px] md:text-[17px] m-0">
+                            <p className="font-sans font-light text-black/80 leading-relaxed text-[13.5px] sm:text-[15px] md:text-[17px] m-0">
                               {currentStep.longDesc}
                             </p>
                           </div>
 
                           {/* Right Column: Detailed Capabilities */}
-                          <div className={`flex flex-col justify-start lg:pl-8 lg:border-l border-black/10 ${currentStep.longFeatures.length > 4 ? "lg:col-span-8" : "lg:col-span-7"}`}>
+                          <div className={`flex flex-col justify-start lg:pl-8 lg:border-l border-black/10 ${currentStep.longFeatures.length > 4 ? "lg:col-span-8" : "lg:col-span-7"} ${isMobile ? "border-t border-black/10 pt-3" : ""}`}>
                             <h4 
-                              className="font-header font-black tracking-widest uppercase mb-3 text-xs sm:text-sm text-black"
+                              className="font-header font-black tracking-widest uppercase mb-2.5 text-[11px] sm:text-sm text-black"
                             >
                               Detailed Capabilities
                             </h4>
-                            <ul className={`grid grid-cols-1 sm:grid-cols-2 ${currentStep.longFeatures.length > 4 ? "lg:grid-cols-2 gap-x-6 gap-y-3" : "gap-x-6 gap-y-3.5"} list-none m-0 p-0`}>
+                            <ul className={`grid grid-cols-1 sm:grid-cols-2 ${currentStep.longFeatures.length > 4 ? "lg:grid-cols-2 gap-x-6 gap-y-2 sm:gap-y-3" : "gap-x-6 gap-y-2 sm:gap-y-3.5"} list-none m-0 p-0`}>
                               {currentStep.longFeatures.map((feat) => (
-                                <li key={feat.name} className="flex items-start gap-2.5">
+                                <li key={feat.name} className="flex items-start gap-2">
                                   <span 
                                     style={{ color: brandColor }} 
-                                    className="font-bold leading-none mt-0.5 text-lg shrink-0"
+                                    className="font-bold leading-none mt-0.5 text-base sm:text-lg shrink-0"
                                   >
                                     +
                                   </span>
                                   <div>
-                                    <span className="font-header font-black text-black uppercase tracking-wider block text-[14px] sm:text-[15px]">
+                                    <span className="font-header font-black text-black uppercase tracking-wider block text-[13px] sm:text-[15px]">
                                       {feat.name}
                                     </span>
-                                    <span className="font-sans font-light leading-snug block text-[13px] sm:text-[13.5px] text-black/70 mt-0.5">
+                                    <span className="font-sans font-light leading-snug block text-[12px] sm:text-[13.5px] text-black/70 mt-0.5">
                                       {feat.desc}
                                     </span>
                                   </div>
@@ -1297,18 +1509,14 @@ export default function Home() {
           id="about-section"
           initial={false}
           animate={{
-            x: isMobile ? 0 : (isContactOpen ? "100%" : "0%"),
-            y: isMobile ? 0 : ((!isAboutOpen && !isContactOpen) ? "100%" : "0%"),
+            x: isContactOpen ? "100%" : "0%",
+            y: (!isAboutOpen && !isContactOpen) ? "100%" : "0%",
           }}
           transition={{
             duration: 0.8,
             ease: [0.22, 1, 0.36, 1]
           }}
-          className={
-            isMobile 
-              ? "w-full border-t border-black/20 bg-white text-black py-12 scroll-mt-[clamp(56px,6vh,72px)]" 
-              : "absolute inset-0 w-full h-full z-30 bg-white overflow-hidden text-black"
-          }
+          className="absolute inset-0 w-full h-full z-30 bg-white overflow-y-auto lg:overflow-hidden text-black"
         >
           <div className="grid grid-cols-1 lg:grid-cols-2 w-full h-full">
             
@@ -1399,17 +1607,13 @@ export default function Home() {
           id="contact-section"
           initial={false}
           animate={{
-            x: isMobile ? 0 : (isContactOpen ? "0%" : "-100%"),
+            x: isContactOpen ? "0%" : "-100%",
           }}
           transition={{
             duration: 0.8,
             ease: [0.22, 1, 0.36, 1]
           }}
-          className={
-            isMobile 
-              ? "w-full border-t border-black/20 bg-[var(--brand)] text-white py-12 scroll-mt-[clamp(56px,6vh,72px)]" 
-              : "absolute inset-0 w-full h-full z-40 bg-[var(--brand)] overflow-hidden"
-          }
+          className="absolute inset-0 w-full h-full z-40 bg-[var(--brand)] overflow-y-auto lg:overflow-hidden text-white"
         >
             <div className="grid grid-cols-1 lg:grid-cols-2 w-full h-full">
               

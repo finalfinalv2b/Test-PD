@@ -776,7 +776,13 @@ export default function Home() {
     const deltaAccumulatorRef = { current: 0 };
     const isLockedRef = { current: false };
     const lastWheelTimeRef = { current: 0 };
+    const transitionStartTimeRef = { current: 0 };
     const lockTimerRef = { current: null as NodeJS.Timeout | null };
+
+    const MIN_LOCK_MS = 500;
+    const INERTIA_DEBOUNCE_MS = 140;
+    const MAX_LOCK_MS = 1000;
+    const THRESHOLD = 45;
 
     // Helper to allow nested elements (like the About text cascade or Contact form) to scroll natively when hovered
     const canElementScroll = (target: HTMLElement | null, deltaY: number): boolean => {
@@ -814,9 +820,38 @@ export default function Home() {
       const timeDelta = now - lastWheelTimeRef.current;
       lastWheelTimeRef.current = now;
 
-      // If locked during an active transition, absorb residual trackpad/wheel inertia without advancing stages
-      if (isLockedRef.current) {
+      // Normalize delta across deltaMode (0: pixels, 1: lines, 2: pages)
+      let delta = e.deltaY;
+      if (e.deltaMode === 1) {
+        delta *= 40;
+      } else if (e.deltaMode === 2) {
+        delta *= 800;
+      }
+
+      // Discard sub-pixel noise from resting touchpads
+      if (Math.abs(delta) < 1) {
         return;
+      }
+
+      // If locked during an active transition or during click-scrolling, absorb residual trackpad momentum
+      // and dynamically extend the lock until momentum completely stops, preventing skipped stages.
+      if (isLockedRef.current || isClickScrollingRef.current) {
+        if (now - transitionStartTimeRef.current > MAX_LOCK_MS && !isClickScrollingRef.current) {
+          isLockedRef.current = false;
+          deltaAccumulatorRef.current = 0;
+        } else {
+          if (lockTimerRef.current) clearTimeout(lockTimerRef.current);
+          const elapsed = now - transitionStartTimeRef.current;
+          const remainingMin = Math.max(0, MIN_LOCK_MS - elapsed);
+          const waitTime = Math.max(remainingMin, INERTIA_DEBOUNCE_MS);
+
+          lockTimerRef.current = setTimeout(() => {
+            isLockedRef.current = false;
+            deltaAccumulatorRef.current = 0;
+          }, waitTime);
+
+          return;
+        }
       }
 
       // When the user lifts fingers or pauses for > 160ms, clear accumulated inertia
@@ -824,11 +859,10 @@ export default function Home() {
         deltaAccumulatorRef.current = 0;
       }
 
-      // Accumulate deltaY across micro-events
-      deltaAccumulatorRef.current += e.deltaY;
+      // Accumulate normalized delta
+      deltaAccumulatorRef.current += delta;
 
-      // 35px threshold ensures immediate responsiveness to intentional swipes/mouse clicks while discarding noise
-      const THRESHOLD = 35;
+      // Threshold ensures immediate responsiveness to intentional swipes while discarding noise
       if (Math.abs(deltaAccumulatorRef.current) < THRESHOLD) {
         return;
       }
@@ -836,13 +870,14 @@ export default function Home() {
       const direction = deltaAccumulatorRef.current > 0 ? 1 : -1;
       deltaAccumulatorRef.current = 0;
 
-      // Lock for transition duration (550ms for snappy, fluid response on both mouse and trackpad)
+      // Lock for transition duration with dynamic inertia absorption
       isLockedRef.current = true;
+      transitionStartTimeRef.current = now;
       if (lockTimerRef.current) clearTimeout(lockTimerRef.current);
       lockTimerRef.current = setTimeout(() => {
         isLockedRef.current = false;
         deltaAccumulatorRef.current = 0;
-      }, 550);
+      }, MIN_LOCK_MS);
 
       // Contact Section (Stage 8)
       if (isContactOpenRef.current) {

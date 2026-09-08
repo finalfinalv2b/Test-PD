@@ -8,7 +8,7 @@ const bentoData = [
     num: "01",
     title: "STRATEGY",
     label: "REQUIREMENTS SET",
-    bgImage: "/photo-flicker/strategy.png",
+    bgImage: "/photo-flicker/strategy_anim.mp4",
     longDesc: "Every successful product starts with a clear plan. We help you define your target audience, identify your product's key advantages, and lay out a roadmap for development. This ensures we build a product that your customers will love and that fits perfectly with your business goals.",
     longFeatures: [
       { name: "Product Roadmapping", desc: "Creating a clear step-by-step timeline and milestones for development." },
@@ -45,7 +45,7 @@ const bentoData = [
     num: "04",
     title: "SOURCING",
     label: "VENDOR SELECTION",
-    bgImage: "/photo-flicker/sourcing.png",
+    bgImage: "/photo-flicker/sourcing_anim.mp4",
     longDesc: "Finding the right manufacturing partners is key to your product's success. We negotiate directly with trusted factories, manage supplier relationships, and optimize production costs. We set up reliable supply chains to ensure you get high-quality components delivered on time.",
     longFeatures: [
       { name: "Trusted Partners", desc: "Selecting vetted manufacturers capable of meeting high quality standards." },

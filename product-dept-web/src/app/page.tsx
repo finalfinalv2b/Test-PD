@@ -235,9 +235,6 @@ export default function Home() {
   const touchGlobalStartXRef = useRef<number | null>(null);
   const isTouchLockedRef = useRef<boolean>(false);
 
-  // Mobile Header transition: shows "SERVICES & CAPABILITIES" for 1 second, then replaces with the descriptive sentence
-  const [showHeaderSentence, setShowHeaderSentence] = useState(false);
-
   // Mobile Tabs Track: indicator icon when more services exist offscreen to the right
   const [canScrollRight, setCanScrollRight] = useState(true);
 
@@ -257,19 +254,6 @@ export default function Home() {
       return () => track.removeEventListener("scroll", checkTabsOverflow);
     }
   }, [activeIndex, windowWidth, isMobile]);
-
-  useEffect(() => {
-    if (!isMobile) return;
-    if (isInServices && !isAboutOpen && !isContactOpen) {
-      setShowHeaderSentence(false);
-      const timer = setTimeout(() => {
-        setShowHeaderSentence(true);
-      }, 1000);
-      return () => clearTimeout(timer);
-    } else if (!isInServices) {
-      setShowHeaderSentence(false);
-    }
-  }, [isInServices, isAboutOpen, isContactOpen, isMobile]);
 
   const [activeTabMetrics, setActiveTabMetrics] = useState<{
     left: number;
@@ -1092,7 +1076,7 @@ export default function Home() {
                 : "calc(clamp(56px,6vh,72px) + (100dvh - clamp(56px,6vh,72px)) * 0.48)"),
           x: "-50%",
           y: (isAboutOpen || isContactOpen) ? "-150%" : "-50%",
-          opacity: (!isInServices || activeIndex === 0 || activeIndex === null) && !isContactOpen && !isAboutOpen ? 1 : 0
+          opacity: !isContactOpen && !isAboutOpen ? 1 : 0
         }}
         transition={{
           duration: 0.8,
@@ -1125,13 +1109,12 @@ export default function Home() {
       {/* SECTION 1: Title Page with Two-Column Layout */}
       <motion.section
         id="hero-section"
-        initial={false}
-        animate={isMobile ? { y: mobileStage === 0 ? "0%" : "-100%" } : undefined}
+        animate={isMobile ? { y: mobileStage === 0 ? "0%" : "-100%" } : { y: "0%" }}
         transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
         className={
           isMobile
-            ? "absolute inset-0 w-full h-full flex flex-col items-center justify-between border-b border-white/10 bg-transparent text-white overflow-hidden z-10"
-            : "relative w-full h-[calc(100dvh-clamp(56px,6vh,72px))] min-h-[540px] flex flex-col items-center justify-between border-b border-white/10 bg-transparent text-white overflow-hidden"
+            ? `absolute inset-0 w-full h-full flex flex-col items-center justify-between bg-transparent text-white overflow-hidden ${mobileStage === 0 ? "z-20" : "z-10"}`
+            : "relative w-full h-[calc(100dvh-clamp(56px,6vh,72px))] min-h-[540px] flex flex-col items-center justify-between bg-transparent text-white overflow-hidden"
         }
       >
 
@@ -1201,7 +1184,7 @@ export default function Home() {
         {/* Client Name Scrolling Animation (ALWAYS at the bottom of the homescreen - including on mobile) */}
         <div
           ref={partnersBannerRef}
-          className="absolute bottom-0 left-0 w-full flex flex-col gap-1.5 overflow-hidden select-none z-20 bg-black/85 backdrop-blur-[2px]"
+          className="absolute bottom-0 left-0 w-full flex flex-col gap-1.5 overflow-hidden select-none z-20 bg-black"
         >
           <div className="px-6 md:px-12 text-left pt-2">
             <span className="font-sans text-[8px] md:text-[10px] font-black tracking-[0.2em] uppercase text-white/50">
@@ -1209,7 +1192,7 @@ export default function Home() {
             </span>
           </div>
 
-          <div className="w-full overflow-hidden relative py-3 md:py-3.5 border-y border-white/10 flex items-center">
+          <div className="w-full overflow-hidden relative py-3 md:py-3.5 border-t border-white/10 flex items-center">
             <motion.div
               className="flex items-center gap-14 sm:gap-16 md:gap-20 pr-14 sm:pr-16 md:pr-20 whitespace-nowrap min-w-full shrink-0"
               animate={{ x: [0, "-50%"] }}
@@ -1237,12 +1220,11 @@ export default function Home() {
       <motion.section 
         ref={processSectionRef} 
         id="process-section" 
-        initial={false}
-        animate={isMobile ? { y: mobileStage === 0 ? "100%" : "0%" } : undefined}
+        animate={isMobile ? { y: mobileStage === 0 ? "100%" : "0%" } : { y: "0%" }}
         transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
         className={
           isMobile 
-            ? "absolute inset-0 w-full h-full overflow-hidden bg-transparent z-20" 
+            ? `absolute -top-px inset-x-0 bottom-0 w-full h-[calc(100%+1px)] overflow-hidden bg-transparent ${mobileStage === 0 ? "z-10 pointer-events-none" : "z-20"}` 
             : "relative bg-transparent border-b border-black w-full scroll-mt-[clamp(56px,6vh,72px)] h-[600vh]"
         }
       >
@@ -1311,35 +1293,13 @@ export default function Home() {
             />
           </div>
 
-          {/* HEADER BLOCK (with 1s title to sentence replacement on mobile) */}
-          <div className="shrink-0 w-full bg-black border-t border-b border-white/10 pt-[clamp(8px,1.2vh,16px)] pb-[clamp(8px,1.2vh,16px)] px-6 relative z-20">
+          {/* HEADER BLOCK */}
+          <div className={`shrink-0 w-full bg-black ${isMobile ? "border-b border-white/10" : "border-t border-b border-white/10"} pt-[clamp(8px,1.2vh,16px)] pb-[clamp(8px,1.2vh,16px)] px-6 relative z-20`}>
             <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-start md:items-end gap-3 md:gap-6 w-full min-h-[42px] justify-center">
               {isMobile ? (
-                <AnimatePresence mode="wait">
-                  {!showHeaderSentence ? (
-                    <motion.span
-                      key="header-title"
-                      initial={{ opacity: 0, y: 3 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -3 }}
-                      transition={{ duration: 0.25 }}
-                      className="text-base sm:text-lg font-sans font-light tracking-tighter uppercase leading-none text-white block py-1"
-                    >
-                      SERVICES & CAPABILITIES
-                    </motion.span>
-                  ) : (
-                    <motion.p
-                      key="header-sentence"
-                      initial={{ opacity: 0, y: 3 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -3 }}
-                      transition={{ duration: 0.3 }}
-                      className="font-sans font-light text-[12px] sm:text-[13px] tracking-wide text-white/90 leading-snug m-0"
-                    >
-                      We absorb operational friction and execution risk allowing businesses to focus on their core business goals, product vision, and growth.
-                    </motion.p>
-                  )}
-                </AnimatePresence>
+                <span className="text-base sm:text-lg font-sans font-light tracking-tighter uppercase leading-none text-white block py-1">
+                  SERVICES & CAPABILITIES
+                </span>
               ) : (
                 <>
                   <span className="text-[clamp(1.05rem,1.5vw,2rem)] font-sans font-light tracking-tighter uppercase leading-none text-white block">
@@ -1380,7 +1340,7 @@ export default function Home() {
                           : "bg-transparent text-white/40 hover:text-white/80"
                       }`}
                     >
-                      <span className={`font-mono tracking-wider transition-all duration-200 ${isActive ? "text-[11.5px] text-black font-black" : "text-[9.5px] text-white/60"}`}>[{step.num}]</span>
+                      <span className={`font-mono tracking-wider transition-all duration-200 ${isActive ? "text-[11.5px] text-black font-black" : "text-[9.5px] text-white/60"}`}>{step.num}</span>
                       <span className={`font-header font-black tracking-wider uppercase whitespace-nowrap transition-all duration-200 ${isActive ? "text-[13px] sm:text-[15px] text-white" : "text-[11px] sm:text-[12.5px] text-white/40 group-hover:text-white/80"}`}>
                         {step.title}
                       </span>
@@ -1471,10 +1431,8 @@ export default function Home() {
                           </div>
                           <div className="flex items-center gap-4 self-auto">
                             <span 
-                              style={isMobile ? undefined : { color: brandColor || "#f41c06" }}
-                              className={`font-header font-black uppercase tracking-wider text-[11px] sm:text-sm ${
-                                isMobile ? "text-white bg-[#f41c06] px-2.5 py-1 rounded shadow-sm" : ""
-                              }`}
+                              style={{ color: brandColor || "#f41c06" }}
+                              className="font-header font-black uppercase tracking-wider text-[11px] sm:text-sm"
                             >
                               {currentStep.label}
                             </span>

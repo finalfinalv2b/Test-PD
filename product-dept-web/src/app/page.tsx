@@ -8,7 +8,7 @@ const bentoData = [
     num: "01",
     title: "STRATEGY",
     label: "REQUIREMENTS SET",
-    bgImage: "",
+    bgImage: "/photo-flicker/design_anim.mp4",
     longDesc: "Every successful product starts with a clear plan. We help you define your target audience, identify your product's key advantages, and lay out a roadmap for development. This ensures we build a product that your customers will love and that fits perfectly with your business goals.",
     longFeatures: [
       { name: "Product Roadmapping", desc: "Creating a clear step-by-step timeline and milestones for development." },
@@ -21,7 +21,7 @@ const bentoData = [
     num: "02",
     title: "DESIGN",
     label: "FORM DEFINED",
-    bgImage: "/photo-flicker/design_anim.mp4",
+    bgImage: "/photo-flicker/design_anim2.mp4",
     longDesc: "We believe a great product should look spectacular and feel natural to use. Our design team focuses on aesthetics, ease of use, and materials to create a product that stands out in the market. We refine the visual details, shapes, and colors to deliver an exceptional user experience.",
     longFeatures: [
       { name: "Concept Generation", desc: "Developing eye-catching design options and visual directions." },
@@ -1112,7 +1112,7 @@ export default function Home() {
           y: (isAboutOpen || isContactOpen) ? "-150%" : "-50%",
           opacity: isMobile
             ? (!isContactOpen && !isAboutOpen ? 1 : 0)
-            : ((!isInServices || activeIndex === 0 || activeIndex === null) && !isContactOpen && !isAboutOpen ? 1 : 0)
+            : (!isInServices && !isContactOpen && !isAboutOpen ? 1 : 0)
         }}
         transition={{
           top: { duration: 0.8, ease: [0.22, 1, 0.36, 1] },
@@ -1320,7 +1320,7 @@ export default function Home() {
             <motion.div 
               initial={false}
               animate={{
-                opacity: (!activeIndex || activeIndex === 0) ? 0 : 0.35
+                opacity: activeIndex === null ? 0 : 0.35
               }}
               transition={{ duration: 0.5, ease: "easeInOut" }}
               className="absolute inset-0 w-full h-full pointer-events-none z-10 mix-blend-overlay bg-repeat"

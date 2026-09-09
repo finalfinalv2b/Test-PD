@@ -1555,8 +1555,8 @@ export default function Home() {
           {isMobile ? (
             /* MOBILE ZERO-SCROLL ABOUT LAYOUT */
             <div className="w-full h-full flex flex-col justify-between overflow-hidden bg-white">
-              {/* TOP RED HEADER BLOCK */}
-              <div className="shrink-0 bg-[#222222] text-white px-5 py-4 flex flex-col gap-1.5 shadow-md">
+              {/* TOP HEADER BLOCK */}
+              <div className="shrink-0 bg-[#222222] text-white px-5 py-3.5 flex flex-col justify-between shadow-md h-[92px] min-h-[92px]">
                 <div className="flex items-center justify-between">
                   <h1 className="text-3xl font-black tracking-tight text-white uppercase leading-none m-0">
                     ABOUT.
@@ -1574,19 +1574,21 @@ export default function Home() {
                     <span>Back</span>
                   </button>
                 </div>
-                <p className="font-sans font-light text-white/90 text-xs sm:text-[13px] leading-snug m-0">
+                <p className="font-sans font-light text-white/90 text-[11.5px] sm:text-xs leading-tight m-0">
                   We believe the world is a better place when interesting and compelling ideas come to life.
                 </p>
               </div>
 
               {/* WHITE CONTENT BODY */}
-              <div className="flex-1 px-5 py-3.5 flex flex-col justify-between overflow-hidden min-h-0 bg-white">
+              <div className="flex-1 px-5 pt-3 pb-4 flex flex-col justify-between overflow-hidden min-h-0 bg-white">
                 {/* WHO WE ARE */}
-                <div className="pb-2.5 border-b border-black/10">
-                  <span className="text-[10px] font-black tracking-widest uppercase block mb-1 text-black/50">Who We Are</span>
-                  <p className="font-sans font-light text-[12px] sm:text-[13px] tracking-normal leading-snug text-black/85 m-0">
-                    PRODUCT DEPT. is an industry agnostic, full-stack product creation and infrastructure company. We partner with venture and established companies to scale physical product lines quickly, reliably, and profitably.
-                  </p>
+                <div className="pb-2 border-b border-black/10">
+                  <span className="text-[10px] font-black tracking-widest uppercase block text-black/50">Who We Are</span>
+                  <div className="border-t border-black/10 pt-1.5 mt-1">
+                    <p className="font-sans font-light text-[12px] sm:text-[13px] tracking-normal leading-snug text-black/85 m-0">
+                      PRODUCT DEPT. is an industry agnostic, full-stack product creation and infrastructure company. We partner with venture and established companies to scale physical product lines quickly, reliably, and profitably.
+                    </p>
+                  </div>
                 </div>
 
                 {/* CORE PRINCIPLES */}
@@ -1726,8 +1728,8 @@ export default function Home() {
           {isMobile ? (
             /* MOBILE ZERO-SCROLL CONTACT LAYOUT */
             <div className="w-full h-full flex flex-col justify-between overflow-hidden bg-white text-black">
-              {/* TOP RED BRAND HEADER */}
-              <div className="shrink-0 bg-[#222222] text-white px-5 py-4 flex flex-col gap-1.5 shadow-md">
+              {/* TOP BRAND HEADER */}
+              <div className="shrink-0 bg-[#222222] text-white px-5 py-3.5 flex flex-col justify-between shadow-md h-[92px] min-h-[92px]">
                 <div className="flex items-center justify-between">
                   <h1 className="text-3xl font-black tracking-tight text-white uppercase leading-none m-0">
                     GET IN TOUCH.
@@ -1745,13 +1747,13 @@ export default function Home() {
                     <span>Back</span>
                   </button>
                 </div>
-                <p className="font-sans font-light text-white/90 text-xs sm:text-[13px] leading-snug m-0">
+                <p className="font-sans font-light text-white/90 text-[11.5px] sm:text-xs leading-tight m-0">
                   Ready to scale your physical product lines? Reach out below.
                 </p>
               </div>
 
               {/* WHITE FORM BODY */}
-              <div className="flex-1 px-5 py-3.5 flex flex-col justify-between overflow-hidden min-h-0 bg-white">
+              <div className="flex-1 px-5 pt-3 pb-3 flex flex-col justify-between overflow-hidden min-h-0 bg-white">
                 {!isSuccess ? (
                   <form onSubmit={handleSubmit} className="h-full flex flex-col justify-between gap-2.5">
                     <input type="hidden" name="_subject" value="New Inquiry from Product Dept." />

@@ -1575,7 +1575,7 @@ export default function Home() {
             /* MOBILE ZERO-SCROLL ABOUT LAYOUT */
             <div className="w-full h-full flex flex-col justify-between overflow-hidden bg-white">
               {/* TOP HEADER BLOCK */}
-              <div className="shrink-0 bg-[#222222] text-white px-5 py-3.5 flex flex-col justify-between shadow-md h-[92px] min-h-[92px]">
+              <div className="shrink-0 bg-[#444444] text-white px-5 py-3.5 flex flex-col justify-between shadow-md h-[92px] min-h-[92px]">
                 <div className="flex items-center justify-between">
                   <h1 className="text-3xl font-black tracking-tight text-white uppercase leading-none m-0">
                     ABOUT.
@@ -1637,7 +1637,7 @@ export default function Home() {
                     onClick={() => {
                       setMobileStage(9);
                     }}
-                    className="w-full bg-black text-white hover:bg-[#222222] transition-colors py-3 text-xs font-bold tracking-widest uppercase cursor-pointer flex items-center justify-center rounded-[2px]"
+                    className="w-full bg-black text-white hover:bg-[#444444] transition-colors py-3 text-xs font-bold tracking-widest uppercase cursor-pointer flex items-center justify-center rounded-[2px]"
                   >
                     Get in Touch
                   </button>
@@ -1648,7 +1648,7 @@ export default function Home() {
             /* DESKTOP TWO-COLUMN LAYOUT */
             <div className="grid grid-cols-1 lg:grid-cols-2 w-full h-full">
               {/* LEFT SIDE: RED TITLE BLOCK */}
-              <div className="p-8 md:p-14 lg:p-16 flex flex-col justify-between bg-[#222222] text-white h-full">
+              <div className="p-8 md:p-14 lg:p-16 flex flex-col justify-between bg-[#444444] text-white h-full">
                 <div>
                   <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black tracking-tighter text-white uppercase leading-none mb-6">
                     ABOUT.
@@ -1694,7 +1694,7 @@ export default function Home() {
 
                     {/* PRINCIPLES */}
                     <div>
-                      <h2 className="text-xs font-black tracking-widest uppercase mb-4 text-black/50">Core Principles</h2>
+                      <span className="text-xs font-black tracking-widest uppercase block mb-4 text-black/50">Core Principles</span>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
                         <div className="border-t border-black/20 pt-3">
                           <h3 className="font-black text-base md:text-lg mb-1 tracking-tight uppercase text-black">Disciplined Strategy</h3>
@@ -1718,7 +1718,7 @@ export default function Home() {
                     <button
                       type="button"
                       onClick={scrollToContact}
-                      className="w-full max-w-[200px] bg-black text-white hover:bg-[#222222] hover:text-white border border-transparent transition-colors py-3.5 font-bold text-sm tracking-widest uppercase cursor-pointer flex items-center justify-center"
+                      className="w-full max-w-[200px] bg-black text-white hover:bg-[#444444] hover:text-white border border-transparent transition-colors py-3.5 font-bold text-sm tracking-widest uppercase cursor-pointer flex items-center justify-center"
                     >
                       Get in Touch
                     </button>
@@ -1740,7 +1740,7 @@ export default function Home() {
             duration: 0.8,
             ease: [0.22, 1, 0.36, 1]
           }}
-          className={`absolute inset-0 w-full h-full z-40 bg-[#222222] text-white ${
+          className={`absolute inset-0 w-full h-full z-40 bg-[#444444] text-white ${
             isMobile ? "overflow-hidden" : "overflow-y-auto lg:overflow-hidden"
           }`}
         >
@@ -1748,7 +1748,7 @@ export default function Home() {
             /* MOBILE ZERO-SCROLL CONTACT LAYOUT */
             <div className="w-full h-full flex flex-col justify-between overflow-hidden bg-white text-black">
               {/* TOP BRAND HEADER */}
-              <div className="shrink-0 bg-[#222222] text-white px-5 py-3.5 flex flex-col justify-between shadow-md h-[92px] min-h-[92px]">
+              <div className="shrink-0 bg-[#444444] text-white px-5 py-3.5 flex flex-col justify-between shadow-md h-[92px] min-h-[92px]">
                 <div className="flex items-center justify-between">
                   <h1 className="text-3xl font-black tracking-tight text-white uppercase leading-none m-0">
                     GET IN TOUCH.
@@ -1803,7 +1803,7 @@ export default function Home() {
                       <button
                         type="submit"
                         disabled={isSubmitting}
-                        className="w-full bg-black text-white hover:bg-[#222222] py-3 font-bold text-xs tracking-widest uppercase cursor-pointer transition-colors rounded-[2px]"
+                        className="w-full bg-black text-white hover:bg-[#444444] py-3 font-bold text-xs tracking-widest uppercase cursor-pointer transition-colors rounded-[2px]"
                       >
                         {isSubmitting ? "TRANSMITTING..." : "Send"}
                       </button>
@@ -1853,7 +1853,7 @@ export default function Home() {
                        <button
                          type="submit"
                          disabled={isSubmitting}
-                         className="w-full max-w-[200px] bg-black text-white hover:bg-[#222222] hover:text-white border border-transparent transition-colors py-3.5 font-bold text-sm tracking-widest uppercase cursor-pointer"
+                         className="w-full max-w-[200px] bg-black text-white hover:bg-[#444444] hover:text-white border border-transparent transition-colors py-3.5 font-bold text-sm tracking-widest uppercase cursor-pointer"
                        >
                          {isSubmitting ? "TRANSMITTING..." : "Send"}
                        </button>

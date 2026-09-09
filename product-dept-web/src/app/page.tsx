@@ -9,6 +9,7 @@ const bentoData = [
     title: "STRATEGY",
     label: "REQUIREMENTS SET",
     bgImage: "/photo-flicker/design_anim.mp4",
+    loop: false,
     longDesc: "Every successful product starts with a clear plan. We help you define your target audience, identify your product's key advantages, and lay out a roadmap for development. This ensures we build a product that your customers will love and that fits perfectly with your business goals.",
     longFeatures: [
       { name: "Product Roadmapping", desc: "Creating a clear step-by-step timeline and milestones for development." },
@@ -22,6 +23,7 @@ const bentoData = [
     title: "DESIGN",
     label: "FORM DEFINED",
     bgImage: "/photo-flicker/design_anim2.mp4",
+    loop: false,
     longDesc: "We believe a great product should look spectacular and feel natural to use. Our design team focuses on aesthetics, ease of use, and materials to create a product that stands out in the market. We refine the visual details, shapes, and colors to deliver an exceptional user experience.",
     longFeatures: [
       { name: "Concept Generation", desc: "Developing eye-catching design options and visual directions." },
@@ -129,7 +131,17 @@ const partners = [
   }
 ];
 
-function ServiceBackgroundVideo({ src, isOpen }: { src: string; isOpen: boolean }) {
+function ServiceBackgroundVideo({ 
+  src, 
+  isOpen, 
+  loop = true, 
+  playTrigger = 0 
+}: { 
+  src: string; 
+  isOpen: boolean; 
+  loop?: boolean; 
+  playTrigger?: number; 
+}) {
   const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
@@ -155,7 +167,7 @@ function ServiceBackgroundVideo({ src, isOpen }: { src: string; isOpen: boolean 
         video.currentTime = 0;
       } catch {}
     }
-  }, [isOpen]);
+  }, [isOpen, playTrigger]);
 
   const handleLoadedMetadata = () => {
     const video = videoRef.current;
@@ -180,7 +192,7 @@ function ServiceBackgroundVideo({ src, isOpen }: { src: string; isOpen: boolean 
     <video
       ref={videoRef}
       src={src}
-      loop
+      loop={loop}
       muted
       playsInline
       preload="auto"
@@ -201,6 +213,7 @@ export default function Home() {
   const [isAboutOpen, setIsAboutOpen] = useState(false);
   const isAboutOpenRef = useRef(false);
   isAboutOpenRef.current = isAboutOpen;
+  const [playTrigger, setPlayTrigger] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
   const [mobileStage, setMobileStage] = useState(0); // 0: Hero, 1-7: Services 0-6, 8: About, 9: Contact
   const mobileStageRef = useRef(0);
@@ -428,6 +441,7 @@ export default function Home() {
       }
     };
 
+    handleScroll();
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, [isMobile]);
@@ -634,6 +648,8 @@ export default function Home() {
 
   // Click handler that switches service on mobile, and scrolls to target position on desktop
   const handleItemClick = (index: number) => {
+    setPlayTrigger(prev => prev + 1);
+
     if (isContactOpenRef.current) {
       setIsContactOpen(false);
     }
@@ -1286,7 +1302,8 @@ export default function Home() {
           <div className={`absolute inset-0 w-full h-full pointer-events-none z-0 overflow-hidden ${isMobile ? "hidden" : ""}`}>
             {bentoData.map((step, index) => {
               if (!step.bgImage) return null;
-              const isOpen = activeIndex === index;
+              const isServiceActive = isInServices && !isAboutOpen && !isContactOpen;
+              const isOpen = isServiceActive && activeIndex === index;
               const isEven = index % 2 === 0;
               return (
                 <motion.div
@@ -1304,6 +1321,8 @@ export default function Home() {
                     <ServiceBackgroundVideo
                       src={step.bgImage}
                       isOpen={isOpen}
+                      loop={step.loop ?? true}
+                      playTrigger={playTrigger}
                     />
                   ) : (
                     <img

@@ -129,7 +129,7 @@ const partners = [
   }
 ];
 
-function ServiceBackgroundVideo({ src, isOpen, isColor = false }: { src: string; isOpen: boolean; isColor?: boolean }) {
+function ServiceBackgroundVideo({ src, isOpen }: { src: string; isOpen: boolean }) {
   const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
@@ -185,8 +185,7 @@ function ServiceBackgroundVideo({ src, isOpen, isColor = false }: { src: string;
       playsInline
       preload="auto"
       onLoadedMetadata={handleLoadedMetadata}
-      className={`w-full h-full object-cover ${isColor ? "" : "grayscale"}`}
-      style={isColor ? undefined : { filter: "grayscale(100%)" }}
+      className="w-full h-full object-cover"
     />
   );
 }
@@ -1305,14 +1304,12 @@ export default function Home() {
                     <ServiceBackgroundVideo
                       src={step.bgImage}
                       isOpen={isOpen}
-                      isColor={Boolean((step as any).isColor || step.title === "VENTURE INFRASTRUCTURE")}
                     />
                   ) : (
                     <img
                       src={step.bgImage}
                       alt=""
-                      className={`w-full h-full object-cover ${(step as any).isColor || step.title === "VENTURE INFRASTRUCTURE" ? "" : "grayscale"}`}
-                      style={(step as any).isColor || step.title === "VENTURE INFRASTRUCTURE" ? undefined : { filter: "grayscale(100%)" }}
+                      className="w-full h-full object-cover"
                     />
                   )}
                 </motion.div>
@@ -1371,15 +1368,15 @@ export default function Home() {
                       ref={(el) => { tabRefs.current[index] = el; }}
                       key={step.num}
                       onClick={() => handleItemClick(index)}
-                      style={isActive ? { backgroundColor: brandColor || "#f41c06" } : undefined}
+                      style={isActive ? { backgroundColor: "#e5e5e5" } : undefined}
                       className={`relative py-1.5 px-2.5 sm:px-3.5 text-left transition-all duration-200 rounded flex items-center gap-1.5 sm:gap-2 group cursor-pointer border-none outline-none shrink-0 ${
                         isActive 
-                          ? "text-white shadow-sm" 
+                          ? "text-black shadow-sm" 
                           : "bg-transparent text-white/40 hover:text-white/80"
                       }`}
                     >
                       <span className={`font-mono tracking-wider transition-all duration-200 ${isActive ? "text-[11.5px] text-black font-black" : "text-[9.5px] text-white/60"}`}>{step.num}</span>
-                      <span className={`font-header font-black tracking-wider uppercase whitespace-nowrap transition-all duration-200 ${isActive ? "text-[13px] sm:text-[15px] text-white" : "text-[11px] sm:text-[12.5px] text-white/40 group-hover:text-white/80"}`}>
+                      <span className={`font-header font-black tracking-wider uppercase whitespace-nowrap transition-all duration-200 ${isActive ? "text-[13px] sm:text-[15px] text-black" : "text-[11px] sm:text-[12.5px] text-white/40 group-hover:text-white/80"}`}>
                         {step.title}
                       </span>
                     </button>
@@ -1559,7 +1556,7 @@ export default function Home() {
             /* MOBILE ZERO-SCROLL ABOUT LAYOUT */
             <div className="w-full h-full flex flex-col justify-between overflow-hidden bg-white">
               {/* TOP RED HEADER BLOCK */}
-              <div className="shrink-0 bg-[#f41c06] text-white px-5 py-4 flex flex-col gap-1.5 shadow-md">
+              <div className="shrink-0 bg-[#222222] text-white px-5 py-4 flex flex-col gap-1.5 shadow-md">
                 <div className="flex items-center justify-between">
                   <h1 className="text-3xl font-black tracking-tight text-white uppercase leading-none m-0">
                     ABOUT.
@@ -1619,7 +1616,7 @@ export default function Home() {
                     onClick={() => {
                       setMobileStage(9);
                     }}
-                    className="w-full bg-black text-white hover:bg-[#f41c06] transition-colors py-3 text-xs font-bold tracking-widest uppercase cursor-pointer flex items-center justify-center rounded-[2px]"
+                    className="w-full bg-black text-white hover:bg-[#222222] transition-colors py-3 text-xs font-bold tracking-widest uppercase cursor-pointer flex items-center justify-center rounded-[2px]"
                   >
                     Get in Touch
                   </button>
@@ -1630,7 +1627,7 @@ export default function Home() {
             /* DESKTOP TWO-COLUMN LAYOUT */
             <div className="grid grid-cols-1 lg:grid-cols-2 w-full h-full">
               {/* LEFT SIDE: RED TITLE BLOCK */}
-              <div className="p-8 md:p-14 lg:p-16 flex flex-col justify-between bg-[#f41c06] text-white h-full">
+              <div className="p-8 md:p-14 lg:p-16 flex flex-col justify-between bg-[#222222] text-white h-full">
                 <div>
                   <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black tracking-tighter text-white uppercase leading-none mb-6">
                     ABOUT.
@@ -1700,7 +1697,7 @@ export default function Home() {
                     <button
                       type="button"
                       onClick={scrollToContact}
-                      className="w-full max-w-[200px] bg-black text-white hover:bg-[#f41c06] hover:text-white border border-transparent transition-colors py-3.5 font-bold text-sm tracking-widest uppercase cursor-pointer flex items-center justify-center"
+                      className="w-full max-w-[200px] bg-black text-white hover:bg-[#222222] hover:text-white border border-transparent transition-colors py-3.5 font-bold text-sm tracking-widest uppercase cursor-pointer flex items-center justify-center"
                     >
                       Get in Touch
                     </button>
@@ -1722,7 +1719,7 @@ export default function Home() {
             duration: 0.8,
             ease: [0.22, 1, 0.36, 1]
           }}
-          className={`absolute inset-0 w-full h-full z-40 bg-[var(--brand)] text-white ${
+          className={`absolute inset-0 w-full h-full z-40 bg-[#222222] text-white ${
             isMobile ? "overflow-hidden" : "overflow-y-auto lg:overflow-hidden"
           }`}
         >
@@ -1730,7 +1727,7 @@ export default function Home() {
             /* MOBILE ZERO-SCROLL CONTACT LAYOUT */
             <div className="w-full h-full flex flex-col justify-between overflow-hidden bg-white text-black">
               {/* TOP RED BRAND HEADER */}
-              <div className="shrink-0 bg-[#f41c06] text-white px-5 py-4 flex flex-col gap-1.5 shadow-md">
+              <div className="shrink-0 bg-[#222222] text-white px-5 py-4 flex flex-col gap-1.5 shadow-md">
                 <div className="flex items-center justify-between">
                   <h1 className="text-3xl font-black tracking-tight text-white uppercase leading-none m-0">
                     GET IN TOUCH.
@@ -1785,7 +1782,7 @@ export default function Home() {
                       <button
                         type="submit"
                         disabled={isSubmitting}
-                        className="w-full bg-black text-white hover:bg-[#f41c06] py-3 font-bold text-xs tracking-widest uppercase cursor-pointer transition-colors rounded-[2px]"
+                        className="w-full bg-black text-white hover:bg-[#222222] py-3 font-bold text-xs tracking-widest uppercase cursor-pointer transition-colors rounded-[2px]"
                       >
                         {isSubmitting ? "TRANSMITTING..." : "Send"}
                       </button>
@@ -1835,7 +1832,7 @@ export default function Home() {
                        <button
                          type="submit"
                          disabled={isSubmitting}
-                         className="w-full max-w-[200px] bg-black text-white hover:bg-[#f41c06] hover:text-white border border-transparent transition-colors py-3.5 font-bold text-sm tracking-widest uppercase cursor-pointer"
+                         className="w-full max-w-[200px] bg-black text-white hover:bg-[#222222] hover:text-white border border-transparent transition-colors py-3.5 font-bold text-sm tracking-widest uppercase cursor-pointer"
                        >
                          {isSubmitting ? "TRANSMITTING..." : "Send"}
                        </button>

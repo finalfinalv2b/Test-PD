@@ -9,7 +9,7 @@ export default function About() {
         <div className="grid grid-cols-1 lg:grid-cols-2 h-full lg:h-[calc(100vh-clamp(56px,6vh,72px))]">
           
           {/* LEFT SIDE TITLE BLOCK */}
-          <div className="p-8 md:p-16 flex flex-col justify-start bg-[#f41c06] text-white lg:h-full min-h-[300px] lg:min-h-0">
+          <div className="p-8 md:p-16 flex flex-col justify-start bg-[#222222] text-white lg:h-full min-h-[300px] lg:min-h-0">
             <h1 className="text-5xl sm:text-6xl md:text-8xl font-black tracking-tighter text-white uppercase leading-none mb-12">
               ABOUT.
             </h1>
@@ -55,7 +55,7 @@ export default function About() {
               <div className="border-t border-black/20 pt-6 flex justify-start">
                 <Link
                   href="/#contact-section"
-                  className="inline-block bg-[#f41c06] text-white hover:bg-black hover:border-black border border-[#f41c06] transition-colors px-8 py-3 font-black text-xs tracking-widest uppercase cursor-pointer"
+                  className="inline-block bg-[#222222] text-white hover:bg-black hover:border-black border border-[#222222] transition-colors px-8 py-3 font-black text-xs tracking-widest uppercase cursor-pointer"
                 >
                   Get in Touch
                 </Link>

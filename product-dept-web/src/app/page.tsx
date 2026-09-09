@@ -332,8 +332,8 @@ export default function Home() {
       const availableForContent = window.innerHeight - navbarHeight - fixedHeaderOverhead;
 
       // Natural unscaled height of single service card with frosted connector:
-      // Connector (~34px) + card with detailed capabilities (~420px) = ~454px
-      const naturalCardHeight = 454;
+      // Connector (~34px) + card with detailed capabilities (~420px) = ~485px
+      const naturalCardHeight = 485;
 
       let scaleFactor = availableForContent / naturalCardHeight;
       // Cap at 1 on standard/large displays, smoothly scale if screen height is unusually small
@@ -1332,18 +1332,18 @@ export default function Home() {
           </div>
 
           {/* HEADER BLOCK */}
-          <div className={`shrink-0 w-full bg-black ${isMobile ? "border-b border-white/10" : "border-t border-b border-white/10"} pt-[clamp(8px,1.2vh,16px)] pb-[clamp(8px,1.2vh,16px)] px-6 relative z-20`}>
-            <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-start md:items-end gap-3 md:gap-6 w-full min-h-[42px] justify-center">
+          <div className={`shrink-0 w-full bg-black ${isMobile ? "border-b border-white/10" : "border-t border-b border-white/10"} pt-[clamp(8px,1.2vh,16px)] pb-[clamp(8px,1.2vh,16px)] relative z-20`}>
+            <div className="w-full max-w-6xl mx-auto px-4 md:px-6 flex flex-col md:flex-row justify-between items-start md:items-end gap-3 md:gap-6 min-h-[42px]">
               {isMobile ? (
-                <span className="text-base sm:text-lg font-sans font-light tracking-tighter uppercase leading-none text-white block py-1">
+                <span className="text-lg sm:text-xl font-sans font-light tracking-tighter uppercase leading-none text-white block py-1">
                   SERVICES & CAPABILITIES
                 </span>
               ) : (
                 <>
-                  <span className="text-[clamp(1.05rem,1.5vw,2rem)] font-sans font-light tracking-tighter uppercase leading-none text-white block">
+                  <span className="text-[clamp(1.35rem,2.0vw,2.35rem)] font-sans font-light tracking-tighter uppercase leading-none text-white block mb-0.5">
                     Services & Capabilities
                   </span>
-                  <p className="font-sans font-light text-[13.5px] md:text-[clamp(13px,0.75vw,15px)] tracking-widest max-w-sm md:max-w-lg border-t border-white/20 text-white/80 pt-1">
+                  <p className="font-sans font-light text-[13px] md:text-[clamp(12.5px,0.72vw,14.5px)] tracking-wider max-w-[clamp(470px,34vw,600px)] border-t border-white/20 text-white/80 pt-1 text-left">
                     We absorb operational friction and execution risk allowing businesses to focus on their core business goals, product vision, and growth.
                   </p>
                 </>
@@ -1483,7 +1483,7 @@ export default function Home() {
                     <div className={`w-full bg-white text-black ${
                       isMobile 
                         ? "flex-1 px-4 py-3.5 flex flex-col justify-between overflow-y-auto min-h-0" 
-                        : "px-6 sm:px-8 md:px-9 py-6 sm:py-8 md:py-9"
+                        : "min-h-[430px] xl:min-h-[385px] px-6 sm:px-8 md:px-9 py-6 sm:py-8 md:py-9 flex flex-col justify-start"
                     }`}>
                       <AnimatePresence mode="wait">
                         <motion.div
@@ -1492,7 +1492,7 @@ export default function Home() {
                           animate={{ opacity: 1, y: 0 }}
                           exit={{ opacity: 0, y: -8 }}
                           transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
-                          className={`grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-10 ${isMobile ? "flex-1 flex flex-col justify-between" : ""}`}
+                          className={`grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-10 w-full ${isMobile ? "flex-1 flex flex-col justify-between" : ""}`}
                         >
                           {/* Left Column: Description */}
                           <div className={`flex flex-col justify-start ${currentStep.longFeatures.length > 4 ? "lg:col-span-4" : "lg:col-span-5"}`}>

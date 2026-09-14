@@ -225,6 +225,9 @@ export default function Home() {
   mobileStageRef.current = mobileStage;
   const [contentScale, setContentScale] = useState(1);
   const [windowWidth, setWindowWidth] = useState(1440);
+  const [isScrolled, setIsScrolled] = useState(false);
+  const isScrolledRef = useRef(false);
+  const isLogoSeparated = isMobile ? mobileStage > 0 : isScrolled;
 
   // Contact States
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -366,13 +369,21 @@ export default function Home() {
   useEffect(() => {
     const handleScroll = () => {
       const section = processSectionRef.current;
+      let inServices = false;
       if (section) {
         const rect = section.getBoundingClientRect();
-        const inServices = rect.top <= 200;
+        inServices = rect.top <= 200;
         if (inServices !== isInServicesRef.current) {
           setIsInServices(inServices);
           isInServicesRef.current = inServices;
         }
+      }
+
+      const scrollTop = window.scrollY || document.documentElement.scrollTop;
+      const scrolled = inServices || scrollTop > 40;
+      if (scrolled !== isScrolledRef.current) {
+        isScrolledRef.current = scrolled;
+        setIsScrolled(scrolled);
       }
 
       if (isMobile) return;
@@ -383,7 +394,6 @@ export default function Home() {
       if (!section) return;
 
       const rect = section.getBoundingClientRect();
-      const scrollTop = window.scrollY || document.documentElement.scrollTop;
       const sectionStart = rect.top + scrollTop;
       const sectionHeight = rect.height;
       const viewportHeight = window.innerHeight;
@@ -664,6 +674,8 @@ export default function Home() {
 
     setIsInServices(true);
     isInServicesRef.current = true;
+    setIsScrolled(true);
+    isScrolledRef.current = true;
 
     if (isMobile) {
       setMobileStage(index + 1);
@@ -760,6 +772,8 @@ export default function Home() {
         setActiveIndex(null);
         window.scrollTo({ top: 0, behavior: "smooth" });
       }
+      setIsScrolled(false);
+      isScrolledRef.current = false;
     };
 
     window.addEventListener("open-contact", onOpenContact);
@@ -947,6 +961,8 @@ export default function Home() {
         } else if (currentIdx === 0 || currentIdx === null) {
           setIsInServices(false);
           isInServicesRef.current = false;
+          setIsScrolled(false);
+          isScrolledRef.current = false;
           setActiveIndex(null);
           isClickScrollingRef.current = true;
           setTimeout(() => {
@@ -1020,6 +1036,8 @@ export default function Home() {
         } else if (currentIdx === 0 || currentIdx === null) {
           setIsInServices(false);
           isInServicesRef.current = false;
+          setIsScrolled(false);
+          isScrolledRef.current = false;
           setActiveIndex(null);
           isClickScrollingRef.current = true;
           setTimeout(() => {
@@ -1131,9 +1149,7 @@ export default function Home() {
                 : "calc(clamp(56px,6vh,72px) + (100dvh - clamp(56px,6vh,72px)) * 0.48)"),
           x: "-50%",
           y: (isAboutOpen || isContactOpen) ? "-150%" : "-50%",
-          opacity: isMobile
-            ? (!isContactOpen && !isAboutOpen ? 1 : 0)
-            : (!isInServices && !isContactOpen && !isAboutOpen ? 1 : 0)
+          opacity: (!isContactOpen && !isAboutOpen ? 1 : 0)
         }}
         transition={{
           top: { duration: 0.8, ease: [0.22, 1, 0.36, 1] },
@@ -1146,14 +1162,13 @@ export default function Home() {
         }}
         className="fixed left-1/2 z-0 pointer-events-none select-none flex items-center justify-center overflow-visible"
       >
-        {/* Left Shape (Circle) - slides in from off-screen left to the right */}
+        {/* Left Shape (Circle) - separates to left when scrolling down, comes back together when scrolling up */}
         <motion.div
-          initial={{ x: "-100vw" }}
-          animate={{ x: 0 }}
+          initial={false}
+          animate={{ x: isLogoSeparated ? "-100vw" : 0 }}
           transition={{
-            delay: 0.35,
-            duration: 1.1,
-            ease: [0.16, 1, 0.3, 1],
+            duration: 0.8,
+            ease: [0.22, 1, 0.36, 1],
           }}
           className="absolute inset-0 w-full h-full pointer-events-none"
         >
@@ -1169,14 +1184,13 @@ export default function Home() {
           </svg>
         </motion.div>
 
-        {/* Right Shape (Polygon) - slides in from off-screen right to the left */}
+        {/* Right Shape (Polygon) - separates to right when scrolling down, comes back together when scrolling up */}
         <motion.div
-          initial={{ x: "100vw" }}
-          animate={{ x: 0 }}
+          initial={false}
+          animate={{ x: isLogoSeparated ? "100vw" : 0 }}
           transition={{
-            delay: 0.35,
-            duration: 1.1,
-            ease: [0.16, 1, 0.3, 1],
+            duration: 0.8,
+            ease: [0.22, 1, 0.36, 1],
           }}
           className="absolute inset-0 w-full h-full pointer-events-none"
         >

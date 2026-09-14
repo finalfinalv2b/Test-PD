@@ -1141,22 +1141,51 @@ export default function Home() {
         }}
         className="fixed left-1/2 z-0 pointer-events-none select-none flex items-center justify-center overflow-visible"
       >
-        <svg
-          id="Layer_1"
-          data-name="Layer 1"
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 564.03 288.69"
-          className="w-full h-full"
+        {/* Left Shape (Circle) - slides in from off-screen left to the right */}
+        <motion.div
+          initial={{ x: "-100vw" }}
+          animate={{ x: 0 }}
+          transition={{
+            delay: 0.35,
+            duration: 1.1,
+            ease: [0.16, 1, 0.3, 1],
+          }}
+          className="absolute inset-0 w-full h-full pointer-events-none"
         >
-          <polygon
-            points="553.22 284.38 311.9 284.38 286.31 0 562.31 67.5 553.22 284.38"
-            fill={brandColor || "#f41c06"}
-          />
-          <path
-            d="M136.64,15.41c75.46,0,136.64,61.17,136.64,136.64s-61.17,136.64-136.64,136.64S0,227.51,0,152.05,61.17,15.41,136.64,15.41"
-            fill={brandColor || "#f41c06"}
-          />
-        </svg>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 564.03 288.69"
+            className="w-full h-full"
+          >
+            <path
+              d="M136.64,15.41c75.46,0,136.64,61.17,136.64,136.64s-61.17,136.64-136.64,136.64S0,227.51,0,152.05,61.17,15.41,136.64,15.41"
+              fill={brandColor || "#f41c06"}
+            />
+          </svg>
+        </motion.div>
+
+        {/* Right Shape (Polygon) - slides in from off-screen right to the left */}
+        <motion.div
+          initial={{ x: "100vw" }}
+          animate={{ x: 0 }}
+          transition={{
+            delay: 0.35,
+            duration: 1.1,
+            ease: [0.16, 1, 0.3, 1],
+          }}
+          className="absolute inset-0 w-full h-full pointer-events-none"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 564.03 288.69"
+            className="w-full h-full"
+          >
+            <polygon
+              points="553.22 284.38 311.9 284.38 286.31 0 562.31 67.5 553.22 284.38"
+              fill={brandColor || "#f41c06"}
+            />
+          </svg>
+        </motion.div>
       </motion.div>
 
       {/* SECTION 1: Title Page with Two-Column Layout */}

@@ -128,6 +128,11 @@ const partners = [
     name: "NewBio Rx", 
     logo: "/client-logos/newbio-rx.svg", 
     className: "h-[13px] sm:h-[14.5px] md:h-[16px] w-auto object-contain" 
+  },
+  { 
+    name: "Trashie", 
+    logo: "/client-logos/trashie.svg", 
+    className: "h-[16px] sm:h-[18px] md:h-[20px] w-auto object-contain" 
   }
 ];
 

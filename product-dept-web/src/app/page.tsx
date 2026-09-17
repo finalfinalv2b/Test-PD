@@ -24,11 +24,14 @@ const bentoData = [
     label: "FORM DEFINED",
     bgImage: "/photo-flicker/design_anim2.mp4",
     loop: false,
-    longDesc: "We believe a great product should look spectacular and feel natural to use. Our design team focuses on aesthetics, ease of use, and materials to create a product that stands out in the market. We refine the visual details, shapes, and colors to deliver an exceptional user experience.",
+    longDesc: "A great product should look spectacular and feel natural to use. Our design team focuses on aesthetics, ease of use, and materials to create a product that stands out in the market. We refine the visual details, shapes, and colors to deliver an exceptional user experience.",
     longFeatures: [
       { name: "Concept Generation", desc: "Developing eye-catching design options and visual directions." },
       { name: "User Experience", desc: "Optimizing shapes and layouts to ensure the product is comfortable and easy to use." },
-      { name: "Color & Materials", desc: "Selecting beautiful finishes and durable materials that align with your brand." }
+      { name: "Color & Materials", desc: "Selecting beautiful finishes and durable materials that align with your brand." },
+      { name: "Model Making & Prototyping", desc: "Physical models built during the design process surface issues while pivots are still cheap." },
+      { name: "Packaging Design", desc: "We design packaging that protects, transports, and makes a first impression, balancing unboxing experience, brand integration, sustainability, and structural performance." },
+      { name: "Brand Design", desc: "We build enterprises, not just products: naming, logo, color palette, visual language, digital design, brand collateral, and full identity and strategy." }
     ]
   },
   {
@@ -40,7 +43,9 @@ const bentoData = [
     longFeatures: [
       { name: "3D Blueprint Modeling", desc: "Creating precise digital blueprints of the product and its internal parts." },
       { name: "Hardware Design", desc: "Designing functional circuits and internal components to power your product." },
-      { name: "Reliability Testing", desc: "Testing and simulating real-world usage to guarantee performance and safety." }
+      { name: "Endurance Testing", desc: "Testing and simulating real-world usage to guarantee performance and safety." },
+      { name: "Design For Manufacturing (DFM)", desc: "Grounded in decades of manufacturing experience, our designs come production-ready and engineered for cost, performance, and scale." },
+      { name: "Human Factor Engineering & Ergonomics", desc: "Comfortable use is essential to product success, so we run anthropometric studies of grip, reach, and intuitive function before a product reaches the market." }
     ]
   },
   {
@@ -50,25 +55,42 @@ const bentoData = [
     bgImage: "/photo-flicker/sourcing_anim.mp4",
     longDesc: "Finding the right manufacturing partners is key to your product's success. We negotiate directly with trusted factories, manage supplier relationships, and optimize production costs. We set up reliable supply chains to ensure you get high-quality components delivered on time.",
     longFeatures: [
-      { name: "Trusted Partners", desc: "Selecting vetted manufacturers capable of meeting high quality standards." },
-      { name: "Cost Optimization", desc: "Negotiating direct pricing to maximize profit margins and reduce waste." },
-      { name: "Supply Chain Security", desc: "Setting up backup suppliers to prevent delays and ensure continuous production." }
+      { name: "Global Presence", desc: "We have team members on the ground in China, Southeast Asia, and other key manufacturing markets to ensure alignment between design intent, production realities, and timely delivery." },
+      { name: "Trusted Partners", desc: "A decades-old network of audited, specialized, and reliable vendors." },
+      { name: "Supply Chain Optimization", desc: "We streamline the supply chain to eliminate redundancies, reduce costs, and accelerate lead times." },
+      { name: "Supply Chain Security", desc: "Multi-supplier and multi-region sourcing to insulate your supply chain from geopolitical risk and disruption." }
     ]
   },
   {
     num: "05",
+    title: "PRODUCT DEVELOPMENT",
+    label: "TOOLING & SAMPLING",
+    bgImage: "/photo-flicker/manufacturing_anim.mp4",
+    longDesc: "Moving from design and engineering to physical product development is where most product teams struggle. We integrate these disciplines seamlessly with the factory floor to ensure that aesthetic and technical requirements survive the transition to mass production intact.",
+    longFeatures: [
+      { name: "Specification Management", desc: "A locked spec sheet aligns the team and gives us the flexibility to build across geographies and production lines without losing fidelity." },
+      { name: "Tooling & Mold Making", desc: "We oversee the entire process from CAD architecture to final mold refinements, so there's no guesswork before the metal is cut." },
+      { name: "Sampling", desc: "Our in-country teams shepherd the sampling process to ensure the first physical product matches the spec exactly." },
+      { name: "Compliance", desc: "We develop products to meet target-market compliance requirements (FDA, CPSC, Prop. 65, EU CE, Canadian provincial bureaus) and coordinate 3rd party testing to document conformance." },
+      { name: "Costing", desc: "We draw on volume relationships and deep material knowledge to build costing scenarios that support your growth and profitability targets." }
+    ]
+  },
+  {
+    num: "06",
     title: "MANUFACTURING",
     label: "MASS PRODUCTION",
     bgImage: "/photo-flicker/manufacturing_anim2.mp4",
     longDesc: "We manage the entire transition to mass production. Our quality control teams work directly on-site to inspect machinery, validate assembly setups, and perform thorough inspections on the finished products. This ensures that every single unit matches the approved prototype.",
     longFeatures: [
-      { name: "On-Site Inspection", desc: "Performing strict quality checks at key points along the production line." },
-      { name: "Assembly Optimization", desc: "Designing efficient assembly steps to speed up delivery and reduce errors." },
-      { name: "Sample Validation", desc: "Verifying initial production samples against quality benchmarks before full-scale runs." }
+      { name: "Local Presence", desc: "We maintain team members on the factory floor during production to catch issues and enforce quality standards." },
+      { name: "Production Ramp Management", desc: "From initial test runs through mass production, we manage the scale-up to ensure stable yields and consistent quality." },
+      { name: "Production Planning & Scheduling", desc: "We coordinate timelines, material arrivals, and production schedules to keep deliveries predictable." },
+      { name: "Regulated Product Manufacturing", desc: "Expertise across FDA, CE, and UL compliance environments, cleanroom standards, and rigorous trace-ability protocols for high-stakes products." },
+      { name: "Assembly Optimization", desc: "Designing efficient assembly steps to speed up delivery and reduce errors." }
     ]
   },
   {
-    num: "06",
+    num: "07",
     title: "LOGISTICS",
     label: "GLOBAL DELIVERY",
     bgImage: "/photo-flicker/logistics_anim.mp4",
@@ -76,11 +98,14 @@ const bentoData = [
     longFeatures: [
       { name: "Global Freight", desc: "Managing sea, air, and land transportation for your inventory." },
       { name: "Customs & Compliance", desc: "Handling import/export paperwork and regulations for a hassle-free delivery." },
-      { name: "Fulfillment Sync", desc: "Coordinating delivery directly with your warehousing and distribution centers." }
+      { name: "Fulfillment Sync", desc: "Coordinating delivery directly with your warehousing and distribution centers." },
+      { name: "Duty Optimization & Tariff Strategy", desc: "We structure manufacturing locations and product classifications to minimize tariff exposure legally and effectively." },
+      { name: "Amazon FBA Prep & Induction", desc: "Full-prep packaging, labeling, palletization, and direct induction into Amazon fulfillment networks." },
+      { name: "Club Store Prep & Fulfillment", desc: "Custom pallet configurations, PDQ displays, and strict compliance labeling for Costco, Sam's Club, and BJ's." }
     ]
   },
   {
-    num: "07",
+    num: "08",
     title: "VENTURE INFRASTRUCTURE",
     label: "OPERATIONAL BACKBONE",
     bgImage: "/photo-flicker/venture_anim.mp4",
@@ -220,7 +245,7 @@ export default function Home() {
   isAboutOpenRef.current = isAboutOpen;
   const [playTrigger, setPlayTrigger] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
-  const [mobileStage, setMobileStage] = useState(0); // 0: Hero, 1-7: Services 0-6, 8: About, 9: Contact
+  const [mobileStage, setMobileStage] = useState(0); // 0: Hero, 1-8: Services 0-7, 9: About, 10: Contact
   const mobileStageRef = useRef(0);
   mobileStageRef.current = mobileStage;
   const [contentScale, setContentScale] = useState(1);
@@ -405,13 +430,13 @@ export default function Home() {
       const progress = (scrollTop - sectionStart) / scrollableHeight;
 
       if (progress >= 0 && progress <= 1) {
-        const exactStage = progress * 9;
+        const exactStage = progress * 10;
         const baseStage = Math.floor(exactStage);
         const stageFraction = exactStage - baseStage;
 
         // Apply hysteresis deadband to prevent flickering around stage boundaries
         let targetStage = baseStage;
-        const currentStage = isContactOpenRef.current ? 8 : (isAboutOpenRef.current ? 7 : (activeIndexRef.current ?? 0));
+        const currentStage = isContactOpenRef.current ? 9 : (isAboutOpenRef.current ? 8 : (activeIndexRef.current ?? 0));
         if (Math.abs(baseStage - currentStage) <= 1) {
           if (baseStage > currentStage && stageFraction < 0.15) {
             targetStage = currentStage;
@@ -419,16 +444,16 @@ export default function Home() {
             targetStage = currentStage;
           }
         }
-        targetStage = Math.min(8, Math.max(0, targetStage));
+        targetStage = Math.min(9, Math.max(0, targetStage));
 
-        if (targetStage === 8) {
+        if (targetStage === 9) {
           if (!isContactOpenRef.current) {
             setIsContactOpen(true);
           }
           if (isAboutOpenRef.current) {
             setIsAboutOpen(false);
           }
-        } else if (targetStage === 7) {
+        } else if (targetStage === 8) {
           if (isContactOpenRef.current) {
             setIsContactOpen(false);
           }
@@ -467,7 +492,7 @@ export default function Home() {
     setIsAboutOpen(true);
 
     if (isMobile) {
-      setMobileStage(8);
+      setMobileStage(9);
       return;
     }
 
@@ -481,7 +506,7 @@ export default function Home() {
       const viewportHeight = window.innerHeight;
       const scrollableHeight = sectionHeight - viewportHeight;
 
-      const targetProgress = (7 + 0.5) / 9;
+      const targetProgress = (8 + 0.5) / 10;
       const targetScrollY = sectionStart + (targetProgress * scrollableHeight);
 
       const handleScrollEnd = () => {
@@ -511,7 +536,7 @@ export default function Home() {
     setIsContactOpen(true);
 
     if (isMobile) {
-      setMobileStage(9);
+      setMobileStage(10);
       return;
     }
 
@@ -525,7 +550,7 @@ export default function Home() {
       const viewportHeight = window.innerHeight;
       const scrollableHeight = sectionHeight - viewportHeight;
 
-      const targetProgress = (8 + 0.5) / 9;
+      const targetProgress = (9 + 0.5) / 10;
       const targetScrollY = sectionStart + (targetProgress * scrollableHeight);
 
       const handleScrollEnd = () => {
@@ -557,7 +582,7 @@ export default function Home() {
       isTouchLockedRef.current = false;
     }, 400);
 
-    setMobileStage((prev) => Math.min(9, Math.max(0, prev + direction)));
+    setMobileStage((prev) => Math.min(10, Math.max(0, prev + direction)));
   };
 
   // Keep active index and sections in sync with mobileStage on mobile
@@ -571,7 +596,7 @@ export default function Home() {
       isAboutOpenRef.current = false;
       setIsContactOpen(false);
       isContactOpenRef.current = false;
-    } else if (mobileStage >= 1 && mobileStage <= 7) {
+    } else if (mobileStage >= 1 && mobileStage <= 8) {
       setIsInServices(true);
       isInServicesRef.current = true;
       setIsAboutOpen(false);
@@ -580,14 +605,14 @@ export default function Home() {
       isContactOpenRef.current = false;
       setActiveIndex(mobileStage - 1);
       activeIndexRef.current = mobileStage - 1;
-    } else if (mobileStage === 8) {
+    } else if (mobileStage === 9) {
       setIsInServices(true);
       isInServicesRef.current = true;
       setIsAboutOpen(true);
       isAboutOpenRef.current = true;
       setIsContactOpen(false);
       isContactOpenRef.current = false;
-    } else if (mobileStage === 9) {
+    } else if (mobileStage === 10) {
       setIsInServices(true);
       isInServicesRef.current = true;
       setIsAboutOpen(false);
@@ -634,7 +659,7 @@ export default function Home() {
     if (absY > 35 && absY > absX * 1.1) {
       const direction = deltaY < 0 ? 1 : -1;
       advanceMobileStage(direction);
-    } else if (absX > 45 && absX > absY * 1.2 && mobileStageRef.current >= 1 && mobileStageRef.current <= 7) {
+    } else if (absX > 45 && absX > absY * 1.2 && mobileStageRef.current >= 1 && mobileStageRef.current <= 8) {
       const direction = deltaX < 0 ? 1 : -1;
       advanceMobileStage(direction);
     }
@@ -694,8 +719,8 @@ export default function Home() {
 
       const scrollableHeight = sectionHeight - viewportHeight;
       
-      // Calculate target progress coordinate at middle of the index range across 9 stages
-      const targetProgress = (index + 0.5) / 9;
+      // Calculate target progress coordinate at middle of the index range across 10 stages
+      const targetProgress = (index + 0.5) / 10;
       const targetScrollY = sectionStart + (targetProgress * scrollableHeight);
 
       // Disable scroll index changes while click scrolling
@@ -730,7 +755,7 @@ export default function Home() {
   useEffect(() => {
     const onOpenContact = () => {
       if (isMobile) {
-        setMobileStage(9);
+        setMobileStage(10);
       } else {
         scrollToContactRef.current();
       }
@@ -744,7 +769,7 @@ export default function Home() {
     };
     const onOpenAbout = () => {
       if (isMobile) {
-        setMobileStage(8);
+        setMobileStage(9);
       } else {
         scrollToAboutRef.current();
       }
@@ -913,7 +938,7 @@ export default function Home() {
         deltaAccumulatorRef.current = 0;
       }, MIN_LOCK_MS);
 
-      // Contact Section (Stage 8)
+      // Contact Section (Stage 9)
       if (isContactOpenRef.current) {
         if (direction < 0) {
           scrollToAboutRef.current();
@@ -922,17 +947,17 @@ export default function Home() {
         return;
       }
 
-      // About Section (Stage 7)
+      // About Section (Stage 8)
       if (isAboutOpenRef.current) {
         if (direction > 0) {
           scrollToContactRef.current();
         } else if (direction < 0) {
-          handleItemClickRef.current(6);
+          handleItemClickRef.current(7);
         }
         return;
       }
 
-      // Services (Stages 0-6) and Title Page
+      // Services (Stages 0-7) and Title Page
       const currentIdx = activeIndexRef.current;
       const scrollY = window.scrollY || document.documentElement.scrollTop;
       const isAtHero = !isInServicesRef.current || scrollY < 100;
@@ -949,9 +974,9 @@ export default function Home() {
         // Scrolling DOWN
         if (currentIdx === null) {
           handleItemClickRef.current(0);
-        } else if (currentIdx < 6) {
+        } else if (currentIdx < 7) {
           handleItemClickRef.current(currentIdx + 1);
-        } else if (currentIdx === 6) {
+        } else if (currentIdx === 7) {
           scrollToAboutRef.current();
         }
       } else if (direction < 0) {
@@ -1005,9 +1030,9 @@ export default function Home() {
         const currentIdx = activeIndexRef.current;
         if (currentIdx === null) {
           handleItemClickRef.current(0);
-        } else if (currentIdx < 6) {
+        } else if (currentIdx < 7) {
           handleItemClickRef.current(currentIdx + 1);
-        } else if (currentIdx === 6) {
+        } else if (currentIdx === 7) {
           scrollToAboutRef.current();
         }
       } else if (e.key === "ArrowUp" || e.key === "PageUp" || (e.key === " " && e.shiftKey)) {
@@ -1024,7 +1049,7 @@ export default function Home() {
         }
 
         if (isAboutOpenRef.current) {
-          handleItemClickRef.current(6);
+          handleItemClickRef.current(7);
           return;
         }
 
@@ -1326,7 +1351,7 @@ export default function Home() {
         className={
           isMobile 
             ? `absolute -top-px inset-x-0 bottom-0 w-full h-[calc(100%+1px)] overflow-hidden bg-transparent ${mobileStage === 0 ? "z-10 pointer-events-none" : "z-20"}` 
-            : "relative bg-transparent border-b border-black w-full scroll-mt-[clamp(56px,6vh,72px)] h-[600vh]"
+            : "relative bg-transparent border-b border-black w-full scroll-mt-[clamp(56px,6vh,72px)] h-[700vh]"
         }
       >
         {/* Pinned Wrapper for Desktop & Viewport for Mobile */}
@@ -1631,7 +1656,7 @@ export default function Home() {
                   <button
                     type="button"
                     onClick={() => {
-                      setMobileStage(7);
+                      setMobileStage(8);
                     }}
                     className="flex items-center gap-1.5 text-white/80 hover:text-white transition-colors cursor-pointer border border-white/20 px-2.5 py-1 rounded-full text-[11px] font-bold tracking-wider uppercase select-none bg-white/10"
                   >
@@ -1683,7 +1708,7 @@ export default function Home() {
                   <button
                     type="button"
                     onClick={() => {
-                      setMobileStage(9);
+                      setMobileStage(10);
                     }}
                     className="w-full bg-black text-white hover:bg-[#444444] transition-colors py-3 text-xs font-bold tracking-widest uppercase cursor-pointer flex items-center justify-center rounded-[2px]"
                   >
@@ -1804,7 +1829,7 @@ export default function Home() {
                   <button
                     type="button"
                     onClick={() => {
-                      setMobileStage(8);
+                      setMobileStage(9);
                     }}
                     className="flex items-center gap-1.5 text-white/80 hover:text-white transition-colors cursor-pointer border border-white/20 px-2.5 py-1 rounded-full text-[11px] font-bold tracking-wider uppercase select-none bg-white/10"
                   >

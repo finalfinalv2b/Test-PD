@@ -26,13 +26,16 @@ const bentoData = [
   },
   {
     num: "02",
-    title: "INDUSTRIAL DESIGN",
+    title: "DESIGN",
     label: "FORM DEFINED",
-    longDesc: "We believe a great product should look spectacular and feel natural to use. Our design team focuses on aesthetics, ease of use, and materials to create a product that stands out in the market. We refine the visual details, shapes, and colors to deliver an exceptional user experience.",
+    longDesc: "A great product should look spectacular and feel natural to use. Our design team focuses on aesthetics, ease of use, and materials to create a product that stands out in the market. We refine the visual details, shapes, and colors to deliver an exceptional user experience.",
     longFeatures: [
       { name: "Concept Generation", desc: "Developing eye-catching design options and visual directions." },
       { name: "User Experience", desc: "Optimizing shapes and layouts to ensure the product is comfortable and easy to use." },
-      { name: "Color & Materials", desc: "Selecting beautiful finishes and durable materials that align with your brand." }
+      { name: "Color & Materials", desc: "Selecting beautiful finishes and durable materials that align with your brand." },
+      { name: "Model Making & Prototyping", desc: "Physical models built during the design process surface issues while pivots are still cheap." },
+      { name: "Packaging Design", desc: "We design packaging that protects, transports, and makes a first impression, balancing unboxing experience, brand integration, sustainability, and structural performance." },
+      { name: "Brand Design", desc: "We build enterprises, not just products: naming, logo, color palette, visual language, digital design, brand collateral, and full identity and strategy." }
     ]
   },
   {
@@ -43,7 +46,9 @@ const bentoData = [
     longFeatures: [
       { name: "3D Blueprint Modeling", desc: "Creating precise digital blueprints of the product and its internal parts." },
       { name: "Hardware Design", desc: "Designing functional circuits and internal components to power your product." },
-      { name: "Reliability Testing", desc: "Testing and simulating real-world usage to guarantee performance and safety." }
+      { name: "Endurance Testing", desc: "Testing and simulating real-world usage to guarantee performance and safety." },
+      { name: "Design For Manufacturing (DFM)", desc: "Grounded in decades of manufacturing experience, our designs come production-ready and engineered for cost, performance, and scale." },
+      { name: "Human Factor Engineering & Ergonomics", desc: "Comfortable use is essential to product success, so we run anthropometric studies of grip, reach, and intuitive function before a product reaches the market." }
     ]
   },
   {
@@ -52,31 +57,50 @@ const bentoData = [
     label: "VENDOR SELECTION",
     longDesc: "Finding the right manufacturing partners is key to your product's success. We negotiate directly with trusted factories, manage supplier relationships, and optimize production costs. We set up reliable supply chains to ensure you get high-quality components delivered on time.",
     longFeatures: [
-      { name: "Trusted Partners", desc: "Selecting vetted manufacturers capable of meeting high quality standards." },
-      { name: "Cost Optimization", desc: "Negotiating direct pricing to maximize profit margins and reduce waste." },
-      { name: "Supply Chain Security", desc: "Setting up backup suppliers to prevent delays and ensure continuous production." }
+      { name: "Global Presence", desc: "We have team members on the ground in China, Southeast Asia, and other key manufacturing markets to ensure alignment between design intent, production realities, and timely delivery." },
+      { name: "Trusted Partners", desc: "A decades-old network of audited, specialized, and reliable vendors." },
+      { name: "Supply Chain Optimization", desc: "We streamline the supply chain to eliminate redundancies, reduce costs, and accelerate lead times." },
+      { name: "Supply Chain Security", desc: "Multi-supplier and multi-region sourcing to insulate your supply chain from geopolitical risk and disruption." }
     ]
   },
   {
     num: "05",
-    title: "MANUFACTURING",
-    label: "MASS PRODUCTION",
-    longDesc: "We manage the entire transition to mass production. Our quality control teams work directly on-site to inspect machinery, validate assembly setups, and perform thorough inspections on the finished products. This ensures that every single unit matches the approved prototype.",
+    title: "PRODUCT DEVELOPMENT",
+    label: "TOOLING & SAMPLING",
+    longDesc: "Moving from design and engineering to physical product development is where most product teams struggle. We integrate these disciplines seamlessly with the factory floor to ensure that aesthetic and technical requirements survive the transition to mass production intact.",
     longFeatures: [
-      { name: "On-Site Inspection", desc: "Performing strict quality checks at key points along the production line." },
-      { name: "Assembly Optimization", desc: "Designing efficient assembly steps to speed up delivery and reduce errors." },
-      { name: "Sample Validation", desc: "Verifying initial production samples against quality benchmarks before full-scale runs." }
+      { name: "Specification Management", desc: "A locked spec sheet aligns the team and gives us the flexibility to build across geographies and production lines without losing fidelity." },
+      { name: "Tooling & Mold Making", desc: "We oversee the entire process from CAD architecture to final mold refinements, so there's no guesswork before the metal is cut." },
+      { name: "Sampling", desc: "Our in-country teams shepherd the sampling process to ensure the first physical product matches the spec exactly." },
+      { name: "Compliance", desc: "We develop products to meet target-market compliance requirements (FDA, CPSC, Prop. 65, EU CE, Canadian provincial bureaus) and coordinate 3rd party testing to document conformance." },
+      { name: "Costing", desc: "We draw on volume relationships and deep material knowledge to build costing scenarios that support your growth and profitability targets." }
     ]
   },
   {
     num: "06",
+    title: "MANUFACTURING",
+    label: "MASS PRODUCTION",
+    longDesc: "We manage the entire transition to mass production. Our quality control teams work directly on-site to inspect machinery, validate assembly setups, and perform thorough inspections on the finished products. This ensures that every single unit matches the approved prototype.",
+    longFeatures: [
+      { name: "Local Presence", desc: "We maintain team members on the factory floor during production to catch issues and enforce quality standards." },
+      { name: "Production Ramp Management", desc: "From initial test runs through mass production, we manage the scale-up to ensure stable yields and consistent quality." },
+      { name: "Production Planning & Scheduling", desc: "We coordinate timelines, material arrivals, and production schedules to keep deliveries predictable." },
+      { name: "Regulated Product Manufacturing", desc: "Expertise across FDA, CE, and UL compliance environments, cleanroom standards, and rigorous trace-ability protocols for high-stakes products." },
+      { name: "Assembly Optimization", desc: "Designing efficient assembly steps to speed up delivery and reduce errors." }
+    ]
+  },
+  {
+    num: "07",
     title: "LOGISTICS",
     label: "GLOBAL DELIVERY",
     longDesc: "Our job is not done until your products arrive at your warehouse. We handle the entire shipping process, clear customs paperwork, and manage local distribution networks. We take care of the details so your launch is smooth and worry-free.",
     longFeatures: [
       { name: "Global Freight", desc: "Managing sea, air, and land transportation for your inventory." },
       { name: "Customs & Compliance", desc: "Handling import/export paperwork and regulations for a hassle-free delivery." },
-      { name: "Fulfillment Sync", desc: "Coordinating delivery directly with your warehousing and distribution centers." }
+      { name: "Fulfillment Sync", desc: "Coordinating delivery directly with your warehousing and distribution centers." },
+      { name: "Duty Optimization & Tariff Strategy", desc: "We structure manufacturing locations and product classifications to minimize tariff exposure legally and effectively." },
+      { name: "Amazon FBA Prep & Induction", desc: "Full-prep packaging, labeling, palletization, and direct induction into Amazon fulfillment networks." },
+      { name: "Club Store Prep & Fulfillment", desc: "For Costco, Sam's Club, and BJ's, we design and build the pallet planogram, pack to retailer spec (case counts, Ti-Hi, display-ready configurations), and coordinate factory-direct delivery routes that keep landed cost low." }
     ]
   }
 ];

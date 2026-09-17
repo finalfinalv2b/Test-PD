@@ -11,14 +11,14 @@ export const steps = [
     features: ["PRODUCT ROADMAP", "MARKET POSITIONING", "SUCCESS PLANNING"]
   },
   { 
-    num: "02", title: "INDUSTRIAL DESIGN", label: "FORM DEFINED",
+    num: "02", title: "DESIGN", label: "FORM DEFINED",
     description: "We create premium visuals and comfortable form factors that combine beautiful design with practical usability.",
     features: ["CONCEPT STYLING", "USER EXPERIENCE", "MATERIAL SELECTION"]
   },
   { 
     num: "03", title: "ENGINEERING", label: "CAD ARCHITECTURE",
     description: "We turn design concepts into fully functional, high-performance blueprints ready for production.",
-    features: ["MECHANICAL DESIGN", "ELECTRONICS", "PROTOTYPE TESTING"]
+    features: ["MECHANICAL DESIGN", "ELECTRONICS", "ENDURANCE TESTING"]
   },
   { 
     num: "04", title: "SOURCING", label: "VENDOR SELECTION",
@@ -26,12 +26,17 @@ export const steps = [
     features: ["FACTORY SOURCING", "COST MANAGEMENT", "SUPPLY REDUNDANCY"]
   },
   { 
-    num: "05", title: "MANUFACTURING", label: "MASS PRODUCTION",
-    description: "We oversee the production lines and implement strict quality checks to guarantee flawless outcomes.",
-    features: ["QUALITY CONTROL", "PRODUCTION MANAGEMENT", "ASSEMBLY PLANNING"]
+    num: "05", title: "PRODUCT DEVELOPMENT", label: "TOOLING & SAMPLING",
+    description: "Moving from design and engineering to physical product development is where most product teams struggle. We integrate these disciplines seamlessly.",
+    features: ["SPEC MANAGEMENT", "TOOLING & MOLDS", "COMPLIANCE & COSTING"]
   },
   { 
-    num: "06", title: "LOGISTICS", label: "GLOBAL DELIVERY",
+    num: "06", title: "MANUFACTURING", label: "MASS PRODUCTION",
+    description: "We oversee the production lines and implement strict quality checks to guarantee flawless outcomes.",
+    features: ["LOCAL PRESENCE QC", "RAMP MANAGEMENT", "PRODUCTION PLANNING"]
+  },
+  { 
+    num: "07", title: "LOGISTICS", label: "GLOBAL DELIVERY",
     description: "We coordinate shipping and customs to deliver your finished products safely to your door.",
     features: ["SHIPPING COORDINATION", "CUSTOMS CLEARANCE", "FULFILLMENT INTEGRATION"]
   },
@@ -48,7 +53,7 @@ export function ProcessSequence() {
           Full-Stack Process
         </h2>
         <p className="font-sans font-light text-xs tracking-widest max-w-xs md:max-w-sm border-t border-[#F41C06] text-[#F41C06] pt-2">
-          Six steps. From initial concept to finished product.
+          Seven steps. From initial concept to finished product.
         </p>
       </div>
 

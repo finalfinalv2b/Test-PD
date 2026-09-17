@@ -31,11 +31,11 @@ const bentoData = [
     longDesc: "A great product should look spectacular and feel natural to use. Our design team focuses on aesthetics, ease of use, and materials to create a product that stands out in the market. We refine the visual details, shapes, and colors to deliver an exceptional user experience.",
     longFeatures: [
       { name: "Concept Generation", desc: "Developing eye-catching design options and visual directions." },
-      { name: "User Experience", desc: "Optimizing shapes and layouts to ensure the product is comfortable and easy to use." },
+      { name: "Brand Design", desc: "We build enterprises, not just products: naming, logo, color palette, visual language, digital design, brand collateral, and full identity and strategy." },
       { name: "Color & Materials", desc: "Selecting beautiful finishes and durable materials that align with your brand." },
       { name: "Model Making & Prototyping", desc: "Physical models built during the design process surface issues while pivots are still cheap." },
       { name: "Packaging Design", desc: "We design packaging that protects, transports, and makes a first impression, balancing unboxing experience, brand integration, sustainability, and structural performance." },
-      { name: "Brand Design", desc: "We build enterprises, not just products: naming, logo, color palette, visual language, digital design, brand collateral, and full identity and strategy." }
+      { name: "User Experience", desc: "Optimizing shapes and layouts to ensure the product is comfortable and easy to use." }
     ]
   },
   {
@@ -44,11 +44,11 @@ const bentoData = [
     label: "CAD ARCHITECTURE",
     longDesc: "Our engineering team brings the design to life. We build detailed 3D models, design internal mechanics, and optimize the hardware layout. We focus on durability, safety, and reliability to ensure the product performs flawlessly in the real world.",
     longFeatures: [
-      { name: "3D Blueprint Modeling", desc: "Creating precise digital blueprints of the product and its internal parts." },
-      { name: "Hardware Design", desc: "Designing functional circuits and internal components to power your product." },
-      { name: "Endurance Testing", desc: "Testing and simulating real-world usage to guarantee performance and safety." },
       { name: "Design For Manufacturing (DFM)", desc: "Grounded in decades of manufacturing experience, our designs come production-ready and engineered for cost, performance, and scale." },
-      { name: "Human Factor Engineering & Ergonomics", desc: "Comfortable use is essential to product success, so we run anthropometric studies of grip, reach, and intuitive function before a product reaches the market." }
+      { name: "Hardware Design", desc: "Designing functional circuits and internal components to power your product." },
+      { name: "Human Factor Engineering & Ergonomics", desc: "Comfortable use is essential to product success, so we run anthropometric studies of grip, reach, and intuitive function before a product reaches the market." },
+      { name: "3D Blueprint Modeling", desc: "Creating precise digital blueprints of the product and its internal parts." },
+      { name: "Endurance Testing", desc: "Testing and simulating real-world usage to guarantee performance and safety." }
     ]
   },
   {
@@ -70,10 +70,10 @@ const bentoData = [
     longDesc: "Moving from design and engineering to physical product development is where most product teams struggle. We integrate these disciplines seamlessly with the factory floor to ensure that aesthetic and technical requirements survive the transition to mass production intact.",
     longFeatures: [
       { name: "Specification Management", desc: "A locked spec sheet aligns the team and gives us the flexibility to build across geographies and production lines without losing fidelity." },
-      { name: "Tooling & Mold Making", desc: "We oversee the entire process from CAD architecture to final mold refinements, so there's no guesswork before the metal is cut." },
+      { name: "Costing", desc: "We draw on volume relationships and deep material knowledge to build costing scenarios that support your growth and profitability targets." },
       { name: "Sampling", desc: "Our in-country teams shepherd the sampling process to ensure the first physical product matches the spec exactly." },
       { name: "Compliance", desc: "We develop products to meet target-market compliance requirements (FDA, CPSC, Prop. 65, EU CE, Canadian provincial bureaus) and coordinate 3rd party testing to document conformance." },
-      { name: "Costing", desc: "We draw on volume relationships and deep material knowledge to build costing scenarios that support your growth and profitability targets." }
+      { name: "Tooling & Mold Making", desc: "We oversee the entire process from CAD architecture to final mold refinements, so there's no guesswork before the metal is cut." }
     ]
   },
   {

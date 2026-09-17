@@ -129,22 +129,22 @@ export default function Contact() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                   <div className="flex flex-col gap-3">
                     <label htmlFor="name" className="text-xs font-black tracking-widest uppercase text-background/50 transition-colors duration-500">NAME</label>
-                    <input type="text" id="name" name="name" className="border-2 border-background bg-foreground text-background py-4 px-4 outline-none focus:bg-background focus:text-foreground transition-colors font-mono text-sm" placeholder="Jane Doe" required />
+                    <input type="text" id="name" name="name" className="border-2 border-background bg-foreground text-background py-4 px-4 outline-none focus:bg-background focus:text-foreground transition-colors font-sans font-light placeholder:font-neue-haas placeholder:font-thin placeholder:text-background/40 text-base md:text-sm" placeholder="Jane Doe" required />
                   </div>
                   <div className="flex flex-col gap-3">
                     <label htmlFor="email" className="text-xs font-black tracking-widest uppercase text-background/50 transition-colors duration-500">EMAIL</label>
-                    <input type="email" id="email" name="email" className="border-2 border-background bg-foreground text-background py-4 px-4 outline-none focus:bg-background focus:text-foreground transition-colors font-mono text-sm" placeholder="jane@company.com" required />
+                    <input type="email" id="email" name="email" className="border-2 border-background bg-foreground text-background py-4 px-4 outline-none focus:bg-background focus:text-foreground transition-colors font-sans font-light placeholder:font-neue-haas placeholder:font-thin placeholder:text-background/40 text-base md:text-sm" placeholder="jane@company.com" required />
                   </div>
                 </div>
 
                 <div className="flex flex-col gap-3">
                   <label htmlFor="company" className="text-xs font-black tracking-widest uppercase text-background/50 transition-colors duration-500">ORGANIZATION</label>
-                  <input type="text" id="company" name="company" className="border-2 border-background bg-foreground text-background py-4 px-4 outline-none focus:bg-background focus:text-foreground transition-colors font-mono text-sm" placeholder="Organization name" />
+                  <input type="text" id="company" name="company" className="border-2 border-background bg-foreground text-background py-4 px-4 outline-none focus:bg-background focus:text-foreground transition-colors font-sans font-light placeholder:font-neue-haas placeholder:font-thin placeholder:text-background/40 text-base md:text-sm" placeholder="Organization name" />
                 </div>
 
                 <div className="flex flex-col gap-3">
                   <label htmlFor="description" className="text-xs font-black tracking-widest uppercase text-background/50 transition-colors duration-500">MESSAGE</label>
-                  <textarea id="description" name="description" rows={5} className="border-2 border-background bg-foreground text-background py-4 px-4 outline-none focus:bg-background focus:text-foreground transition-colors resize-none font-mono text-sm" placeholder="How can we help?" required></textarea>
+                  <textarea id="description" name="description" rows={5} className="border-2 border-background bg-foreground text-background py-4 px-4 outline-none focus:bg-background focus:text-foreground transition-colors resize-none font-sans font-light placeholder:font-neue-haas placeholder:font-thin placeholder:text-background/40 text-base md:text-sm" placeholder="How can we help?" required></textarea>
                 </div>
 
                 <div className="pt-8">
@@ -159,7 +159,7 @@ export default function Contact() {
               </form>
             ) : (
               <div className="flex flex-col items-start justify-center h-full max-w-2xl mx-auto">
-                <p className="text-xl md:text-2xl font-mono text-background/90 leading-relaxed">
+                <p className="text-xl md:text-2xl font-sans font-light text-background/90 leading-relaxed">
                   Someone from the Product Dept. will get back to you shortly. Thank you.
                 </p>
               </div>

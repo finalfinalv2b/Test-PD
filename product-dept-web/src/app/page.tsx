@@ -27,11 +27,11 @@ const bentoData = [
     longDesc: "A great product should look spectacular and feel natural to use. Our design team focuses on aesthetics, ease of use, and materials to create a product that stands out in the market. We refine the visual details, shapes, and colors to deliver an exceptional user experience.",
     longFeatures: [
       { name: "Concept Generation", desc: "Developing eye-catching design options and visual directions." },
-      { name: "User Experience", desc: "Optimizing shapes and layouts to ensure the product is comfortable and easy to use." },
+      { name: "Brand Design", desc: "We build enterprises, not just products: naming, logo, color palette, visual language, digital design, brand collateral, and full identity and strategy." },
       { name: "Color & Materials", desc: "Selecting beautiful finishes and durable materials that align with your brand." },
       { name: "Model Making & Prototyping", desc: "Physical models built during the design process surface issues while pivots are still cheap." },
       { name: "Packaging Design", desc: "We design packaging that protects, transports, and makes a first impression, balancing unboxing experience, brand integration, sustainability, and structural performance." },
-      { name: "Brand Design", desc: "We build enterprises, not just products: naming, logo, color palette, visual language, digital design, brand collateral, and full identity and strategy." }
+      { name: "User Experience", desc: "Optimizing shapes and layouts to ensure the product is comfortable and easy to use." }
     ]
   },
   {
@@ -41,11 +41,11 @@ const bentoData = [
     bgImage: "/photo-flicker/engineering_anim2.mp4",
     longDesc: "Our engineering team brings the design to life. We build detailed 3D models, design internal mechanics, and optimize the hardware layout. We focus on durability, safety, and reliability to ensure the product performs flawlessly in the real world.",
     longFeatures: [
-      { name: "3D Blueprint Modeling", desc: "Creating precise digital blueprints of the product and its internal parts." },
-      { name: "Hardware Design", desc: "Designing functional circuits and internal components to power your product." },
-      { name: "Endurance Testing", desc: "Testing and simulating real-world usage to guarantee performance and safety." },
       { name: "Design For Manufacturing (DFM)", desc: "Grounded in decades of manufacturing experience, our designs come production-ready and engineered for cost, performance, and scale." },
-      { name: "Human Factor Engineering & Ergonomics", desc: "Comfortable use is essential to product success, so we run anthropometric studies of grip, reach, and intuitive function before a product reaches the market." }
+      { name: "Hardware Design", desc: "Designing functional circuits and internal components to power your product." },
+      { name: "Human Factor Engineering & Ergonomics", desc: "Comfortable use is essential to product success, so we run anthropometric studies of grip, reach, and intuitive function before a product reaches the market." },
+      { name: "3D Blueprint Modeling", desc: "Creating precise digital blueprints of the product and its internal parts." },
+      { name: "Endurance Testing", desc: "Testing and simulating real-world usage to guarantee performance and safety." }
     ]
   },
   {
@@ -69,10 +69,10 @@ const bentoData = [
     longDesc: "Moving from design and engineering to physical product development is where most product teams struggle. We integrate these disciplines seamlessly with the factory floor to ensure that aesthetic and technical requirements survive the transition to mass production intact.",
     longFeatures: [
       { name: "Specification Management", desc: "A locked spec sheet aligns the team and gives us the flexibility to build across geographies and production lines without losing fidelity." },
-      { name: "Tooling & Mold Making", desc: "We oversee the entire process from CAD architecture to final mold refinements, so there's no guesswork before the metal is cut." },
+      { name: "Costing", desc: "We draw on volume relationships and deep material knowledge to build costing scenarios that support your growth and profitability targets." },
       { name: "Sampling", desc: "Our in-country teams shepherd the sampling process to ensure the first physical product matches the spec exactly." },
       { name: "Compliance", desc: "We develop products to meet target-market compliance requirements (FDA, CPSC, Prop. 65, EU CE, Canadian provincial bureaus) and coordinate 3rd party testing to document conformance." },
-      { name: "Costing", desc: "We draw on volume relationships and deep material knowledge to build costing scenarios that support your growth and profitability targets." }
+      { name: "Tooling & Mold Making", desc: "We oversee the entire process from CAD architecture to final mold refinements, so there's no guesswork before the metal is cut." }
     ]
   },
   {
@@ -1584,39 +1584,67 @@ export default function Home() {
                           className={`grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-10 w-full ${isMobile ? "flex-1 flex flex-col justify-between" : ""}`}
                         >
                           {/* Left Column: Description */}
-                          <div className={`flex flex-col justify-start ${currentStep.longFeatures.length > 4 ? "lg:col-span-4" : "lg:col-span-5"}`}>
+                          <div className="flex flex-col justify-start lg:col-span-4">
                             <p className="font-sans font-light text-black/80 leading-relaxed text-[13.5px] sm:text-[15px] md:text-[17px] m-0">
                               {currentStep.longDesc}
                             </p>
                           </div>
 
                           {/* Right Column: Detailed Capabilities */}
-                          <div className={`flex flex-col justify-start lg:pl-8 lg:border-l border-black/10 ${currentStep.longFeatures.length > 4 ? "lg:col-span-8" : "lg:col-span-7"} ${isMobile ? "border-t border-black/10 pt-3" : ""}`}>
+                          <div className={`flex flex-col justify-start lg:pl-8 lg:border-l border-black/10 lg:col-span-8 ${isMobile ? "border-t border-black/10 pt-3" : ""}`}>
                             <h4 
-                              className="font-header font-black tracking-widest uppercase mb-2.5 text-[11px] sm:text-sm text-black"
+                              className="font-header font-black tracking-widest uppercase mb-3 text-[11px] sm:text-sm text-black"
                             >
                               Detailed Capabilities
                             </h4>
-                            <ul className={`grid grid-cols-1 sm:grid-cols-2 ${currentStep.longFeatures.length > 4 ? "lg:grid-cols-2 gap-x-6 gap-y-2 sm:gap-y-3" : "gap-x-6 gap-y-2 sm:gap-y-3.5"} list-none m-0 p-0`}>
-                              {currentStep.longFeatures.map((feat) => (
-                                <li key={feat.name} className="flex items-start gap-2">
-                                  <span 
-                                    style={{ color: brandColor }} 
-                                    className="font-bold leading-none mt-0.5 text-base sm:text-lg shrink-0"
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 lg:gap-x-10 w-full">
+                              {/* Left Column on Desktop (even index) / All items on Mobile */}
+                              <ul className="flex flex-col gap-3.5 sm:gap-4 lg:gap-4.5 list-none m-0 p-0">
+                                {currentStep.longFeatures.map((feat, idx) => (
+                                  <li 
+                                    key={feat.name} 
+                                    className={`flex items-start gap-2.5 ${idx % 2 !== 0 ? "sm:hidden" : ""}`}
                                   >
-                                    +
-                                  </span>
-                                  <div>
-                                    <span className="font-header font-black text-black uppercase tracking-wider block text-[13px] sm:text-[15px]">
-                                      {feat.name}
+                                    <span 
+                                      style={{ color: brandColor }} 
+                                      className="font-bold leading-none mt-0.5 text-base sm:text-lg shrink-0 select-none"
+                                    >
+                                      +
                                     </span>
-                                    <span className="font-sans font-light leading-snug block text-[12px] sm:text-[13.5px] text-black/70 mt-0.5">
-                                      {feat.desc}
+                                    <div className="flex flex-col">
+                                      <span className="font-header font-black text-black uppercase tracking-wider block text-[13px] sm:text-[14px] lg:text-[15px] leading-tight">
+                                        {feat.name}
+                                      </span>
+                                      <span className="font-sans font-light leading-snug block text-[12px] sm:text-[13px] lg:text-[13.5px] text-black/75 mt-1">
+                                        {feat.desc}
+                                      </span>
+                                    </div>
+                                  </li>
+                                ))}
+                              </ul>
+
+                              {/* Right Column on Desktop (odd index, hidden on mobile) */}
+                              <ul className="hidden sm:flex flex-col gap-3.5 sm:gap-4 lg:gap-4.5 list-none m-0 p-0">
+                                {currentStep.longFeatures.filter((_, idx) => idx % 2 !== 0).map((feat) => (
+                                  <li key={feat.name} className="flex items-start gap-2.5">
+                                    <span 
+                                      style={{ color: brandColor }} 
+                                      className="font-bold leading-none mt-0.5 text-base sm:text-lg shrink-0 select-none"
+                                    >
+                                      +
                                     </span>
-                                  </div>
-                                </li>
-                              ))}
-                            </ul>
+                                    <div className="flex flex-col">
+                                      <span className="font-header font-black text-black uppercase tracking-wider block text-[13px] sm:text-[14px] lg:text-[15px] leading-tight">
+                                        {feat.name}
+                                      </span>
+                                      <span className="font-sans font-light leading-snug block text-[12px] sm:text-[13px] lg:text-[13.5px] text-black/75 mt-1">
+                                        {feat.desc}
+                                      </span>
+                                    </div>
+                                  </li>
+                                ))}
+                              </ul>
+                            </div>
                           </div>
                         </motion.div>
                       </AnimatePresence>
@@ -1854,22 +1882,22 @@ export default function Home() {
                     <div className="grid grid-cols-2 gap-3">
                       <div className="flex flex-col gap-1">
                         <label htmlFor="mobile-name" className="text-[10px] font-black tracking-widest uppercase text-black">NAME</label>
-                        <input type="text" id="mobile-name" name="name" className="border border-black/15 bg-white text-black py-2 px-3 outline-none focus:border-black transition-colors font-mono text-base rounded-[2px]" placeholder="Jane Doe" required />
+                        <input type="text" id="mobile-name" name="name" className="border border-black/15 bg-white text-black py-2 px-3 outline-none focus:border-black transition-colors font-sans font-light placeholder:font-neue-haas placeholder:font-thin placeholder:text-black/40 text-base rounded-[2px]" placeholder="Jane Doe" required />
                       </div>
                       <div className="flex flex-col gap-1">
                         <label htmlFor="mobile-email" className="text-[10px] font-black tracking-widest uppercase text-black">EMAIL</label>
-                        <input type="email" id="mobile-email" name="email" className="border border-black/15 bg-white text-black py-2 px-3 outline-none focus:border-black transition-colors font-mono text-base rounded-[2px]" placeholder="jane@co.com" required />
+                        <input type="email" id="mobile-email" name="email" className="border border-black/15 bg-white text-black py-2 px-3 outline-none focus:border-black transition-colors font-sans font-light placeholder:font-neue-haas placeholder:font-thin placeholder:text-black/40 text-base rounded-[2px]" placeholder="jane@co.com" required />
                       </div>
                     </div>
 
                     <div className="flex flex-col gap-1">
                       <label htmlFor="mobile-company" className="text-[10px] font-black tracking-widest uppercase text-black">ORGANIZATION</label>
-                      <input type="text" id="mobile-company" name="company" className="border border-black/15 bg-white text-black py-2 px-3 outline-none focus:border-black transition-colors font-mono text-base rounded-[2px]" placeholder="Organization name" />
+                      <input type="text" id="mobile-company" name="company" className="border border-black/15 bg-white text-black py-2 px-3 outline-none focus:border-black transition-colors font-sans font-light placeholder:font-neue-haas placeholder:font-thin placeholder:text-black/40 text-base rounded-[2px]" placeholder="Organization name" />
                     </div>
 
                     <div className="flex flex-col gap-1 flex-1 min-h-0">
                       <label htmlFor="mobile-description" className="text-[10px] font-black tracking-widest uppercase text-black">MESSAGE</label>
-                      <textarea id="mobile-description" name="description" rows={2} className="border border-black/15 bg-white text-black py-2 px-3 outline-none focus:border-black transition-colors resize-none font-mono text-base h-full min-h-[50px] rounded-[2px]" placeholder="How can we help?" required></textarea>
+                      <textarea id="mobile-description" name="description" rows={2} className="border border-black/15 bg-white text-black py-2 px-3 outline-none focus:border-black transition-colors resize-none font-sans font-light placeholder:font-neue-haas placeholder:font-thin placeholder:text-black/40 text-base h-full min-h-[50px] rounded-[2px]" placeholder="How can we help?" required></textarea>
                     </div>
 
                     <div className="pt-1">
@@ -1884,7 +1912,7 @@ export default function Home() {
                   </form>
                 ) : (
                   <div className="flex flex-col items-center justify-center h-full text-center py-6">
-                    <p className="text-base font-mono text-black leading-relaxed">
+                    <p className="text-base font-sans font-light text-black leading-relaxed">
                       Someone from Product Dept. will get back to you shortly. Thank you.
                     </p>
                   </div>
@@ -1904,22 +1932,22 @@ export default function Home() {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
                       <div className="flex flex-col gap-2.5">
                         <label htmlFor="name" className="text-xs font-black tracking-widest uppercase text-black">NAME</label>
-                        <input type="text" id="name" name="name" className="border border-black/10 bg-white text-black py-3.5 px-4 outline-none focus:border-black transition-colors font-mono text-base md:text-sm" placeholder="Jane Doe" required />
+                        <input type="text" id="name" name="name" className="border border-black/10 bg-white text-black py-3.5 px-4 outline-none focus:border-black transition-colors font-sans font-light placeholder:font-neue-haas placeholder:font-thin placeholder:text-black/40 text-base md:text-sm" placeholder="Jane Doe" required />
                       </div>
                       <div className="flex flex-col gap-2.5">
                         <label htmlFor="email" className="text-xs font-black tracking-widest uppercase text-black">EMAIL</label>
-                        <input type="email" id="email" name="email" className="border border-black/10 bg-white text-black py-3.5 px-4 outline-none focus:border-black transition-colors font-mono text-base md:text-sm" placeholder="jane@company.com" required />
+                        <input type="email" id="email" name="email" className="border border-black/10 bg-white text-black py-3.5 px-4 outline-none focus:border-black transition-colors font-sans font-light placeholder:font-neue-haas placeholder:font-thin placeholder:text-black/40 text-base md:text-sm" placeholder="jane@company.com" required />
                       </div>
                     </div>
 
                     <div className="flex flex-col gap-2.5">
                       <label htmlFor="company" className="text-xs font-black tracking-widest uppercase text-black">ORGANIZATION</label>
-                      <input type="text" id="company" name="company" className="border border-black/10 bg-white text-black py-3.5 px-4 outline-none focus:border-black transition-colors font-mono text-base md:text-sm" placeholder="Organization name" />
+                      <input type="text" id="company" name="company" className="border border-black/10 bg-white text-black py-3.5 px-4 outline-none focus:border-black transition-colors font-sans font-light placeholder:font-neue-haas placeholder:font-thin placeholder:text-black/40 text-base md:text-sm" placeholder="Organization name" />
                     </div>
 
                     <div className="flex flex-col gap-2.5">
                       <label htmlFor="description" className="text-xs font-black tracking-widest uppercase text-black">MESSAGE</label>
-                      <textarea id="description" name="description" rows={5} className="border border-black/10 bg-white text-black py-3.5 px-4 outline-none focus:border-black transition-colors resize-none font-mono text-base md:text-sm" placeholder="How can we help?" required></textarea>
+                      <textarea id="description" name="description" rows={5} className="border border-black/10 bg-white text-black py-3.5 px-4 outline-none focus:border-black transition-colors resize-none font-sans font-light placeholder:font-neue-haas placeholder:font-thin placeholder:text-black/40 text-base md:text-sm" placeholder="How can we help?" required></textarea>
                     </div>
 
                     <div className="pt-4 flex justify-start">
@@ -1934,7 +1962,7 @@ export default function Home() {
                   </form>
                 ) : (
                   <div className="flex flex-col items-start justify-center h-full max-w-2xl mx-auto py-12">
-                    <p className="text-xl md:text-2xl font-mono text-black leading-relaxed">
+                    <p className="text-xl md:text-2xl font-sans font-light text-black leading-relaxed">
                       Someone from the Product Dept. will get back to you shortly. Thank you.
                     </p>
                   </div>

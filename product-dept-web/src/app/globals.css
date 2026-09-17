@@ -45,6 +45,7 @@
 
   --font-sans: var(--font-neue-haas-unica), sans-serif;
   --font-header: var(--font-header-stack);
+  --font-neue-haas: var(--font-neue-haas), sans-serif;
 }
 
 h1,

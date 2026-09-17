@@ -109,6 +109,7 @@ const bentoData = [
     title: "VENTURE INFRASTRUCTURE",
     label: "OPERATIONAL BACKBONE",
     bgImage: "/photo-flicker/venture_anim.mp4",
+    loop: false,
     isColor: true,
     longDesc: "Founders should focus on what they do best: taking their innovations to market. Product Dept. is a plug-and-play venture platform providing operational backbone for a fraction of the cost and learning curve of building a full team in-house.",
     longFeatures: [
@@ -193,9 +194,6 @@ function ServiceBackgroundVideo({
       }
     } else {
       video.pause();
-      try {
-        video.currentTime = 0;
-      } catch {}
     }
   }, [isOpen, playTrigger]);
 
@@ -212,10 +210,13 @@ function ServiceBackgroundVideo({
       }
     } else {
       video.pause();
-      try {
-        video.currentTime = 0;
-      } catch {}
     }
+  };
+
+  const handleEnded = () => {
+    const video = videoRef.current;
+    if (!video) return;
+    video.pause();
   };
 
   return (
@@ -227,6 +228,7 @@ function ServiceBackgroundVideo({
       playsInline
       preload="auto"
       onLoadedMetadata={handleLoadedMetadata}
+      onEnded={handleEnded}
       className="w-full h-full object-cover"
     />
   );

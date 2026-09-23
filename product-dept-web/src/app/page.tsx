@@ -1453,7 +1453,7 @@ export default function Home() {
             >
               <div 
                 ref={tabsInnerRef}
-                className="max-w-6xl mx-auto flex items-center justify-between gap-1 sm:gap-2 relative pr-8 md:pr-0"
+                className="w-full max-w-[1060px] mx-auto flex items-center justify-between gap-0.5 sm:gap-1 md:gap-[clamp(2px,0.25vw,4px)] relative pr-8 md:pr-0"
               >
                 {bentoData.map((step, index) => {
                   const isActive = activeIndex === index;
@@ -1463,14 +1463,24 @@ export default function Home() {
                       key={step.num}
                       onClick={() => handleItemClick(index)}
                       style={isActive ? { backgroundColor: "#e5e5e5" } : undefined}
-                      className={`relative py-1.5 px-2.5 sm:px-3.5 text-left transition-all duration-200 rounded flex items-center gap-1.5 sm:gap-2 group cursor-pointer border-none outline-none shrink-0 ${
+                      className={`relative py-1.5 px-2 md:py-1 md:px-[clamp(5px,0.45vw,8px)] text-left transition-all duration-200 rounded flex items-center gap-1 md:gap-[clamp(3px,0.3vw,5px)] group cursor-pointer border-none outline-none shrink-0 ${
                         isActive 
                           ? "text-black shadow-sm" 
                           : "bg-transparent text-white/40 hover:text-white/80"
                       }`}
                     >
-                      <span className={`font-mono tracking-wider transition-all duration-200 ${isActive ? "text-[11.5px] text-black font-black" : "text-[9.5px] text-white/60"}`}>{step.num}</span>
-                      <span className={`font-header font-black tracking-wider uppercase whitespace-nowrap transition-all duration-200 ${isActive ? "text-[13px] sm:text-[15px] text-black" : "text-[11px] sm:text-[12.5px] text-white/40 group-hover:text-white/80"}`}>
+                      <span className={`font-mono tracking-wider transition-all duration-200 ${
+                        isActive 
+                          ? "text-[10px] md:text-[clamp(9px,0.58vw,10.5px)] text-black font-black" 
+                          : "text-[8.5px] md:text-[clamp(8px,0.5vw,9px)] text-white/60"
+                      }`}>
+                        {step.num}
+                      </span>
+                      <span className={`font-header font-black tracking-wider uppercase whitespace-nowrap transition-all duration-200 ${
+                        isActive 
+                          ? "text-[11.5px] sm:text-[12px] md:text-[clamp(11px,0.72vw,12.5px)] text-black" 
+                          : "text-[10px] sm:text-[10.5px] md:text-[clamp(9.5px,0.62vw,11px)] text-white/40 group-hover:text-white/80"
+                      }`}>
                         {step.title}
                       </span>
                     </button>

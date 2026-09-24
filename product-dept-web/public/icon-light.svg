@@ -1,11 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 612.03 612.03">
   
     <style>
-      :root { color-scheme: light dark; }
       polygon, path { fill: #000000; }
-      @media (prefers-color-scheme: dark) {
-        polygon, path { fill: #ffffff; }
-      }
     </style>
   <g transform="translate(24.86, 161.67)">
     <polygon points="553.22 284.38 311.9 284.38 286.31 0 562.31 67.5 553.22 284.38"/>

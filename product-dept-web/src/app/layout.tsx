@@ -60,8 +60,24 @@ export const metadata: Metadata = {
   description: "Where Great Ideas Become Exceptional Products. Full-Stack Product Creation.",
   icons: {
     icon: [
-      { url: "/icon.svg", type: "image/svg+xml" },
-      { url: "/favicon.ico", sizes: "any" },
+      {
+        url: "/icon-light.svg",
+        type: "image/svg+xml",
+        media: "(prefers-color-scheme: light)",
+      },
+      {
+        url: "/icon-dark.svg",
+        type: "image/svg+xml",
+        media: "(prefers-color-scheme: dark)",
+      },
+      {
+        url: "/favicon-light.ico",
+        media: "(prefers-color-scheme: light)",
+      },
+      {
+        url: "/favicon-dark.ico",
+        media: "(prefers-color-scheme: dark)",
+      },
     ],
     apple: "/apple-icon.png",
   },
@@ -79,6 +95,46 @@ export default function RootLayout({
       lang="en"
       className={`${elza.variable} ${neueHaas.variable} ${neueHaasUnica.variable} h-full antialiased overscroll-none`}
     >
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                function updateFavicon() {
+                  try {
+                    var isDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+                    var svgHref = isDark ? '/icon-dark.svg' : '/icon-light.svg';
+                    var icoHref = isDark ? '/favicon-dark.ico' : '/favicon-light.ico';
+                    var links = document.querySelectorAll("link[rel*='icon']");
+                    var hasSvg = false;
+                    links.forEach(function(el) {
+                      var rel = el.getAttribute('rel') || '';
+                      if (rel.indexOf('apple-touch-icon') !== -1) return;
+                      if (el.getAttribute('type') === 'image/svg+xml' || (el.href && el.href.indexOf('.svg') !== -1)) {
+                        el.href = svgHref;
+                        hasSvg = true;
+                      } else {
+                        el.href = icoHref;
+                      }
+                    });
+                    if (!hasSvg) {
+                      var newLink = document.createElement('link');
+                      newLink.rel = 'icon';
+                      newLink.type = 'image/svg+xml';
+                      newLink.href = svgHref;
+                      document.head.appendChild(newLink);
+                    }
+                  } catch (e) {}
+                }
+                updateFavicon();
+                if (window.matchMedia) {
+                  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', updateFavicon);
+                }
+              })();
+            `,
+          }}
+        />
+      </head>
       <body className="min-h-full flex flex-col font-sans bg-background text-foreground tracking-tight overflow-x-hidden overscroll-none">
         <Navigation />
         <main className="flex-1 flex flex-col w-full">

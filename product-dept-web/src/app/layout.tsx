@@ -58,6 +58,13 @@ const neueHaasUnica = localFont({
 export const metadata: Metadata = {
   title: "Product Dept.",
   description: "Where Great Ideas Become Exceptional Products. Full-Stack Product Creation.",
+  icons: {
+    icon: [
+      { url: "/icon.svg", type: "image/svg+xml" },
+      { url: "/favicon.ico", sizes: "any" },
+    ],
+    apple: "/apple-icon.png",
+  },
 };
 
 import { Navigation } from "@/components/Navigation";
